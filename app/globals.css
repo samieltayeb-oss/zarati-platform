@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+@theme {
+  /* Brand colors */
+  --color-primary: #1E7A46;
+  --color-primary-dark: #155C33;
+  --color-primary-light: #2A9E5A;
+  --color-secondary: #D4A017;
+  --color-secondary-light: #E8B52A;
+  --color-bg: #F8F8F8;
+  --color-surface: #FFFFFF;
+  --color-border: #E5E7EB;
+  --color-text: #111827;
+  --color-muted: #6B7280;
+  --color-success: #16A34A;
+  --color-warning: #F59E0B;
+  --color-danger: #DC2626;
+
+  /* Font families */
+  --font-arabic: var(--font-cairo), 'Cairo', sans-serif;
+  --font-latin: var(--font-geist), 'Geist', sans-serif;
+}
+
+/* Direction-aware font selection */
+html[lang="ar"] body {
+  font-family: var(--font-arabic);
+}
+
+html[lang="en"] body {
+  font-family: var(--font-latin);
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  min-height: 100vh;
+}
+
+/* Smooth transitions for locale switching */
+* {
+  transition: none;
+}

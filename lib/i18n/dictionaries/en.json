@@ -1,0 +1,163 @@
+{
+  "nav": {
+    "home": "Home",
+    "marketplace": "Marketplace",
+    "weather": "Weather",
+    "dashboard": "Dashboard",
+    "about": "About",
+    "login": "Sign In",
+    "register": "Get Started",
+    "language": "العربية"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "tryAgain": "Try Again",
+    "viewAll": "View All",
+    "learnMore": "Learn More",
+    "comingSoon": "Coming Soon",
+    "demoData": "Demo Data",
+    "currency": "SDG",
+    "perTon": "/ ton",
+    "change24h": "24h",
+    "lastUpdated": "Last updated",
+    "search": "Search",
+    "filter": "Filter",
+    "close": "Close",
+    "back": "Back"
+  },
+  "home": {
+    "hero": {
+      "title": "Sudan's Smart Agriculture Platform",
+      "subtitle": "Connecting farmers, traders, and markets across Sudan with real-time prices, weather intelligence, and AI-powered tools.",
+      "ctaPrimary": "Get Started Free",
+      "ctaSecondary": "Explore Platform"
+    },
+    "mission": {
+      "title": "Our Mission",
+      "description": "Zarati empowers Sudan's 15 million farmers with technology, market access, and financial tools to build a food-secure nation.",
+      "transparency": { "title": "Price Transparency", "description": "Real-time crop prices from markets across Sudan" },
+      "access": { "title": "Market Access", "description": "Direct connections between farmers and buyers" },
+      "intelligence": { "title": "Smart Insights", "description": "AI-powered recommendations tailored to your farm" }
+    },
+    "stats": {
+      "title": "Sudan Agriculture at a Glance",
+      "farmers": { "value": "15M+", "label": "Farmers" },
+      "arable": { "value": "45M ha", "label": "Agricultural Land" },
+      "gdp": { "value": "35%", "label": "GDP Contribution" },
+      "sesame": { "value": "#1", "label": "Global Sesame Exporter" }
+    },
+    "cropSnapshot": {
+      "title": "Crop Market Snapshot",
+      "subtitle": "Prices from major Sudan markets",
+      "crop": "Crop",
+      "price": "Price (SDG/ton)",
+      "change": "Change",
+      "market": "Market"
+    },
+    "weatherSnapshot": {
+      "title": "Weather Intelligence",
+      "subtitle": "Conditions across Sudan's farming regions",
+      "viewForecast": "View Full Forecast"
+    },
+    "aiPreview": {
+      "title": "Meet Your AI Farm Advisor",
+      "description": "Personalized recommendations on planting schedules, pest management, and market timing — powered by AI trained on Sudan's agriculture data.",
+      "badge": "Coming Soon",
+      "planting": "Optimal planting windows",
+      "pests": "Pest & disease alerts",
+      "market": "Best time to sell"
+    },
+    "marketplacePreview": {
+      "title": "Agricultural Marketplace",
+      "subtitle": "Buy and sell crops, equipment, seeds, and fertilizer",
+      "browseAll": "Browse Marketplace"
+    },
+    "futureVision": {
+      "title": "The Complete Agricultural OS",
+      "subtitle": "Every tool a Sudanese farmer needs, in one platform"
+    },
+    "cta": {
+      "title": "Join Sudan's Agricultural Revolution",
+      "description": "Whether you're a farmer, trader, NGO, or government body — Zarati has the tools you need.",
+      "button": "Create Free Account",
+      "note": "Free for all farmers. No credit card required."
+    }
+  },
+  "marketplace": {
+    "title": "Agricultural Marketplace",
+    "subtitle": "Buy and sell across all agricultural categories",
+    "search": "Search listings...",
+    "all": "All Categories",
+    "crops": "Crops",
+    "equipment": "Equipment",
+    "seeds": "Seeds",
+    "fertilizer": "Fertilizer",
+    "sortBy": "Sort By",
+    "newest": "Newest First",
+    "priceAsc": "Price: Low to High",
+    "priceDesc": "Price: High to Low",
+    "seller": "Seller",
+    "location": "Location",
+    "quantity": "Quantity",
+    "contact": "Contact Seller",
+    "demoNotice": "Demo listing",
+    "empty": "No listings found"
+  },
+  "weather": {
+    "title": "Weather Intelligence",
+    "subtitle": "Agricultural weather for Sudan's key farming regions",
+    "khartoum": "Khartoum",
+    "kassala": "Kassala",
+    "gedaref": "Gedaref",
+    "portSudan": "Port Sudan",
+    "elobeid": "El Obeid",
+    "sunny": "Sunny",
+    "cloudy": "Cloudy",
+    "partly-cloudy": "Partly Cloudy",
+    "rainy": "Rainy",
+    "stormy": "Stormy",
+    "dusty": "Dusty / Haboob",
+    "temperature": "Temperature",
+    "feelsLike": "Feels Like",
+    "humidity": "Humidity",
+    "wind": "Wind",
+    "forecast": "7-Day Forecast",
+    "high": "High",
+    "low": "Low",
+    "precipitation": "Rain"
+  },
+  "dashboard": {
+    "title": "My Farm Dashboard",
+    "welcome": "Welcome back",
+    "myListings": "My Listings",
+    "activeCrops": "Active Crops",
+    "priceAlerts": "Price Alerts",
+    "messages": "Messages",
+    "recentPrices": "Recent Price Movements",
+    "addListing": "Add Listing",
+    "setPriceAlert": "Set Price Alert",
+    "viewMarket": "View Market"
+  },
+  "about": {
+    "title": "About Zarati",
+    "heroTitle": "Building Sudan's Agricultural Future",
+    "heroSubtitle": "Zarati is the national smart agriculture platform connecting Sudan's farmers to technology, markets, and opportunity.",
+    "missionTitle": "Our Mission",
+    "missionDescription": "Sudan has 45 million hectares of agricultural potential — one of the largest in Africa. Yet farmers lack access to market prices, modern tools, and financial services. Zarati changes that.",
+    "valuesTitle": "Our Values",
+    "farmerFirst": "Farmer First",
+    "farmerFirstDesc": "Every feature is built for the farmer's needs",
+    "transparent": "Transparent",
+    "transparentDesc": "Open data, fair prices, honest platform",
+    "sudanese": "Proudly Sudanese",
+    "sudaneseDesc": "Built in Sudan, for Sudan",
+    "contactTitle": "Get in Touch",
+    "contactEmail": "hello@zarati.sd"
+  },
+  "errors": {
+    "notFound": "Page not found",
+    "notFoundDesc": "The page you're looking for doesn't exist.",
+    "backHome": "Back to Home"
+  }
+}

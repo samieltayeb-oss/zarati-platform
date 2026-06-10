@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Get-ChildItem *)",
+      "Bash(xargs grep -l \"middleware\")",
+      "Bash(node -e ' *)",
+      "Bash(npm show *)",
+      "Bash(npm install *)",
+      "Bash(npx tsc *)",
+      "Bash(npm run *)",
+      "Bash(npx eslint *)",
+      "Bash(npx vitest *)",
+      "Bash(npx next *)",
+      "Bash(git init *)",
+      "Bash(git add *)"
+    ]
+  }
+}

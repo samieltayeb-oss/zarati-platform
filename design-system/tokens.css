@@ -1,0 +1,277 @@
+/* ============================================================
+   ZARATI | زرعتي — Design Tokens
+   Version: 1.0
+   Usage: Import this file globally in your app
+   ============================================================ */
+
+:root {
+
+  /* ========================================================
+     COLOR TOKENS — BRAND
+     ======================================================== */
+
+  /* Primary Greens */
+  --za-green-50:  #F1F8F2;
+  --za-green-100: #D6EDD9;
+  --za-green-200: #AADAAF;
+  --za-green-300: #76C27D;
+  --za-green-400: #4CAF50;  /* Leaf — Primary Accent */
+  --za-green-500: #43A047;
+  --za-green-600: #388E3C;
+  --za-green-700: #2E7D32;
+  --za-green-800: #1B5E20;
+  --za-green-900: #0D3B1E;  /* Forest — Primary Brand Green */
+
+  /* Primary Blues / Navy */
+  --za-navy-50:   #E8EDF5;
+  --za-navy-100:  #C5D2E8;
+  --za-navy-200:  #8FABD1;
+  --za-navy-300:  #5A84BA;
+  --za-navy-400:  #2E63A8;
+  --za-navy-500:  #1565C0;  /* River Blue */
+  --za-navy-600:  #1255A4;
+  --za-navy-700:  #0F4488;
+  --za-navy-800:  #0C3371;
+  --za-navy-900:  #0F2D5E;  /* Deep Navy — Primary Brand Blue */
+
+  /* Secondary — Sand */
+  --za-sand-100:  #FAF5EC;
+  --za-sand-200:  #F2E4C8;
+  --za-sand-300:  #E5CCA0;
+  --za-sand-400:  #C8A96E;  /* Sahara Sand */
+  --za-sand-500:  #B08D4A;
+  --za-sand-600:  #8A6D34;
+
+  /* Secondary — Earth */
+  --za-earth-400: #9E6B3D;
+  --za-earth-600: #6B4C2A;  /* Nile Soil */
+  --za-earth-800: #3D2A14;
+
+  /* Accent — Gold */
+  --za-gold-300:  #FFD54F;
+  --za-gold-400:  #FFCA28;
+  --za-gold-500:  #F4A800;  /* Investment Gold */
+  --za-gold-600:  #E07A00;
+
+  /* Accent — Teal */
+  --za-teal-400:  #26A69A;
+  --za-teal-500:  #00897B;  /* Data Teal */
+  --za-teal-600:  #00796B;
+  --za-teal-800:  #00352D;
+
+  /* Neutral Scale */
+  --za-neutral-0:   #FFFFFF;
+  --za-neutral-50:  #FAFAFA;
+  --za-neutral-100: #F5F5F5;
+  --za-neutral-200: #EEEEEE;
+  --za-neutral-300: #E0E0E0;
+  --za-neutral-400: #BDBDBD;
+  --za-neutral-500: #9E9E9E;
+  --za-neutral-600: #757575;
+  --za-neutral-700: #616161;
+  --za-neutral-800: #424242;
+  --za-neutral-900: #212121;
+  --za-neutral-950: #121212;
+
+  /* ========================================================
+     COLOR TOKENS — SEMANTIC
+     ======================================================== */
+
+  --za-color-success:         #2E7D32;
+  --za-color-success-light:   #E8F5E9;
+  --za-color-success-dark:    #1B5E20;
+
+  --za-color-warning:         #E65100;
+  --za-color-warning-light:   #FFF3E0;
+  --za-color-warning-dark:    #BF360C;
+
+  --za-color-error:           #C62828;
+  --za-color-error-light:     #FFEBEE;
+  --za-color-error-dark:      #8C0000;
+
+  --za-color-info:            #0277BD;
+  --za-color-info-light:      #E1F5FE;
+  --za-color-info-dark:       #01579B;
+
+  /* ========================================================
+     COLOR TOKENS — SEMANTIC SURFACES
+     ======================================================== */
+
+  /* Light Mode */
+  --za-surface-bg:            var(--za-neutral-50);
+  --za-surface-card:          var(--za-neutral-0);
+  --za-surface-elevated:      var(--za-neutral-0);
+  --za-surface-overlay:       rgba(15, 45, 94, 0.6);
+
+  --za-text-primary:          var(--za-neutral-900);
+  --za-text-secondary:        var(--za-neutral-600);
+  --za-text-disabled:         var(--za-neutral-400);
+  --za-text-inverse:          var(--za-neutral-0);
+  --za-text-brand:            var(--za-green-900);
+  --za-text-link:             var(--za-navy-500);
+
+  --za-border-default:        var(--za-neutral-200);
+  --za-border-strong:         var(--za-neutral-300);
+  --za-border-brand:          var(--za-green-400);
+
+  --za-action-primary:        var(--za-green-400);
+  --za-action-primary-hover:  var(--za-green-500);
+  --za-action-primary-active: var(--za-green-600);
+  --za-action-secondary:      var(--za-navy-900);
+  --za-action-secondary-hover:var(--za-navy-800);
+
+  /* ========================================================
+     TYPOGRAPHY TOKENS
+     ======================================================== */
+
+  --za-font-english:    'Inter', 'Helvetica Neue', Arial, sans-serif;
+  --za-font-arabic:     'IBM Plex Arabic', 'Noto Sans Arabic', 'Arial Unicode MS', sans-serif;
+  --za-font-mono:       'JetBrains Mono', 'Fira Code', Consolas, monospace;
+
+  --za-text-display-xl:  72px;
+  --za-text-display-lg:  56px;
+  --za-text-display-md:  44px;
+  --za-text-h1:          36px;
+  --za-text-h2:          28px;
+  --za-text-h3:          22px;
+  --za-text-h4:          18px;
+  --za-text-h5:          16px;
+  --za-text-h6:          14px;
+  --za-text-body-xl:     20px;
+  --za-text-body-lg:     18px;
+  --za-text-body-md:     16px;
+  --za-text-body-sm:     14px;
+  --za-text-caption:     12px;
+  --za-text-label:       12px;
+  --za-text-overline:    11px;
+
+  --za-weight-regular:  400;
+  --za-weight-medium:   500;
+  --za-weight-semibold: 600;
+  --za-weight-bold:     700;
+
+  --za-leading-tight:   1.1;
+  --za-leading-snug:    1.25;
+  --za-leading-normal:  1.5;
+  --za-leading-relaxed: 1.65;
+  --za-leading-loose:   1.85;
+
+  /* ========================================================
+     SPACING TOKENS
+     ======================================================== */
+
+  --za-space-1:   4px;
+  --za-space-2:   8px;
+  --za-space-3:   12px;
+  --za-space-4:   16px;
+  --za-space-5:   20px;
+  --za-space-6:   24px;
+  --za-space-8:   32px;
+  --za-space-10:  40px;
+  --za-space-12:  48px;
+  --za-space-16:  64px;
+  --za-space-20:  80px;
+  --za-space-24:  96px;
+  --za-space-32:  128px;
+
+  /* ========================================================
+     BORDER RADIUS TOKENS
+     ======================================================== */
+
+  --za-radius-none:  0px;
+  --za-radius-xs:    2px;
+  --za-radius-sm:    4px;
+  --za-radius-md:    8px;
+  --za-radius-lg:    12px;
+  --za-radius-xl:    16px;
+  --za-radius-2xl:   24px;
+  --za-radius-full:  9999px;
+
+  /* ========================================================
+     SHADOW TOKENS
+     ======================================================== */
+
+  --za-shadow-none:  none;
+  --za-shadow-xs:    0 1px 2px rgba(15, 45, 94, 0.06);
+  --za-shadow-sm:    0 2px 4px rgba(15, 45, 94, 0.08);
+  --za-shadow-md:    0 4px 12px rgba(15, 45, 94, 0.10);
+  --za-shadow-lg:    0 8px 24px rgba(15, 45, 94, 0.12);
+  --za-shadow-xl:    0 16px 48px rgba(15, 45, 94, 0.16);
+  --za-shadow-focus: 0 0 0 3px rgba(76, 175, 80, 0.35);
+
+  /* ========================================================
+     MOTION TOKENS
+     ======================================================== */
+
+  --za-duration-instant:    0ms;
+  --za-duration-fast:       100ms;
+  --za-duration-normal:     200ms;
+  --za-duration-slow:       300ms;
+  --za-duration-deliberate: 400ms;
+
+  --za-ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --za-ease-enter:    cubic-bezier(0, 0, 0.2, 1);
+  --za-ease-exit:     cubic-bezier(0.4, 0, 1, 1);
+  --za-ease-sharp:    cubic-bezier(0.4, 0, 0.6, 1);
+
+  /* ========================================================
+     LAYOUT TOKENS
+     ======================================================== */
+
+  --za-max-content-width: 1280px;
+  --za-sidebar-width:     240px;
+  --za-sidebar-collapsed: 64px;
+  --za-navbar-height:     64px;
+  --za-topbar-height:     56px;
+  --za-footer-height:     320px;
+
+  /* Z-Index Scale */
+  --za-z-base:     0;
+  --za-z-raised:   10;
+  --za-z-dropdown: 100;
+  --za-z-sticky:   200;
+  --za-z-overlay:  300;
+  --za-z-modal:    400;
+  --za-z-toast:    500;
+  --za-z-tooltip:  600;
+}
+
+
+/* ============================================================
+   DARK MODE OVERRIDES
+   ============================================================ */
+
+[data-theme="dark"] {
+  --za-surface-bg:            #0F1A0F;
+  --za-surface-card:          #1A2D1A;
+  --za-surface-elevated:      #243524;
+
+  --za-text-primary:          #F0F4F0;
+  --za-text-secondary:        rgba(240, 244, 240, 0.65);
+  --za-text-disabled:         rgba(240, 244, 240, 0.35);
+  --za-text-brand:            var(--za-green-400);
+
+  --za-border-default:        rgba(255, 255, 255, 0.08);
+  --za-border-strong:         rgba(255, 255, 255, 0.14);
+
+  --za-shadow-sm:    0 2px 4px rgba(0, 0, 0, 0.3);
+  --za-shadow-md:    0 4px 12px rgba(0, 0, 0, 0.4);
+  --za-shadow-lg:    0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+
+/* ============================================================
+   UTILITY CLASSES — BRAND COLORS
+   ============================================================ */
+
+.bg-za-navy    { background-color: var(--za-navy-900); }
+.bg-za-green   { background-color: var(--za-green-900); }
+.bg-za-leaf    { background-color: var(--za-green-400); }
+.text-za-brand { color: var(--za-green-900); }
+.text-za-navy  { color: var(--za-navy-900); }
+.text-za-leaf  { color: var(--za-green-400); }
+
+.focus-za:focus-visible {
+  outline: none;
+  box-shadow: var(--za-shadow-focus);
+}
