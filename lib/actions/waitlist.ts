@@ -1,6 +1,7 @@
 'use server'
 
 import { createServerClient } from '@/lib/supabase/server'
+import { sendWelcomeEmail, sendAdminNotification } from '@/lib/email/send'
 
 export type WaitlistUserType = 'farmer' | 'trader' | 'ngo' | 'government' | 'investor'
 
@@ -50,6 +51,12 @@ export async function submitWaitlist(entry: WaitlistEntry): Promise<WaitlistResu
     console.error('[Zarati Waitlist] Unexpected error:', err)
     return { ok: false, message: 'Something went wrong. Please try again.' }
   }
+
+  // Send emails in parallel — failures are logged but never fail the signup
+  await Promise.allSettled([
+    sendWelcomeEmail(entry),
+    sendAdminNotification(entry),
+  ])
 
   return { ok: true }
 }
