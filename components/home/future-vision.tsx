@@ -1,70 +1,181 @@
 import Link from 'next/link'
-import { Badge } from '@/components/ui/badge'
-import { MODULES } from '@/config/modules'
 import type { Locale } from '@/lib/i18n/config'
-
-const MODULE_EMOJI: Record<string, string> = {
-  marketplace: '🛒',
-  weather: '🌤️',
-  'ai-advisor': '🤖',
-  financing: '💰',
-  ngo: '🤝',
-  government: '🏛️',
-  satellite: '🛰️',
-}
 
 interface FutureVisionDict {
   title: string
   subtitle: string
+  availableToday: string
+  roadmapTitle: string
+  roadmapNote: string
+  live: string
+  phase2Label: string
+  phase3Label: string
+  phase4Label: string
 }
 
 interface Props {
   lang: Locale
   dict: FutureVisionDict
-  comingSoonLabel: string
 }
 
-export function FutureVision({ lang, dict, comingSoonLabel }: Props) {
+export function FutureVision({ lang, dict }: Props) {
   const isAr = lang === 'ar'
-  const modules = Object.values(MODULES).filter((m) => m.status !== 'disabled')
+
+  const activeModules = [
+    {
+      id: 'marketplace',
+      emoji: '🛒',
+      labelEn: 'Marketplace',
+      labelAr: 'السوق الزراعي',
+      descEn: 'Buy and sell crops, equipment, seeds, and fertilizer',
+      descAr: 'اشترِ وبِع المحاصيل والمعدات والبذور والأسمدة',
+      path: `/${lang}/marketplace`,
+    },
+    {
+      id: 'weather',
+      emoji: '🌤️',
+      labelEn: 'Weather Intelligence',
+      labelAr: 'معلومات الطقس',
+      descEn: "Agricultural weather for Sudan's key farming regions",
+      descAr: 'أحوال الطقس الزراعي في المناطق الرئيسية بالسودان',
+      path: `/${lang}/weather`,
+    },
+    {
+      id: 'crops',
+      emoji: '📊',
+      labelEn: 'Crop Prices',
+      labelAr: 'أسعار المحاصيل',
+      descEn: 'Real-time prices from markets across Sudan',
+      descAr: 'أسعار آنية من أسواق السودان',
+      path: `/${lang}/crops`,
+    },
+    {
+      id: 'dashboard',
+      emoji: '🌾',
+      labelEn: 'Farmer Dashboard',
+      labelAr: 'لوحة المزرعة',
+      descEn: 'Your farm operations and market movements at a glance',
+      descAr: 'عمليات مزرعتك وتحركات السوق في لمحة',
+      path: `/${lang}/overview`,
+    },
+  ]
+
+  const roadmapModules = [
+    {
+      id: 'ai-advisor',
+      emoji: '🤖',
+      labelEn: 'AI Agricultural Advisor',
+      labelAr: 'المستشار الزراعي الذكي',
+      descEn: 'Personalised AI recommendations for planting, pests, and market timing',
+      descAr: 'توصيات ذكاء اصطناعي مخصصة للزراعة والآفات وتوقيت البيع',
+      phase: dict.phase2Label,
+    },
+    {
+      id: 'financing',
+      emoji: '💰',
+      labelEn: 'Financing & Microloans',
+      labelAr: 'التمويل والقروض الصغيرة',
+      descEn: 'Access microloans and agricultural financing for your farm',
+      descAr: 'احصل على القروض الصغيرة والتمويل الزراعي لمزرعتك',
+      phase: dict.phase3Label,
+    },
+    {
+      id: 'ngo',
+      emoji: '🤝',
+      labelEn: 'NGO Portal',
+      labelAr: 'بوابة المنظمات',
+      descEn: "Coordination tools for NGOs supporting Sudan's farmers",
+      descAr: 'أدوات تنسيق للمنظمات الداعمة لمزارعي السودان',
+      phase: dict.phase4Label,
+    },
+    {
+      id: 'government',
+      emoji: '🏛️',
+      labelEn: 'Government Portal',
+      labelAr: 'البوابة الحكومية',
+      descEn: 'National agricultural data, analytics, and policy tools',
+      descAr: 'البيانات الزراعية الوطنية والتحليلات وأدوات السياسات',
+      phase: dict.phase4Label,
+    },
+  ]
 
   return (
-    <section className="py-16 sm:py-20 bg-bg">
+    <section className="py-20 sm:py-24 bg-bg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-10">
-          <h2 className="text-2xl sm:text-3xl font-bold text-text mb-2">{dict.title}</h2>
-          <p className="text-muted">{dict.subtitle}</p>
+
+        {/* Header */}
+        <div className="text-center mb-14">
+          <h2 className="text-3xl sm:text-4xl font-bold text-text mb-3">{dict.title}</h2>
+          <p className="text-muted text-lg max-w-2xl mx-auto leading-relaxed">{dict.subtitle}</p>
         </div>
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-          {modules.map((m) => {
-            const isActive = m.status === 'active'
-            const card = (
-              <div
-                className={`rounded-xl border p-4 text-center transition-all ${
-                  isActive
-                    ? 'border-primary/30 bg-primary/5 hover:bg-primary/10 cursor-pointer'
-                    : 'border-border bg-surface opacity-70'
-                }`}
-              >
-                <div className="text-2xl mb-2">{MODULE_EMOJI[m.id] ?? '📦'}</div>
-                <div className="text-sm font-medium text-text mb-1">
+
+        {/* Group A — Available Today */}
+        <div className="mb-12">
+          <div className="flex items-center gap-2 mb-6">
+            <span className="w-2 h-2 rounded-full bg-green-500" />
+            <span className="text-sm font-semibold text-text uppercase tracking-wider">
+              {dict.availableToday}
+            </span>
+          </div>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            {activeModules.map((m) => (
+              <Link key={m.id} href={m.path} className="group block">
+                <div className="rounded-2xl border border-primary/20 bg-surface p-5 h-full
+                               hover:border-primary/50 hover:shadow-md hover:-translate-y-0.5
+                               transition-all duration-200">
+                  <div className="text-3xl mb-3">{m.emoji}</div>
+                  <div className="text-sm font-semibold text-text mb-1.5 leading-snug">
+                    {isAr ? m.labelAr : m.labelEn}
+                  </div>
+                  <p className="text-xs text-muted leading-relaxed mb-4">
+                    {isAr ? m.descAr : m.descEn}
+                  </p>
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-green-500" />
+                    <span className="text-xs font-medium text-green-600">{dict.live}</span>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        {/* Divider */}
+        <div className="relative my-10">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-border" />
+          </div>
+          <div className="relative flex justify-center">
+            <span className="bg-bg px-4 text-xs text-muted uppercase tracking-widest font-medium">
+              {dict.roadmapTitle}
+            </span>
+          </div>
+        </div>
+
+        {/* Group B — Future Roadmap */}
+        <div className="mb-10">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            {roadmapModules.map((m) => (
+              <div key={m.id}
+                className="rounded-2xl border border-border bg-surface/60 p-5 h-full">
+                <div className="text-3xl mb-3 opacity-60">{m.emoji}</div>
+                <div className="text-sm font-semibold text-text/80 mb-1.5 leading-snug">
                   {isAr ? m.labelAr : m.labelEn}
                 </div>
-                {!isActive && (
-                  <Badge variant="outline" className="text-xs">{comingSoonLabel}</Badge>
-                )}
+                <p className="text-xs text-muted/80 leading-relaxed mb-4">
+                  {isAr ? m.descAr : m.descEn}
+                </p>
+                <span className="inline-flex items-center rounded-full border border-navy/20
+                                 bg-navy/5 px-2.5 py-0.5 text-xs font-medium text-navy/60">
+                  {m.phase}
+                </span>
               </div>
-            )
-
-            return isActive ? (
-              <Link key={m.id} href={`/${lang}${m.path}`}>
-                {card}
-              </Link>
-            ) : (
-              <div key={m.id}>{card}</div>
-            )
-          })}
+            ))}
+          </div>
         </div>
+
+        {/* Roadmap note */}
+        <p className="text-center text-sm text-muted/70 mt-6">{dict.roadmapNote}</p>
       </div>
     </section>
   )

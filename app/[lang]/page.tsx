@@ -54,7 +54,7 @@ export default async function Page({ params }: Props) {
         locationLabel={dict.marketplace.location}
         quantityLabel={dict.marketplace.quantity}
       />
-      <FutureVision lang={locale} dict={home.futureVision} comingSoonLabel={common.comingSoon} />
+      <FutureVision lang={locale} dict={home.futureVision} />
       <CtaSection lang={locale} dict={home.cta} />
     </>
   )

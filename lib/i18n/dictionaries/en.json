@@ -75,7 +75,14 @@
     },
     "futureVision": {
       "title": "The Complete Agricultural OS",
-      "subtitle": "Every tool a Sudanese farmer needs, in one platform"
+      "subtitle": "One platform connecting farmers, traders, NGOs, government, and agricultural intelligence.",
+      "availableToday": "Available Today",
+      "roadmapTitle": "Future Roadmap",
+      "roadmapNote": "Building the digital infrastructure for Sudanese agriculture.",
+      "live": "Live",
+      "phase2Label": "Phase 2",
+      "phase3Label": "Phase 3",
+      "phase4Label": "Phase 4"
     },
     "cta": {
       "title": "Join Sudan's Agricultural Revolution",
