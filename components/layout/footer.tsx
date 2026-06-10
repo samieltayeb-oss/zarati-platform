@@ -85,9 +85,22 @@ export function Footer({ lang, nav }: FooterProps) {
           </div>
         </div>
 
-        <div className="mt-10 pt-6 border-t border-border text-center text-xs text-muted">
-          © 2026 Zarati · زرعتي.{' '}
-          {isAr ? 'جميع الحقوق محفوظة.' : 'All rights reserved.'}
+        <div className="mt-10 pt-6 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-muted">
+          <span>
+            © 2026 Zarati · زرعتي.{' '}
+            {isAr ? 'جميع الحقوق محفوظة.' : 'All rights reserved.'}
+          </span>
+          <div className="flex items-center gap-4">
+            <Link href={`/${lang}/privacy`} className="hover:text-primary transition-colors">
+              {isAr ? 'الخصوصية' : 'Privacy'}
+            </Link>
+            <Link href={`/${lang}/terms`} className="hover:text-primary transition-colors">
+              {isAr ? 'الشروط' : 'Terms'}
+            </Link>
+            <Link href={`/${lang}/contact`} className="hover:text-primary transition-colors">
+              {isAr ? 'تواصل معنا' : 'Contact'}
+            </Link>
+          </div>
         </div>
       </div>
     </footer>
