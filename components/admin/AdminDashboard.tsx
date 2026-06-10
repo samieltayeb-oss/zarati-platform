@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import type { WaitlistRecord } from '@/lib/supabase/admin'
+import { adminLogout } from '@/lib/admin/actions'
 
 type Lang = 'en' | 'ar'
 type RoleKey = 'farmer' | 'trader' | 'ngo' | 'government' | 'investor'
@@ -26,6 +27,7 @@ interface Dict {
   noResults: string
   roles: Record<RoleKey, string>
   langToggle: string
+  logout: string
 }
 
 const DICT: Record<Lang, Dict> = {
@@ -45,6 +47,7 @@ const DICT: Record<Lang, Dict> = {
     noResults: 'No matching records',
     roles: { farmer: 'Farmer', trader: 'Trader', ngo: 'NGO', government: 'Government', investor: 'Investor' },
     langToggle: 'العربية',
+    logout: 'Sign Out',
   },
   ar: {
     title: 'لوحة قائمة الانتظار',
@@ -62,6 +65,7 @@ const DICT: Record<Lang, Dict> = {
     noResults: 'لا توجد نتائج',
     roles: { farmer: 'مزارع', trader: 'تاجر', ngo: 'منظمة', government: 'جهة حكومية', investor: 'مستثمر' },
     langToggle: 'English',
+    logout: 'تسجيل الخروج',
   },
 }
 
@@ -163,12 +167,22 @@ export function AdminDashboard({ entries, error }: AdminDashboardProps) {
             <span className="text-white/30 select-none">|</span>
             <span className="text-sm text-white/75">{t.title}</span>
           </div>
-          <button
-            onClick={() => setLang(l => (l === 'en' ? 'ar' : 'en'))}
-            className="text-xs border border-white/30 rounded px-2.5 py-1 hover:bg-white/10"
-          >
-            {t.langToggle}
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setLang(l => (l === 'en' ? 'ar' : 'en'))}
+              className="text-xs border border-white/30 rounded px-2.5 py-1 hover:bg-white/10"
+            >
+              {t.langToggle}
+            </button>
+            <form action={adminLogout}>
+              <button
+                type="submit"
+                className="text-xs border border-white/30 rounded px-2.5 py-1 hover:bg-red-500/30"
+              >
+                {t.logout}
+              </button>
+            </form>
+          </div>
         </div>
       </header>
 
