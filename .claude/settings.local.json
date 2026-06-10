@@ -35,7 +35,11 @@
       "PowerShell(Get-Content \"C:\\\\Users\\\\mcreg\\\\Desktop\\\\zarati\\\\public\\\\maps\\\\sudan-path.txt\" -Raw -Encoding UTF8 | Select-Object -First 1 | ForEach-Object { $_.Substring\\(0, 100\\) })",
       "PowerShell($content = Get-Content \"C:\\\\Users\\\\mcreg\\\\Desktop\\\\zarati\\\\components\\\\maps\\\\SudanMap.tsx\" -Raw; Write-Host \"File size: $\\($content.Length\\)\"; $idx = $content.IndexOf\\('const SUDAN_PATH'\\); $content.Substring\\($idx, 120\\))",
       "Bash(Select-Object -First 50)",
-      "Bash(npm test *)"
+      "Bash(npm test *)",
+      "Bash(Select-Object -Property Mode, Name)",
+      "Bash(xargs grep -l \"supabase\\\\|SUPABASE\")",
+      "Bash(awk '{print $NF}')",
+      "PowerShell(head *)"
     ]
   }
 }
