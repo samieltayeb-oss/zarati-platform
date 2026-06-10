@@ -1,5 +1,7 @@
 'use server'
 
+import { createServerClient } from '@/lib/supabase/server'
+
 export type WaitlistUserType = 'farmer' | 'trader' | 'ngo' | 'government' | 'investor'
 
 export interface WaitlistEntry {
@@ -13,8 +15,6 @@ export type WaitlistResult =
   | { ok: true }
   | { ok: false; field?: 'name' | 'email' | 'userType'; message: string }
 
-// v0.1: Mock submission — no persistence.
-// Replace with Supabase / Prisma insert in v1.0.
 export async function submitWaitlist(entry: WaitlistEntry): Promise<WaitlistResult> {
   if (!entry.name.trim()) {
     return { ok: false, field: 'name', message: 'Name is required.' }
@@ -29,17 +29,26 @@ export async function submitWaitlist(entry: WaitlistEntry): Promise<WaitlistResu
     return { ok: false, field: 'userType', message: 'Please select your role.' }
   }
 
-  // Simulate network latency
-  await new Promise<void>((resolve) => setTimeout(resolve, 700))
-
-  if (process.env.NODE_ENV !== 'production') {
-    console.log('[Zarati Waitlist]', {
+  try {
+    const supabase = createServerClient()
+    const { error } = await supabase.from('waitlist').insert({
       name: entry.name.trim(),
       email: entry.email.trim().toLowerCase(),
-      userType: entry.userType,
-      locale: entry.locale,
-      submittedAt: new Date().toISOString(),
+      role: entry.userType,
+      language: entry.locale,
     })
+
+    if (error) {
+      // Postgres unique_violation — duplicate email
+      if (error.code === '23505') {
+        return { ok: false, field: 'email', message: 'This email is already on the waitlist.' }
+      }
+      console.error('[Zarati Waitlist] Insert error:', error.message)
+      return { ok: false, message: 'Something went wrong. Please try again.' }
+    }
+  } catch (err) {
+    console.error('[Zarati Waitlist] Unexpected error:', err)
+    return { ok: false, message: 'Something went wrong. Please try again.' }
   }
 
   return { ok: true }
