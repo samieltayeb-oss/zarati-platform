@@ -1,27 +1,49 @@
 @import "tailwindcss";
+@import "../design-system/tokens.css";
 
 @theme {
-  /* Brand colors */
-  --color-primary: #1E7A46;
-  --color-primary-dark: #155C33;
-  --color-primary-light: #2A9E5A;
-  --color-secondary: #D4A017;
-  --color-secondary-light: #E8B52A;
-  --color-bg: #F8F8F8;
-  --color-surface: #FFFFFF;
-  --color-border: #E5E7EB;
-  --color-text: #111827;
-  --color-muted: #6B7280;
-  --color-success: #16A34A;
-  --color-warning: #F59E0B;
-  --color-danger: #DC2626;
+  /* ── Brand Identity ─────────────────────────────── */
+  --color-primary:         #0D3B1E;   /* Forest Green  ZA-GREEN-900 */
+  --color-primary-dark:    #071E0F;   /* Deep Forest   ZA-GREEN-950 */
 
-  /* Font families */
+  /* ── Action / CTA (replaces conflated gold) ─────── */
+  --color-secondary:       #4CAF50;   /* Leaf Green    ZA-GREEN-400 */
+  --color-secondary-light: #76C27D;   /* Light Leaf    ZA-GREEN-300 */
+  --color-secondary-dark:  #388E3C;   /* Hover Leaf    ZA-GREEN-600 */
+
+  /* ── Authority / Dark Sections ──────────────────── */
+  --color-navy:            #0F2D5E;   /* Deep Navy     ZA-NAVY-900  */
+  --color-navy-dark:       #0C3371;   /* Darker Navy   ZA-NAVY-800  */
+
+  /* ── Data / Water ───────────────────────────────── */
+  --color-teal:            #00897B;   /* Data Teal     ZA-TEAL-500  */
+  --color-blue:            #1565C0;   /* River Blue    ZA-NAVY-500  */
+
+  /* ── Land / Warmth ──────────────────────────────── */
+  --color-sand:            #C8A96E;   /* Sahara Sand   ZA-SAND-400  */
+
+  /* ── Premium — investor / admin contexts ONLY ────── */
+  --color-gold:            #F4A800;   /* Invest. Gold  ZA-GOLD-500  */
+
+  /* ── Neutral Surfaces ───────────────────────────── */
+  --color-bg:              #FAFAFA;   /* ZA-NEUTRAL-50  */
+  --color-surface:         #FFFFFF;   /* ZA-NEUTRAL-0   */
+  --color-border:          #EEEEEE;   /* ZA-NEUTRAL-200 */
+  --color-border-strong:   #E0E0E0;   /* ZA-NEUTRAL-300 */
+  --color-text:            #212121;   /* ZA-NEUTRAL-900 */
+  --color-muted:           #757575;   /* ZA-NEUTRAL-600 */
+
+  /* ── Semantic States ────────────────────────────── */
+  --color-success:         #2E7D32;   /* ZA-COLOR-SUCCESS */
+  --color-warning:         #E65100;   /* ZA-COLOR-WARNING */
+  --color-danger:          #C62828;   /* ZA-COLOR-ERROR   */
+  --color-info:            #0277BD;   /* ZA-COLOR-INFO    */
+
+  /* ── Typography (v0.1 — IBM Plex Arabic / Inter deferred to v0.2) ── */
   --font-arabic: var(--font-cairo), 'Cairo', sans-serif;
-  --font-latin: var(--font-geist), 'Geist', sans-serif;
+  --font-latin:  var(--font-geist), 'Geist', sans-serif;
 }
 
-/* Direction-aware font selection */
 html[lang="ar"] body {
   font-family: var(--font-arabic);
 }
@@ -36,7 +58,6 @@ body {
   min-height: 100vh;
 }
 
-/* Smooth transitions for locale switching */
 * {
   transition: none;
 }

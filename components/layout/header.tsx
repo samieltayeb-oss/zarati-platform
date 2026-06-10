@@ -1,10 +1,12 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
+import logoSrc from '@/brand/logo2-transparent.png'
 import type { Locale } from '@/lib/i18n/config'
 
 interface NavDict {
@@ -41,12 +43,19 @@ export function Header({ lang, nav }: HeaderProps) {
   return (
     <header className="bg-surface border-b border-border sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-[80px] md:h-[96px]">
 
-          {/* Logo */}
-          <Link href={`/${lang}`} className="flex items-center gap-2 shrink-0">
-            <span className="text-primary font-bold text-xl tracking-tight">زرعتي</span>
-            <span className="text-muted text-sm hidden sm:block">| Zarati</span>
+          {/* Logo lockup */}
+          <Link href={`/${lang}`} className="shrink-0">
+            <Image
+              src={logoSrc}
+              alt="زرعتي | ZARATI"
+              height={68}
+              width={102}
+              className="h-[48px] md:h-[64px] w-auto object-contain"
+              style={{ mixBlendMode: 'multiply' }}
+              priority
+            />
           </Link>
 
           {/* Desktop nav */}

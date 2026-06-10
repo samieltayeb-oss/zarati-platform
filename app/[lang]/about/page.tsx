@@ -19,7 +19,7 @@ export default async function AboutPage({ params }: Props) {
   return (
     <>
       {/* Hero */}
-      <section className="bg-gradient-to-b from-primary to-primary-dark text-white py-20 sm:py-28">
+      <section className="bg-gradient-to-b from-navy to-navy-dark text-white py-20 sm:py-28">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl sm:text-5xl font-bold mb-4 leading-tight">{t.heroTitle}</h1>
           <p className="text-white/80 text-lg max-w-2xl mx-auto leading-relaxed">{t.heroSubtitle}</p>

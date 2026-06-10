@@ -16,15 +16,10 @@ interface Props {
 }
 
 export function StatsSection({ dict }: Props) {
-  const stats = [
-    { ...dict.farmers,  color: 'text-primary' },
-    { ...dict.arable,   color: 'text-secondary' },
-    { ...dict.gdp,      color: 'text-primary' },
-    { ...dict.sesame,   color: 'text-secondary' },
-  ]
+  const stats = [dict.farmers, dict.arable, dict.gdp, dict.sesame]
 
   return (
-    <section className="bg-primary py-14 sm:py-18">
+    <section className="bg-navy py-14 sm:py-18">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-center text-2xl font-bold text-white mb-10">{dict.title}</h2>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">

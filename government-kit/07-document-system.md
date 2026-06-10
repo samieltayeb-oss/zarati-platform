@@ -84,7 +84,7 @@ Top of footer: 1px rule ZA-NEUTRAL-200
 ─────────────────────
 
 📞 [Phone Number]     ← 12px, #212121
-✉  [email@zarati.sd] ← 12px, #1565C0 (linked)
+✉  [sam@nexorayyc.io] ← 12px, #1565C0 (linked)
 🌐 www.zarati.sd     ← 12px, #1565C0 (linked)
 
 [LinkedIn icon] [Twitter/X icon] [YouTube icon]

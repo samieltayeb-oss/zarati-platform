@@ -63,7 +63,7 @@ export default async function WeatherPage({ params }: Props) {
               </div>
               <div className="sm:ms-auto flex flex-wrap gap-6">
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-primary">{w.temp}°C</div>
+                  <div className="text-3xl font-bold text-teal">{w.temp}°C</div>
                   <div className="text-xs text-muted">{isAr ? t.temperature : 'Temp'}</div>
                 </div>
                 <div className="text-center">

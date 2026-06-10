@@ -12,7 +12,30 @@
       "Bash(npx vitest *)",
       "Bash(npx next *)",
       "Bash(git init *)",
-      "Bash(git add *)"
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git config *)",
+      "Bash(git branch *)",
+      "Bash(git remote *)",
+      "Bash(git push *)",
+      "Bash(Select-Object Name)",
+      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\mcreg\\\\Desktop\\\\zarati\\\\brand\\\\\" -Recurse -File | Where-Object { $_.Extension -in @\\('.png', '.jpg', '.jpeg', '.svg', '.pdf', '.ai', '.eps', '.webp', '.ico'\\) } | Select-Object FullName, Length, LastWriteTime)",
+      "Bash(Remove-Item *)",
+      "Bash(Start-Sleep -Seconds 5)",
+      "Bash(Get-Content \"C:\\\\Users\\\\mcreg\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\C--Users-mcreg-Desktop-zarati\\\\87577bd8-ce1d-4f19-a865-66f9bc4f88bc\\\\tasks\\\\b83pwtual.output\" -Tail 10)",
+      "Bash(taskkill /F /IM node.exe)",
+      "PowerShell(Get-Process *)",
+      "Bash(Get-Process node *)",
+      "Bash(Select-Object Id, ProcessName, CPU)",
+      "WebFetch(domain:www.geoboundaries.org)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:media.githubusercontent.com)",
+      "PowerShell($content = Get-Content \"C:\\\\Users\\\\mcreg\\\\.claude\\\\projects\\\\C--Users-mcreg-Desktop-zarati\\\\87577bd8-ce1d-4f19-a865-66f9bc4f88bc\\\\tool-results\\\\webfetch-1781066269526-smy6go.bin\" -Raw -Encoding UTF8; $content.Substring\\(0, 500\\))",
+      "PowerShell(New-Item *)",
+      "PowerShell(Get-Content \"C:\\\\Users\\\\mcreg\\\\Desktop\\\\zarati\\\\public\\\\maps\\\\sudan-path.txt\" -Raw -Encoding UTF8 | Select-Object -First 1 | ForEach-Object { $_.Substring\\(0, 100\\) })",
+      "PowerShell($content = Get-Content \"C:\\\\Users\\\\mcreg\\\\Desktop\\\\zarati\\\\components\\\\maps\\\\SudanMap.tsx\" -Raw; Write-Host \"File size: $\\($content.Length\\)\"; $idx = $content.IndexOf\\('const SUDAN_PATH'\\); $content.Substring\\($idx, 120\\))",
+      "Bash(Select-Object -First 50)",
+      "Bash(npm test *)"
     ]
   }
 }

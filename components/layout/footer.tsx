@@ -1,4 +1,6 @@
 import Link from 'next/link'
+import Image from 'next/image'
+import logoSrc from '@/brand/logo2-transparent.png'
 import type { Locale } from '@/lib/i18n/config'
 
 interface FooterNav {
@@ -30,17 +32,28 @@ export function Footer({ lang, nav }: FooterProps) {
 
           {/* Brand */}
           <div>
-            <div className="flex items-center gap-2 mb-3">
-              <span className="text-primary font-bold text-xl">زرعتي</span>
-              <span className="text-muted text-sm">| Zarati</span>
+            <div className="mb-4">
+              <Image
+                src={logoSrc}
+                alt="زرعتي | ZARATI"
+                height={72}
+                width={108}
+                className="h-[64px] w-auto object-contain"
+                style={{ mixBlendMode: 'multiply' }}
+              />
             </div>
             <p className="text-muted text-sm leading-relaxed max-w-xs">
               {isAr
                 ? 'منصة السودان الزراعية الذكية — تمكين المزارعين بالتقنية.'
                 : "Sudan's Smart Agriculture Platform — empowering farmers with technology."}
             </p>
+            <p className="text-muted/60 text-xs mt-1 max-w-xs">
+              {isAr
+                ? 'الزراعة الذكية لمستقبل السودان'
+                : "Smart Agriculture for Sudan's Future"}
+            </p>
             <span className="inline-flex items-center gap-1.5 mt-3 text-xs text-muted/70">
-              <span className="w-1.5 h-1.5 rounded-full bg-secondary inline-block" />
+              <span className="w-1.5 h-1.5 rounded-full bg-border-strong inline-block" />
               {isAr ? 'بيانات تجريبية' : 'Demo Data Active'}
             </span>
           </div>
@@ -66,8 +79,8 @@ export function Footer({ lang, nav }: FooterProps) {
             <h3 className="text-sm font-semibold text-text mb-4">
               {isAr ? 'تواصل معنا' : 'Contact'}
             </h3>
-            <a href="mailto:hello@zarati.sd" className="text-sm text-muted hover:text-primary transition-colors">
-              hello@zarati.sd
+            <a href="mailto:sam@nexorayyc.io" className="text-sm text-muted hover:text-primary transition-colors">
+              sam@nexorayyc.io
             </a>
           </div>
         </div>

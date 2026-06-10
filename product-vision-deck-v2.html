@@ -1,0 +1,2400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZARATI | زرعتي — Product Vision Deck v2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=IBM+Plex+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --za-green-400: #4CAF50;
+  --za-green-600: #2E7D32;
+  --za-green-900: #0D3B1E;
+  --za-navy-900:  #0F2D5E;
+  --za-navy-700:  #1565C0;
+  --za-navy-500:  #1976D2;
+  --za-gold-500:  #F4A800;
+  --za-teal-500:  #00897B;
+  --za-sand-400:  #C8A96E;
+  --za-neutral-900: #212121;
+  --za-neutral-700: #424242;
+  --za-neutral-500: #757575;
+  --za-neutral-300: #BDBDBD;
+  --za-neutral-100: #F5F5F5;
+  --za-neutral-50:  #FAFAFA;
+  --za-white: #FFFFFF;
+  --za-font-en: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  --za-font-ar: 'IBM Plex Arabic', 'Noto Sans Arabic', sans-serif;
+}
+body { background: #111; font-family: var(--za-font-en); overflow: hidden; }
+#pw { position: fixed; top: 0; left: 0; display: flex; align-items: center; justify-content: center; width: 100vw; height: 100vh; }
+#pres { position: relative; width: 1280px; height: 720px; overflow: hidden; transform-origin: top left; }
+.slide {
+  position: absolute; top: 0; left: 0;
+  width: 1280px; height: 720px;
+  display: none; overflow: hidden;
+}
+.slide.active { display: flex; }
+
+/* Slide backgrounds */
+.s-navy  { background: #0F2D5E; }
+.s-forest{ background: #0D3B1E; }
+.s-dark  { background: #07162a; }
+.s-light { background: #fff; }
+.s-warm  { background: #FAFAFA; }
+.s-teal  { background: #004D40; }
+
+/* Nav */
+#nav { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 16px; z-index: 100; background: rgba(0,0,0,.5); backdrop-filter: blur(8px); padding: 8px 20px; border-radius: 999px; }
+#nav button { background: rgba(255,255,255,.15); border: none; color: #fff; font-size: 18px; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background .2s; }
+#nav button:hover { background: rgba(255,255,255,.3); }
+#slide-counter { color: rgba(255,255,255,.7); font-size: 13px; font-family: var(--za-font-en); min-width: 60px; text-align: center; }
+#progress { position: fixed; top: 0; left: 0; height: 3px; background: var(--za-green-400); transition: width .3s; z-index: 100; }
+
+/* Logo */
+.logo { height: 56px; width: auto; display: block; mix-blend-mode: multiply; }
+.logo-inv { width: auto; display: block; background: rgba(255,255,255,.97); border-radius: 10px; padding: 4px 10px; }
+
+/* Typography */
+.overline { font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; }
+.display-xl { font-size: 72px; font-weight: 800; line-height: 1.05; }
+.display-lg { font-size: 56px; font-weight: 800; line-height: 1.08; }
+.display-md { font-size: 44px; font-weight: 700; line-height: 1.1; }
+.display-sm { font-size: 36px; font-weight: 700; line-height: 1.15; }
+.h2 { font-size: 28px; font-weight: 700; line-height: 1.25; }
+.h3 { font-size: 22px; font-weight: 600; line-height: 1.3; }
+.h4 { font-size: 18px; font-weight: 600; line-height: 1.35; }
+.body-lg { font-size: 16px; font-weight: 400; line-height: 1.6; }
+.body-md { font-size: 14px; font-weight: 400; line-height: 1.6; }
+.body-sm { font-size: 13px; font-weight: 400; line-height: 1.5; }
+.caption { font-size: 11px; font-weight: 400; line-height: 1.5; }
+.text-white { color: #fff; }
+.text-white-70 { color: rgba(255,255,255,.7); }
+.text-white-50 { color: rgba(255,255,255,.5); }
+.text-navy { color: #0F2D5E; }
+.text-green { color: #4CAF50; }
+.text-gold { color: #F4A800; }
+.text-sand { color: #C8A96E; }
+.text-teal { color: #00897B; }
+.text-neutral-700 { color: #424242; }
+.text-neutral-500 { color: #757575; }
+
+/* Arabic */
+.ar { font-family: var(--za-font-ar); direction: rtl; letter-spacing: 0; }
+
+/* Layout helpers */
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.items-center { align-items: center; }
+.items-start { align-items: flex-start; }
+.justify-center { justify-content: center; }
+.justify-between { justify-content: space-between; }
+.gap-4 { gap: 16px; }
+.gap-6 { gap: 24px; }
+.gap-8 { gap: 32px; }
+.gap-3 { gap: 12px; }
+.gap-2 { gap: 8px; }
+
+/* Slide header strip */
+.slide-header {
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 60px; display: flex; align-items: center;
+  justify-content: space-between; padding: 0 48px;
+  border-bottom: 1px solid rgba(255,255,255,.1);
+}
+.slide-header.light { border-bottom-color: #E0E0E0; }
+.sh-tag { display: flex; align-items: center; gap: 10px; }
+.sh-num { font-size: 11px; font-weight: 700; letter-spacing: 2px; color: var(--za-green-400); text-transform: uppercase; }
+
+/* Bottom accent bar */
+.bottom-bar { position: absolute; bottom: 0; left: 0; right: 0; height: 4px; background: var(--za-green-400); }
+
+/* Stat card */
+.stat-card {
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 12px; padding: 24px;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.stat-card.light {
+  background: #fff;
+  border: 1px solid #E0E0E0;
+  box-shadow: 0 2px 12px rgba(15,45,94,.08);
+}
+.stat-card.navy-dark {
+  background: var(--za-navy-900);
+  border: 1px solid rgba(76,175,80,.2);
+}
+.stat-num { font-size: 38px; font-weight: 800; line-height: 1; }
+.stat-unit { font-size: 16px; font-weight: 600; }
+
+/* Tag/badge */
+.badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 12px; border-radius: 999px;
+  font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
+}
+.badge-green { background: rgba(76,175,80,.15); color: var(--za-green-400); border: 1px solid rgba(76,175,80,.3); }
+.badge-gold { background: rgba(244,168,0,.15); color: var(--za-gold-500); border: 1px solid rgba(244,168,0,.3); }
+.badge-navy { background: rgba(15,45,94,.15); color: var(--za-navy-700); border: 1px solid rgba(15,45,94,.2); }
+.badge-white { background: rgba(255,255,255,.1); color: rgba(255,255,255,.85); border: 1px solid rgba(255,255,255,.2); }
+.badge-teal { background: rgba(0,137,123,.15); color: var(--za-teal-500); border: 1px solid rgba(0,137,123,.3); }
+
+/* Problem row */
+.prob-row {
+  display: flex; align-items: flex-start; gap: 16px;
+  padding: 16px 20px; border-radius: 10px;
+  background: rgba(255,255,255,.04);
+  border-left: 3px solid var(--za-green-400);
+}
+.prob-icon { font-size: 22px; flex-shrink: 0; margin-top: 2px; }
+
+/* Feature row */
+.feat-item { display: flex; align-items: flex-start; gap: 14px; }
+.feat-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--za-green-400); margin-top: 7px; flex-shrink: 0; }
+
+/* Progress bar */
+.prog-bar { height: 6px; background: rgba(255,255,255,.12); border-radius: 999px; overflow: hidden; }
+.prog-fill { height: 100%; border-radius: 999px; background: var(--za-green-400); }
+
+/* Watermark Z */
+.wm-z {
+  position: absolute; right: -40px; bottom: -80px;
+  font-size: 600px; font-weight: 900; line-height: 1;
+  color: rgba(255,255,255,.03); pointer-events: none; user-select: none;
+  font-family: var(--za-font-en);
+}
+
+/* Chart containers */
+.chart-wrap { position: relative; }
+
+/* SDG badge */
+.sdg-badge {
+  width: 48px; height: 48px; border-radius: 8px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  font-size: 8px; font-weight: 700; text-align: center; text-transform: uppercase; line-height: 1.2;
+}
+
+/* Competitive table */
+.comp-table { width: 100%; border-collapse: collapse; }
+.comp-table th, .comp-table td { padding: 10px 14px; text-align: center; font-size: 13px; border-bottom: 1px solid #E0E0E0; }
+.comp-table th { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+.comp-table tr:last-child td { border-bottom: none; }
+.comp-check { color: var(--za-green-400); font-size: 16px; font-weight: 700; }
+.comp-no { color: #BDBDBD; font-size: 16px; }
+.comp-partial { color: #F4A800; font-size: 14px; }
+
+/* Revenue phase card */
+.rev-phase {
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 12px; padding: 20px;
+}
+.rev-phase.active-phase { border-color: var(--za-green-400); background: rgba(76,175,80,.08); }
+
+/* Team card */
+.team-card {
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 14px; padding: 24px 20px;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.team-avatar {
+  width: 60px; height: 60px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--za-green-900), var(--za-navy-900));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; font-weight: 800; color: var(--za-green-400);
+  border: 2px solid rgba(76,175,80,.3);
+}
+
+/* Map region highlight */
+.map-region { fill: rgba(76,175,80,.15); stroke: var(--za-green-400); stroke-width: 1.5; cursor: pointer; transition: fill .2s; }
+.map-region.active { fill: rgba(76,175,80,.35); }
+.map-region.inactive { fill: rgba(255,255,255,.04); stroke: rgba(255,255,255,.15); }
+
+/* Status pill */
+.status-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 14px; border-radius: 999px; font-size: 12px; font-weight: 600;
+}
+.status-built { background: rgba(76,175,80,.15); color: var(--za-green-400); border: 1px solid rgba(76,175,80,.3); }
+.status-dev { background: rgba(244,168,0,.15); color: #F4A800; border: 1px solid rgba(244,168,0,.3); }
+.status-planned { background: rgba(255,255,255,.08); color: rgba(255,255,255,.5); border: 1px solid rgba(255,255,255,.15); }
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div id="pw">
+  <div id="pres">
+
+<!-- ============================================================
+     SLIDE 1 — COVER (revised)
+============================================================ -->
+<div class="slide s-navy active" id="s1">
+  <div class="wm-z">Z</div>
+  <div style="position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at 70% 50%, rgba(76,175,80,.08) 0%, transparent 60%);pointer-events:none;"></div>
+
+
+  <!-- Subtle Nubian geometric border line (top) -->
+  <div style="position:absolute;top:4px;left:0;right:0;height:2px;background:linear-gradient(90deg, transparent, rgba(200,169,110,.15) 20%, rgba(200,169,110,.15) 80%, transparent);pointer-events:none;"></div>
+
+  <!-- Top bar -->
+  <div style="position:absolute;top:0;left:0;right:0;height:4px;background:var(--za-green-400);"></div>
+
+  <div style="position:absolute;top:24px;left:56px;">
+    <img src="brand/logo2.png" class="logo logo-inv" alt="زرعتي | ZARATI" style="height:92px;">
+  </div>
+
+  <div style="position:absolute;top:44px;right:56px;display:flex;align-items:center;gap:12px;">
+    <span class="badge badge-white">Confidential</span>
+    <span class="badge badge-white">v2.0 · June 2026</span>
+  </div>
+
+  <div style="position:absolute;left:56px;top:50%;transform:translateY(-52%);max-width:640px;">
+    <div class="overline text-green" style="margin-bottom:16px;">Sudan's Agricultural Future</div>
+    <div class="display-lg text-white" style="margin-bottom:20px;line-height:1.1;">The Digital Operating System<br>for Sudan's Agricultural Economy</div>
+    <div class="ar h2 text-white-70" style="margin-bottom:32px;">نظام التشغيل الرقمي للاقتصاد الزراعي السوداني</div>
+    <div class="body-lg text-white-70" style="max-width:520px;margin-bottom:40px;">A technology platform connecting farmers, traders, government and development organizations — built for Sudan's real conditions.</div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;">
+      <span class="badge badge-green">Government of Sudan</span>
+      <span class="badge badge-white">FAO · WFP · IFAD</span>
+      <span class="badge badge-gold">Investors</span>
+    </div>
+  </div>
+
+  <div style="position:absolute;bottom:36px;left:56px;right:56px;display:flex;justify-content:space-between;align-items:center;">
+    <div>
+      <div class="body-sm text-white-70">Sami Eltayeb, Founder &amp; CEO</div>
+      <div class="caption text-white-50">sam@nexorayyc.io</div>
+    </div>
+    <div style="display:flex;gap:32px;">
+      <div style="text-align:center;">
+        <div class="h3 text-green">$4.7B</div>
+        <div class="caption text-white-50">Sudan ag GDP</div>
+      </div>
+      <div style="text-align:center;">
+        <div class="h3 text-green">70%</div>
+        <div class="caption text-white-50">Workforce in ag</div>
+      </div>
+      <div style="text-align:center;">
+        <div class="h3 text-green">~0%</div>
+        <div class="caption text-white-50">Digitized today</div>
+      </div>
+    </div>
+  </div>
+  <div class="bottom-bar"></div>
+</div>
+
+<!-- ============================================================
+     SLIDE 2 — PRODUCT STATUS (NEW)
+============================================================ -->
+<div class="slide s-light" id="s2">
+  <div class="slide-header light">
+    <div class="sh-tag">
+      <span class="sh-num">02</span>
+      <span class="h4 text-navy">Product Status</span>
+    </div>
+    <img src="brand/logo2.png" class="logo" alt="زرعتي | ZARATI" style="height:44px;">
+  </div>
+
+  <div style="position:absolute;top:80px;left:56px;right:56px;bottom:20px;display:flex;flex-direction:column;gap:20px;">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:4px;">
+      <div>
+        <div class="overline text-neutral-500" style="margin-bottom:6px;">Where we are today</div>
+        <div class="h2 text-navy">Platform Development Roadmap</div>
+      </div>
+      <div class="badge badge-green" style="font-size:12px;padding:6px 16px;">Actively Building</div>
+    </div>
+
+    <!-- Status table -->
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <!-- Built -->
+      <div style="background:#F5F5F5;border-radius:10px;padding:16px 20px;border-left:4px solid var(--za-green-400);">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <span class="status-built">✓ Built / MVP Ready</span>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;">
+          <div class="feat-item"><div class="feat-dot" style="background:#4CAF50;"></div><span class="body-sm text-neutral-700">Farmer profile &amp; registration flow</span></div>
+          <div class="feat-item"><div class="feat-dot" style="background:#4CAF50;"></div><span class="body-sm text-neutral-700">Market price bulletin (SMS + web)</span></div>
+          <div class="feat-item"><div class="feat-dot" style="background:#4CAF50;"></div><span class="body-sm text-neutral-700">Basic weather integration</span></div>
+        </div>
+      </div>
+
+      <!-- In dev -->
+      <div style="background:#FFF8E1;border-radius:10px;padding:16px 20px;border-left:4px solid #F4A800;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+          <span class="status-dev">⟳ In Development (6 months)</span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;">
+          <div class="feat-item"><div class="feat-dot" style="background:#F4A800;"></div><span class="body-sm text-neutral-700">AI crop advisory engine</span></div>
+          <div class="feat-item"><div class="feat-dot" style="background:#F4A800;"></div><span class="body-sm text-neutral-700">Government analytics dashboard</span></div>
+          <div class="feat-item"><div class="feat-dot" style="background:#F4A800;"></div><span class="body-sm text-neutral-700">NGO beneficiary tracking module</span></div>
+          <div class="feat-item"><div class="feat-dot" style="background:#F4A800;"></div><span class="body-sm text-neutral-700">Trader supply chain tools</span></div>
+          <div class="feat-item"><div class="feat-dot" style="background:#F4A800;"></div><span class="body-sm text-neutral-700">Satellite field monitoring (pilot)</span></div>
+          <div class="feat-item"><div class="feat-dot" style="background:#F4A800;"></div><span class="body-sm text-neutral-700">Offline SMS fallback (full)</span></div>
+        </div>
+      </div>
+
+      <!-- Planned -->
+      <div style="background:#FAFAFA;border-radius:10px;padding:16px 20px;border-left:4px solid #BDBDBD;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+          <span class="status-planned">◌ Phase 2 (12–24 months)</span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;">
+          <div class="feat-item"><div class="feat-dot" style="background:#BDBDBD;"></div><span class="body-sm text-neutral-500">Mobile money / digital payments</span></div>
+          <div class="feat-item"><div class="feat-dot" style="background:#BDBDBD;"></div><span class="body-sm text-neutral-500">Commodity exchange integration</span></div>
+          <div class="feat-item"><div class="feat-dot" style="background:#BDBDBD;"></div><span class="body-sm text-neutral-500">Cross-border trade facilitation</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Timeline bar -->
+    <div style="background:#F5F5F5;border-radius:10px;padding:16px 20px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <span class="body-sm text-neutral-700" style="font-weight:600;">Development Timeline</span>
+        <span class="caption text-neutral-500">12-month Phase 1 target: Gedaref · Kassala · Red Sea State</span>
+      </div>
+      <div style="display:flex;gap:0;border-radius:6px;overflow:hidden;height:28px;">
+        <div style="background:var(--za-green-400);flex:3;display:flex;align-items:center;padding:0 12px;"><span style="font-size:11px;font-weight:600;color:#fff;">Foundation (Done)</span></div>
+        <div style="background:#F4A800;flex:4;display:flex;align-items:center;padding:0 12px;"><span style="font-size:11px;font-weight:600;color:#fff;">Core Build · Now → Q1 2027</span></div>
+        <div style="background:#BDBDBD;flex:3;display:flex;align-items:center;padding:0 12px;"><span style="font-size:11px;font-weight:600;color:#fff;">Phase 2 · 2027+</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="bottom-bar"></div>
+</div>
+
+<!-- ============================================================
+     SLIDE 3 — THE PROBLEM (revised)
+============================================================ -->
+<div class="slide s-navy" id="s3">
+  <div class="slide-header">
+    <div class="sh-tag">
+      <span class="sh-num">03</span>
+      <span class="h4 text-white">The Problem</span>
+    </div>
+    <img src="brand/logo2.png" class="logo logo-inv" alt="زرعتي | ZARATI" style="height:44px;">
+  </div>
+
+  <div style="position:absolute;top:80px;left:56px;right:56px;bottom:20px;display:flex;gap:40px;">
+    <!-- Left — Big stat -->
+    <div style="width:340px;flex-shrink:0;display:flex;flex-direction:column;justify-content:center;">
+      <div class="overline text-green" style="margin-bottom:12px;">Sudan Agriculture</div>
+      <div class="display-lg text-white" style="margin-bottom:4px;">~0%</div>
+      <div class="body-lg text-white-70" style="margin-bottom:24px;">of agricultural production is digitally tracked</div>
+      <div style="height:1px;background:rgba(255,255,255,.1);margin-bottom:24px;"></div>
+      <div class="display-sm text-green" style="margin-bottom:4px;">70%</div>
+      <div class="body-md text-white-70" style="margin-bottom:20px;">of Sudan's workforce depends on agriculture — yet the sector operates entirely on informal oral networks</div>
+      <div class="ar body-md text-white-50">الزراعة السودانية تعمل بدون بيانات</div>
+    </div>
+
+    <!-- Right — Problem rows -->
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:12px;">
+      <div class="prob-row">
+        <span class="prob-icon">📊</span>
+        <div>
+          <div class="h4 text-white" style="margin-bottom:4px;">No data, no decisions</div>
+          <div class="body-sm text-white-70">Farmers lack price data, weather forecasts, and crop advisory. They make seasonal decisions worth their family's entire income on rumors and tradition.</div>
+        </div>
+      </div>
+      <div class="prob-row">
+        <span class="prob-icon">📡</span>
+        <div>
+          <div class="h4 text-white" style="margin-bottom:4px;">Government is flying blind</div>
+          <div class="body-sm text-white-70">The Ministry of Agriculture has no real-time production data. Food security decisions, subsidy allocation, and export policy are based on estimates from the 1990s.</div>
+        </div>
+      </div>
+      <div class="prob-row">
+        <span class="prob-icon">💸</span>
+        <div>
+          <div class="h4 text-white" style="margin-bottom:4px;">Traders &amp; middlemen extract value</div>
+          <div class="body-sm text-white-70">Without market price visibility, farmers sell to whoever arrives at the farm gate. A study of similar markets finds smallholders capture 30–40% below fair market price.</div>
+        </div>
+      </div>
+      <div class="prob-row">
+        <span class="prob-icon">🤲</span>
+        <div>
+          <div class="h4 text-white" style="margin-bottom:4px;">Aid is inefficient and unverifiable</div>
+          <div class="body-sm text-white-70">$600M+ in annual humanitarian agricultural aid reaches Sudan without beneficiary verification, impact tracking, or outcome reporting — damaging donor trust and renewal.</div>
+        </div>
+      </div>
+      <div class="prob-row">
+        <span class="prob-icon">👩‍🌾</span>
+        <div>
+          <div class="h4 text-white" style="margin-bottom:4px;">Women farmers are invisible</div>
+          <div class="body-sm text-white-70">Women represent an estimated 60–80% of food production labor in Sudan but are largely excluded from registered services, credit access, and agricultural programs.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bottom-bar"></div>
+</div>
+
+<!-- ============================================================
+     SLIDE 4 — AGRICULTURE TODAY (revised)
+============================================================ -->
+<div class="slide s-warm" id="s4">
+  <div class="slide-header light">
+    <div class="sh-tag">
+      <span class="sh-num">04</span>
+      <span class="h4 text-navy">Sudan Agriculture Today</span>
+    </div>
+    <img src="brand/logo2.png" class="logo" alt="زرعتي | ZARATI" style="height:44px;">
+  </div>
+
+  <div style="position:absolute;top:80px;left:56px;right:56px;bottom:20px;display:flex;gap:32px;">
+    <!-- Crops chart -->
+    <div style="flex:1;background:#fff;border-radius:12px;padding:24px;box-shadow:0 2px 12px rgba(15,45,94,.08);">
+      <div class="overline text-neutral-500" style="margin-bottom:8px;">Major crops by production (MT)</div>
+      <div class="h3 text-navy" style="margin-bottom:16px;">Crop Portfolio</div>
+      <div style="height:220px;">
+        <canvas id="cropChart"></canvas>
+      </div>
+      <div style="margin-top:12px;padding-top:12px;border-top:1px solid #f0f0f0;">
+        <div class="caption text-neutral-500">Sources: FAO FAOSTAT 2022–23 | Sudan Federal Ministry of Agriculture</div>
+      </div>
+    </div>
+
+    <!-- Stats grid -->
+    <div style="width:380px;display:flex;flex-direction:column;gap:14px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+        <div class="stat-card light">
+          <div class="overline text-neutral-500">Arable land</div>
+          <div class="stat-num text-navy">84M<span class="stat-unit" style="font-size:20px;color:#757575;"> ha</span></div>
+          <div class="body-sm text-neutral-500">Only 20M currently cultivated</div>
+        </div>
+        <div class="stat-card light">
+          <div class="overline text-neutral-500">GDP contribution</div>
+          <div class="stat-num text-navy">$4.7<span class="stat-unit" style="font-size:20px;color:#757575;">B</span></div>
+          <div class="body-sm text-neutral-500">~30% of national GDP</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+        <div class="stat-card light">
+          <div class="overline text-neutral-500">Smallholder farms</div>
+          <div class="stat-num text-navy">12M<span class="stat-unit" style="font-size:20px;color:#757575;">+</span></div>
+          <div class="body-sm text-neutral-500">Across productive states</div>
+        </div>
+        <div class="stat-card light">
+          <div class="overline text-neutral-500">Mobile penetration</div>
+          <div class="stat-num text-navy">68<span class="stat-unit" style="font-size:20px;color:#757575;">%</span></div>
+          <div class="body-sm text-neutral-500">Rural access via basic phone</div>
+        </div>
+      </div>
+      <div style="background:rgba(76,175,80,.06);border:1px solid rgba(76,175,80,.2);border-radius:10px;padding:16px;">
+        <div class="h4 text-navy" style="margin-bottom:8px;">Productivity Gap</div>
+        <div class="body-sm text-neutral-700">Sudan's wheat yield averages <strong>1.8 t/ha</strong> vs. Egypt's <strong>6.6 t/ha</strong> and global average of <strong>3.5 t/ha</strong>. The gap is not climate — it's access to inputs, advisory and markets.</div>
+      </div>
+
+      <!-- Sudan crop identity strip -->
+      <div style="background:#fff;border-radius:10px;padding:14px;border:1px solid #E0E0E0;">
+        <div class="caption text-neutral-500" style="margin-bottom:10px;">SUDAN'S PRINCIPAL CROPS</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <div style="display:flex;align-items:center;gap:6px;background:#F5F5F5;border-radius:6px;padding:6px 10px;">
+            <span style="font-size:16px;">🌾</span><div><div style="font-size:11px;font-weight:600;color:#0F2D5E;">Sorghum</div><div style="font-size:9px;color:#757575;">الذرة — Staple grain</div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;background:#F5F5F5;border-radius:6px;padding:6px 10px;">
+            <span style="font-size:16px;">🌿</span><div><div style="font-size:11px;font-weight:600;color:#0F2D5E;">Sesame</div><div style="font-size:9px;color:#757575;">السمسم — #1 export</div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;background:#F5F5F5;border-radius:6px;padding:6px 10px;">
+            <span style="font-size:16px;">🥜</span><div><div style="font-size:11px;font-weight:600;color:#0F2D5E;">Groundnuts</div><div style="font-size:9px;color:#757575;">الفول السوداني</div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;background:#F5F5F5;border-radius:6px;padding:6px 10px;">
+            <span style="font-size:16px;">🌱</span><div><div style="font-size:11px;font-weight:600;color:#0F2D5E;">Gum Arabic</div><div style="font-size:9px;color:#757575;">الصمغ العربي — 80% of world supply</div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;background:#F5F5F5;border-radius:6px;padding:6px 10px;">
+            <span style="font-size:16px;">🌾</span><div><div style="font-size:11px;font-weight:600;color:#0F2D5E;">Wheat</div><div style="font-size:9px;color:#757575;">القمح — Gedaref belt</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:#fff;border-radius:10px;padding:14px;border:1px solid #E0E0E0;">
+        <div class="caption text-neutral-500" style="margin-bottom:8px;">CONFLICT IMPACT NOTE</div>
+        <div class="body-sm text-neutral-700">Khartoum and Gezira states — historically 40% of production — are severely damaged by the 2023–present conflict. <strong>Gedaref, Kassala, and Red Sea State remain the most productive active regions.</strong></div>
+      </div>
+    </div>
+  </div>
+  <div class="bottom-bar"></div>
+</div>
+
+<!-- ============================================================
+     SLIDE 5 — WAR CHALLENGES (revised)
+============================================================ -->
+<div class="slide s-dark" id="s5">
+  <div class="slide-header">
+    <div class="sh-tag">
+      <span class="sh-num">05</span>
+      <span class="h4 text-white">Operating in Conflict</span>
+    </div>
+    <img src="brand/logo2.png" class="logo logo-inv" alt="زرعتي | ZARATI" style="height:44px;">
+  </div>
+
+  <div style="position:absolute;top:80px;left:56px;right:56px;bottom:20px;display:flex;gap:40px;align-items:center;">
+    <!-- Left column -->
+    <div style="flex:1;display:flex;flex-direction:column;gap:16px;">
+      <div>
+        <div class="overline text-green" style="margin-bottom:10px;">Context &amp; Constraints</div>
+        <div class="h2 text-white" style="margin-bottom:8px;">We are designing for Sudan's real conditions</div>
+        <div class="body-md text-white-70">This is not a hypothetical risk — it's the operating environment. ZARATI's architecture is built around it.</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div style="background:rgba(255,255,255,.05);border-radius:10px;padding:16px 18px;border-left:3px solid #E53935;">
+          <div class="h4 text-white" style="margin-bottom:4px;">⚠ Khartoum &amp; Gezira: Not Phase 1</div>
+          <div class="body-sm text-white-70">Both states under active conflict. Displaced populations, destroyed infrastructure. ZARATI does not operate there in Phase 1.</div>
+        </div>
+        <div style="background:rgba(255,255,255,.05);border-radius:10px;padding:16px 18px;border-left:3px solid #F4A800;">
+          <div class="h4 text-white" style="margin-bottom:4px;">⚡ Intermittent internet &amp; power</div>
+          <div class="body-sm text-white-70">Platform is SMS-first, offline-capable. No feature requires constant connectivity. Data syncs when connection is available.</div>
+        </div>
+        <div style="background:rgba(255,255,255,.05);border-radius:10px;padding:16px 18px;border-left:3px solid var(--za-green-400);">
+          <div class="h4 text-white" style="margin-bottom:4px;">✓ Gedaref, Kassala, Red Sea: Active &amp; stable</div>
+          <div class="body-sm text-white-70">These three states represent Sudan's most productive active farmland and current government seat (Port Sudan). Phase 1 focuses here.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right column -->
+    <div style="width:380px;display:flex;flex-direction:column;gap:14px;">
+      <div class="h4 text-green" style="margin-bottom:4px;">Resilience by Design</div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div style="display:flex;gap:14px;align-items:flex-start;">
+          <div style="width:36px;height:36px;border-radius:8px;background:rgba(76,175,80,.15);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">📱</div>
+          <div><div class="body-md text-white" style="font-weight:600;">SMS / USSD fallback</div><div class="caption text-white-50">Works on any phone, no data required</div></div>
+        </div>
+        <div style="display:flex;gap:14px;align-items:flex-start;">
+          <div style="width:36px;height:36px;border-radius:8px;background:rgba(76,175,80,.15);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">☁</div>
+          <div><div class="body-md text-white" style="font-weight:600;">Distributed cloud architecture</div><div class="caption text-white-50">No single point of failure in-country</div></div>
+        </div>
+        <div style="display:flex;gap:14px;align-items:flex-start;">
+          <div style="width:36px;height:36px;border-radius:8px;background:rgba(76,175,80,.15);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">🛰</div>
+          <div><div class="body-md text-white" style="font-weight:600;">Satellite data layer</div><div class="caption text-white-50">Field monitoring where ground access is limited</div></div>
+        </div>
+        <div style="display:flex;gap:14px;align-items:flex-start;">
+          <div style="width:36px;height:36px;border-radius:8px;background:rgba(76,175,80,.15);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">🤝</div>
+          <div><div class="body-md text-white" style="font-weight:600;">Community agent network</div><div class="caption text-white-50">Local trusted intermediaries where digital access is low</div></div>
+        </div>
+      </div>
+      <div style="margin-top:8px;padding:14px 16px;background:rgba(76,175,80,.08);border-radius:10px;border:1px solid rgba(76,175,80,.2);">
+        <div class="body-sm text-white-70"><strong class="text-green">Comparable precedent:</strong> M-Pesa scaled through Kenya's 2007–08 post-election violence. iCow and Esoko grew fastest during instability because they solved the information vacuum that crises create.</div>
+      </div>
+    </div>
+  </div>
+  <div class="bottom-bar"></div>
+</div>
+
+<!-- ============================================================
+     SLIDE 6 — GOVERNANCE & POLITICAL REALITY (NEW)
+============================================================ -->
+<div class="slide s-light" id="s6">
+  <div class="slide-header light">
+    <div class="sh-tag">
+      <span class="sh-num">06</span>
+      <span class="h4 text-navy">Governance &amp; Political Reality</span>
+    </div>
+    <img src="brand/logo2.png" class="logo" alt="زرعتي | ZARATI" style="height:44px;">
+  </div>
+
+  <div style="position:absolute;top:80px;left:56px;right:56px;bottom:20px;display:flex;gap:32px;">
+    <!-- Left -->
+    <div style="flex:1;display:flex;flex-direction:column;gap:16px;">
+      <div>
+        <div class="overline text-neutral-500" style="margin-bottom:8px;">Honest Assessment</div>
+        <div class="h2 text-navy" style="margin-bottom:10px;">Sudan's governance landscape is fragmented — and that is our context</div>
+        <div class="body-md text-neutral-700">We do not hide political complexity. Our strategy accounts for it explicitly.</div>
+      </div>
+      <!-- Sudan region mini-map -->
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:2px;">
+        <div style="display:flex;align-items:center;gap:5px;background:rgba(76,175,80,.08);border:1px solid rgba(76,175,80,.2);border-radius:6px;padding:5px 10px;">
+          <div style="width:8px;height:8px;border-radius:2px;background:#4CAF50;flex-shrink:0;"></div>
+          <span style="font-size:11px;font-weight:600;color:#0F2D5E;">Gedaref, Kassala, Red Sea</span>
+          <span style="font-size:10px;color:#757575;">— Phase 1 (Active)</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:5px;background:#FFF8E1;border:1px solid rgba(244,168,0,.2);border-radius:6px;padding:5px 10px;">
+          <div style="width:8px;height:8px;border-radius:2px;background:#F4A800;flex-shrink:0;"></div>
+          <span style="font-size:11px;font-weight:600;color:#424242;">N. Kordofan, Nile State</span>
+          <span style="font-size:10px;color:#757575;">— Phase 2 (conditional)</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:5px;background:#FFEBEE;border:1px solid rgba(229,57,53,.15);border-radius:6px;padding:5px 10px;">
+          <div style="width:8px;height:8px;border-radius:2px;background:#E53935;flex-shrink:0;"></div>
+          <span style="font-size:11px;font-weight:600;color:#424242;">Khartoum, Gezira</span>
+          <span style="font-size:10px;color:#757575;">— Excluded (conflict)</span>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div style="background:#FFF8E1;border-radius:10px;padding:14px 18px;border-left:3px solid #F4A800;">
+          <div class="h4 text-neutral-900" style="margin-bottom:4px;">Fragmented political authority</div>
+          <div class="body-sm text-neutral-700">The SAF-led government (Port Sudan) controls eastern states. ZARATI Phase 1 is geographically aligned with the recognized government's territory and agriculture ministry.</div>
+        </div>
+        <div style="background:#F3F8FF;border-radius:10px;padding:14px 18px;border-left:3px solid var(--za-navy-700);">
+          <div class="h4 text-neutral-900" style="margin-bottom:4px;">State-level relationships are primary</div>
+          <div class="body-sm text-neutral-700">Agricultural decisions in Sudan are largely state-level. Gedaref, Kassala, and Red Sea state governments have operational authority. We engage there first.</div>
+        </div>
+        <div style="background:#F3FCF3;border-radius:10px;padding:14px 18px;border-left:3px solid var(--za-green-400);">
+          <div class="h4 text-neutral-900" style="margin-bottom:4px;">Neutral platform positioning</div>
+          <div class="body-sm text-neutral-700">ZARATI is a data and services platform, not a political actor. FAO, WFP, and GIZ already operate in these states under humanitarian mandates. We follow their engagement models.</div>
+        </div>
+        <div style="background:#F5F5F5;border-radius:10px;padding:14px 18px;border-left:3px solid #BDBDBD;">
+          <div class="h4 text-neutral-900" style="margin-bottom:4px;">Data sovereignty &amp; government trust</div>
+          <div class="body-sm text-neutral-700">All agricultural data has a clear sovereignty framework: farmer data owned by farmers, aggregate data shared with government via formal data-sharing agreements with clear governance.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right -->
+    <div style="width:380px;display:flex;flex-direction:column;gap:14px;">
+
+      <div style="background:var(--za-navy-900);border-radius:12px;padding:24px;color:#fff;">
+        <div class="overline text-green" style="margin-bottom:12px;">Engagement Strategy</div>
+        <div style="display:flex;flex-direction:column;gap:14px;">
+          <div>
+            <div class="h4 text-white" style="margin-bottom:4px;">Step 1: Humanitarian entry</div>
+            <div class="body-sm text-white-70">Launch under FAO/WFP pilot agreements — this gives us legitimacy, data, and political cover.</div>
+          </div>
+          <div style="height:1px;background:rgba(255,255,255,.1);"></div>
+          <div>
+            <div class="h4 text-white" style="margin-bottom:4px;">Step 2: State government MOU</div>
+            <div class="body-sm text-white-70">Formal data-sharing MOU with state agriculture ministries before national expansion.</div>
+          </div>
+          <div style="height:1px;background:rgba(255,255,255,.1);"></div>
+          <div>
+            <div class="h4 text-white" style="margin-bottom:4px;">Step 3: Federal MOU for national rollout</div>
+            <div class="body-sm text-white-70">National data platform agreement with Sudan Federal Ministry of Agriculture (Port Sudan).</div>
+          </div>
+          <div style="height:1px;background:rgba(255,255,255,.1);"></div>
+          <div>
+            <div class="h4 text-white" style="margin-bottom:4px;">Step 4: Post-conflict expansion</div>
+            <div class="body-sm text-white-70">When Khartoum/Gezira stabilize, ZARATI is already the established national agricultural data standard.</div>
+          </div>
+        </div>
+      </div>
+      <div style="background:#F3FCF3;border-radius:10px;padding:16px;border:1px solid rgba(76,175,80,.2);">
+        <div class="caption text-neutral-500" style="margin-bottom:6px;">KEY RISK MITIGATION</div>
+        <div class="body-sm text-neutral-700">ZARATI does not require national political consensus to operate. Phase 1 is viable with state-level agreements alone.</div>
+      </div>
+    </div>
+  </div>
+  <div class="bottom-bar"></div>
+</div>
+
+<!-- ============================================================
+     SLIDE 7 — MARKET OPPORTUNITY (revised TAM)
+============================================================ -->
+<div class="slide s-navy" id="s7">
+  <div class="slide-header">
+    <div class="sh-tag">
+      <span class="sh-num">07</span>
+      <span class="h4 text-white">Market Opportunity</span>
+    </div>
+    <img src="brand/logo2.png" class="logo logo-inv" alt="زرعتي | ZARATI" style="height:44px;">
+  </div>
+
+  <div style="position:absolute;top:80px;left:56px;right:56px;bottom:20px;display:flex;flex-direction:column;gap:20px;">
+    <div style="text-align:center;">
+      <div class="overline text-green" style="margin-bottom:8px;">Addressable Market</div>
+      <div class="h2 text-white">Sudan's Agricultural Technology Market</div>
+    </div>
+
+    <!-- TAM/SAM/SOM cards -->
+    <div style="display:flex;gap:20px;justify-content:center;">
+      <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:28px 32px;text-align:center;flex:1;max-width:300px;">
+        <div class="overline text-white-50" style="margin-bottom:12px;">TAM — Total Addressable</div>
+        <div class="display-md text-white" style="margin-bottom:4px;">$420M</div>
+        <div class="body-sm text-white-70" style="margin-bottom:12px;">Annual value of ag advisory, market data, and logistics intelligence in Sudan</div>
+        <div class="caption text-white-50">Methodology: 12M smallholder farms × $35/farm/yr addressable service value. Cross-checked against comparable East African markets (Kenya, Ethiopia).</div>
+      </div>
+      <div style="background:rgba(76,175,80,.1);border:1px solid rgba(76,175,80,.25);border-radius:14px;padding:28px 32px;text-align:center;flex:1;max-width:300px;">
+        <div class="overline text-green" style="margin-bottom:12px;">SAM — Serviceable</div>
+        <div class="display-md text-white" style="margin-bottom:4px;">$85M</div>
+        <div class="body-sm text-white-70" style="margin-bottom:12px;">Eastern states (Gedaref, Kassala, Red Sea) + NGO/Gov data contracts</div>
+        <div class="caption text-white-50">~3M farms in target states + institutional data subscriptions at $8–25/unit/month (NGOs, traders, banks).</div>
+      </div>
+      <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:28px 32px;text-align:center;flex:1;max-width:300px;">
+        <div class="overline text-white-50" style="margin-bottom:12px;">SOM — Obtainable (Yr 3)</div>
+        <div class="display-md text-green" style="margin-bottom:4px;">$6.2M</div>
+        <div class="body-sm text-white-70" style="margin-bottom:12px;">Realistic 3-year revenue from Phase 1 pilot states + institutional contracts</div>
+        <div class="caption text-white-50">Conservative 7% SAM capture by Year 3. Based on comparable pilots: iCow Kenya (8% in Y3), Esoko Ghana (5% in Y3).</div>
+      </div>
+    </div>
+
+    <!-- Comparison context -->
+    <div style="background:rgba(255,255,255,.04);border-radius:12px;padding:16px 24px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div>
+          <div class="caption text-white-50" style="margin-bottom:6px;">COMPARABLE MARKET VALIDATION</div>
+          <div class="body-sm text-white-70">iCow (Kenya) reached $2M ARR with 180K farmers in Y3. Esoko (Ghana) achieved NGO data contracts of $1.2M in Y2. Both validated that B2B institutional revenue precedes farmer revenue in fragile contexts.</div>
+        </div>
+        <div style="display:flex;gap:20px;flex-shrink:0;margin-left:32px;">
+          <div style="text-align:center;">
+            <div class="h3 text-green">$600M+</div>
+            <div class="caption text-white-50">Annual ag aid to Sudan</div>
+          </div>
+          <div style="text-align:center;">
+            <div class="h3 text-green">$2.1B</div>
+            <div class="caption text-white-50">East Africa AgTech (2024)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bottom-bar"></div>
+</div>
+
+<!-- ============================================================
+     SLIDE 8 — WHY DIGITAL, WHY NOW
+============================================================ -->
+<div class="slide s-warm" id="s8">
+  <div class="slide-header light">
+    <div class="sh-tag">
+      <span class="sh-num">08</span>
+      <span class="h4 text-navy">Why Digital, Why Now</span>
+    </div>
+    <img src="brand/logo2.png" class="logo" alt="زرعتي | ZARATI" style="height:44px;">
+  </div>
+
+  <div style="position:absolute;top:80px;left:56px;right:56px;bottom:20px;display:flex;gap:32px;align-items:center;">
+    <!-- Left -->
+    <div style="flex:1;display:flex;flex-direction:column;gap:20px;">
+      <div>
+        <div class="overline text-neutral-500" style="margin-bottom:8px;">The enabling conditions</div>
+        <div class="h2 text-navy">Three forces converging now</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <div style="background:#fff;border-radius:10px;padding:20px;box-shadow:0 2px 12px rgba(15,45,94,.06);border-left:4px solid var(--za-green-400);">
+          <div class="h4 text-navy" style="margin-bottom:6px;">1. Mobile penetration reaching critical mass</div>
+          <div class="body-sm text-neutral-700">68% rural mobile penetration. Basic-phone SMS capability means ZARATI works for farmers without smartphones or internet. Reaching 10M+ farmers is technically feasible today.</div>
+        </div>
+        <div style="background:#fff;border-radius:10px;padding:20px;box-shadow:0 2px 12px rgba(15,45,94,.06);border-left:4px solid var(--za-navy-700);">
+          <div class="h4 text-navy" style="margin-bottom:6px;">2. Humanitarian sector demanding accountability</div>
+          <div class="body-sm text-neutral-700">Post-COVID, every major donor (USAID, DFID, EU) requires beneficiary tracking, impact verification, and outcome reporting. ZARATI solves a $600M problem NGOs currently cannot address.</div>
+        </div>
+        <div style="background:#fff;border-radius:10px;padding:20px;box-shadow:0 2px 12px rgba(15,45,94,.06);border-left:4px solid var(--za-gold-500);">
+          <div class="h4 text-navy" style="margin-bottom:6px;">3. Reconstruction creates a once-in-generation window</div>
+          <div class="body-sm text-neutral-700">Post-conflict reconstruction investment in Sudan agriculture is projected at $3B+ (World Bank/IDA estimates). The platform that owns the data layer when reconstruction begins owns the sector.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right -->
+    <div style="width:360px;display:flex;flex-direction:column;gap:14px;">
+      <div style="background:var(--za-navy-900);border-radius:12px;padding:24px;">
+        <div class="overline text-green" style="margin-bottom:12px;">Why not wait for stability?</div>
+        <div class="body-md text-white" style="margin-bottom:16px;font-weight:600;">"The data layer that captures the crisis period becomes the baseline. Whoever builds it first wins."</div>
+        <div class="body-sm text-white-70" style="margin-bottom:12px;">M-Pesa launched during Kenya's 2007–08 post-election crisis. Grameen Bank scaled fastest during Bangladesh floods. Crisis creates demand for trust infrastructure.</div>
+        <div style="height:1px;background:rgba(255,255,255,.1);margin-bottom:12px;"></div>
+        <div class="body-sm text-white-50">First-mover in data accumulation creates compounding advantages: better AI, better pricing, better government relationships, stronger network effects.</div>
+      </div>
+      <div style="background:#fff;border-radius:12px;padding:20px;box-shadow:0 2px 12px rgba(15,45,94,.08);">
+        <div class="caption text-neutral-500" style="margin-bottom:8px;">DIGITAL AGRICULTURE READINESS</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span class="body-sm text-neutral-700">Mobile access</span><span class="body-sm text-navy" style="font-weight:600;">68%</span></div>
+            <div class="prog-bar"><div class="prog-fill" style="width:68%;"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span class="body-sm text-neutral-700">NGO data demand</span><span class="body-sm text-navy" style="font-weight:600;">High</span></div>
+            <div class="prog-bar"><div class="prog-fill" style="width:90%;"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span class="body-sm text-neutral-700">Competitive landscape</span><span class="body-sm text-navy" style="font-weight:600;">Minimal</span></div>
+            <div class="prog-bar"><div class="prog-fill" style="width:15%;background:var(--za-gold-500);"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bottom-bar"></div>
+</div>
+
+<!-- ============================================================
+     SLIDE 9 — WHAT IS ZARATI (revised with build status)
+============================================================ -->
+<div class="slide s-navy" id="s9">
+  <div class="slide-header">
+    <div class="sh-tag">
+      <span class="sh-num">09</span>
+      <span class="h4 text-white">What Is ZARATI</span>
+    </div>
+    <img src="brand/logo2.png" class="logo logo-inv" alt="زرعتي | ZARATI" style="height:44px;">
+  </div>
+
+  <div style="position:absolute;top:80px;left:56px;right:56px;bottom:20px;display:flex;flex-direction:column;gap:16px;">
+    <div style="text-align:center;">
+      <div class="display-sm text-white" style="margin-bottom:8px;">One platform. Four stakeholders. Compounding network effects.</div>
+      <div class="ar h3 text-white-70">منصة واحدة لأربع جهات معنية</div>
+    </div>
+
+    <!-- 4 pillars -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;flex:1;">
+      <div style="background:rgba(76,175,80,.1);border:1px solid rgba(76,175,80,.2);border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:8px;">
+        <div style="font-size:28px;margin-bottom:4px;">👩‍🌾</div>
+        <div class="h4 text-white">Farmer App</div>
+        <div class="body-sm text-white-70" style="flex:1;">SMS + mobile app. Market prices, weather, crop advisory, input sourcing. Works offline.</div>
+        <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:8px;">
+          <span class="status-built" style="font-size:10px;padding:2px 8px;">✓ MVP Ready</span>
+        </div>
+      </div>
+      <div style="background:rgba(21,101,192,.1);border:1px solid rgba(21,101,192,.2);border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:8px;">
+        <div style="font-size:28px;margin-bottom:4px;">🏛</div>
+        <div class="h4 text-white">Government Dashboard</div>
+        <div class="body-sm text-white-70" style="flex:1;">Real-time production data, food security alerts, policy analytics, regional reporting.</div>
+        <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:8px;">
+          <span class="status-dev" style="font-size:10px;padding:2px 8px;">⟳ In Development</span>
+        </div>
+      </div>
+      <div style="background:rgba(0,137,123,.1);border:1px solid rgba(0,137,123,.2);border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:8px;">
+        <div style="font-size:28px;margin-bottom:4px;">🤲</div>
+        <div class="h4 text-white">NGO/Aid Portal</div>
+        <div class="body-sm text-white-70" style="flex:1;">Beneficiary registration, aid distribution tracking, gender disaggregation, impact reporting, donor dashboards.</div>
+        <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:8px;">
+          <span class="status-dev" style="font-size:10px;padding:2px 8px;">⟳ In Development</span>
+        </div>
+      </div>
+      <div style="background:rgba(244,168,0,.08);border:1px solid rgba(244,168,0,.2);border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:8px;">
+        <div style="font-size:28px;margin-bottom:4px;">🚛</div>
+        <div class="h4 text-white">Trader Platform</div>
+        <div class="body-sm text-white-70" style="flex:1;">Supply forecasting, regional crop availability, logistics coordination, market intelligence reports.</div>
+        <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:8px;">
+          <span class="status-dev" style="font-size:10px;padding:2px 8px;">⟳ In Development</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Network effect note -->
+    <div style="background:rgba(255,255,255,.04);border-radius:10px;padding:14px 24px;display:flex;align-items:center;gap:20px;">
+      <div style="font-size:22px;">🔗</div>
+      <div class="body-sm text-white-70"><strong class="text-white">Network effect:</strong> Every farmer registered makes the government data better. Better government data attracts NGOs. NGO presence brings more farmers. Trader intelligence improves with scale. Each stakeholder makes every other stakeholder's tool more valuable.</div>
+    </div>
+  </div>
+  <div class="bottom-bar"></div>
+</div>
+
+<!-- ============================================================
+     SLIDE 10 — PLATFORM OVERVIEW
+============================================================ -->
+<div class="slide s-light" id="s10">
+  <div class="slide-header light">
+    <div class="sh-tag">
+      <span class="sh-num">10</span>
+      <span class="h4 text-navy">Platform Architecture</span>
+    </div>
+    <img src="brand/logo2.png" class="logo" alt="زرعتي | ZARATI" style="height:44px;">
+  </div>
+
+  <div style="position:absolute;top:80px;left:56px;right:56px;bottom:20px;display:flex;gap:28px;align-items:center;">
+    <!-- Diagram -->
+    <div style="flex:1;background:var(--za-navy-900);border-radius:16px;padding:28px;height:100%;max-height:540px;display:flex;flex-direction:column;gap:16px;position:relative;overflow:hidden;">
+      <!-- Subtle Nile-inspired vertical flow line -->
+      <svg style="position:absolute;left:0;top:0;bottom:0;width:6px;height:100%;opacity:.25;pointer-events:none;" preserveAspectRatio="none" viewBox="0 0 6 400">
+        <path d="M3,0 Q5,50 3,100 Q1,150 3,200 Q5,250 3,300 Q1,350 3,400" fill="none" stroke="#1565C0" stroke-width="3" stroke-linecap="round"/>
+      </svg>
+      <div class="overline text-green" style="margin-bottom:4px;">Data Flow Architecture</div>
+
+      <!-- Data sources -->
+      <div style="background:rgba(255,255,255,.05);border-radius:10px;padding:14px;border:1px solid rgba(255,255,255,.08);">
+        <div class="caption text-white-50" style="margin-bottom:8px;">DATA INPUTS</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <span class="badge badge-white" style="font-size:10px;">Farmer registrations</span>
+          <span class="badge badge-white" style="font-size:10px;">Market prices</span>
+          <span class="badge badge-white" style="font-size:10px;">Satellite imagery</span>
+          <span class="badge badge-white" style="font-size:10px;">Weather API</span>
+          <span class="badge badge-white" style="font-size:10px;">NGO beneficiary data</span>
+          <span class="badge badge-white" style="font-size:10px;">SMS/USSD logs</span>
+        </div>
+      </div>
+
+      <!-- Arrow -->
+      <div style="text-align:center;font-size:20px;color:rgba(76,175,80,.6);">↓</div>
+
+      <!-- Core platform -->
+      <div style="background:rgba(76,175,80,.1);border:1px solid rgba(76,175,80,.25);border-radius:10px;padding:16px;text-align:center;">
+        <div class="h4 text-white" style="margin-bottom:6px;">ZARATI Core Platform</div>
+        <div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;">
+          <span class="badge badge-green" style="font-size:10px;">AI Advisory Engine</span>
+          <span class="badge badge-green" style="font-size:10px;">Data Lake</span>
+          <span class="badge badge-green" style="font-size:10px;">Analytics API</span>
+          <span class="badge badge-green" style="font-size:10px;">Identity Layer</span>
+        </div>
+      </div>
+
+      <!-- Arrow -->
+      <div style="text-align:center;font-size:20px;color:rgba(76,175,80,.6);">↓</div>
+
+      <!-- Outputs -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <div style="background:rgba(255,255,255,.04);border-radius:8px;padding:10px;text-align:center;">
+          <div class="caption text-green" style="margin-bottom:4px;">FARMERS</div>
+          <div class="body-sm text-white-70">Advisory · Prices · Weather</div>
+        </div>
+        <div style="background:rgba(255,255,255,.04);border-radius:8px;padding:10px;text-align:center;">
+          <div class="caption text-green" style="margin-bottom:4px;">GOVERNMENT</div>
+          <div class="body-sm text-white-70">Dashboard · Alerts · Reports</div>
+        </div>
+        <div style="background:rgba(255,255,255,.04);border-radius:8px;padding:10px;text-align:center;">
+          <div class="caption text-green" style="margin-bottom:4px;">NGOs</div>
+          <div class="body-sm text-white-70">Beneficiary · Impact · SDGs</div>
+        </div>
+        <div style="background:rgba(255,255,255,.04);border-radius:8px;padding:10px;text-align:center;">
+          <div class="caption text-green" style="margin-bottom:4px;">TRADERS</div>
+          <div class="body-sm text-white-70">Forecasts · Logistics · Intel</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Feature list -->
+    <div style="width:340px;display:flex;flex-direction:column;gap:12px;">
+      <div class="overline text-neutral-500" style="margin-bottom:4px;">Core Capabilities</div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div style="background:#fff;border-radius:10px;padding:14px 16px;box-shadow:0 2px 8px rgba(15,45,94,.06);display:flex;gap:12px;align-items:flex-start;">
+          <div style="width:32px;height:32px;border-radius:8px;background:rgba(76,175,80,.1);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">🤖</div>
+          <div><div class="body-md text-navy" style="font-weight:600;margin-bottom:2px;">AI crop advisory</div><div class="caption text-neutral-500">Personalized recommendations based on location, crop, season, soil type</div></div>
+        </div>
+        <div style="background:#fff;border-radius:10px;padding:14px 16px;box-shadow:0 2px 8px rgba(15,45,94,.06);display:flex;gap:12px;align-items:flex-start;">
+          <div style="width:32px;height:32px;border-radius:8px;background:rgba(21,101,192,.1);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">📊</div>
+          <div><div class="body-md text-navy" style="font-weight:600;margin-bottom:2px;">Real-time market prices</div><div class="caption text-neutral-500">Aggregated from traders, NGOs, government sources. SMS-delivered.</div></div>
+        </div>
+        <div style="background:#fff;border-radius:10px;padding:14px 16px;box-shadow:0 2px 8px rgba(15,45,94,.06);display:flex;gap:12px;align-items:flex-start;">
+          <div style="width:32px;height:32px;border-radius:8px;background:rgba(0,137,123,.1);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">🛰</div>
+          <div><div class="body-md text-navy" style="font-weight:600;margin-bottom:2px;">Satellite field monitoring</div><div class="caption text-neutral-500">NDVI, flood detection, crop health — no field visit required</div></div>
+        </div>
+        <div style="background:#fff;border-radius:10px;padding:14px 16px;box-shadow:0 2px 8px rgba(15,45,94,.06);display:flex;gap:12px;align-items:flex-start;">
+          <div style="width:32px;height:32px;border-radius:8px;background:rgba(244,168,0,.1);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">✅</div>
+          <div><div class="body-md text-navy" style="font-weight:600;margin-bottom:2px;">Beneficiary verification</div><div class="caption text-neutral-500">Digital ID + biometric options for aid targeting accuracy</div></div>
+        </div>
+        <div style="background:#fff;border-radius:10px;padding:14px 16px;box-shadow:0 2px 8px rgba(15,45,94,.06);display:flex;gap:12px;align-items:flex-start;">
+          <div style="width:32px;height:32px;border-radius:8px;background:rgba(76,175,80,.1);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">📱</div>
+          <div><div class="body-md text-navy" style="font-weight:600;margin-bottom:2px;">SMS / offline-first</div><div class="caption text-neutral-500">Full functionality on basic phone. No data plan required.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bottom-bar"></div>
+</div>
+
+<!-- ============================================================
+     SLIDE 11 — TEAM & LEADERSHIP (NEW)
+============================================================ -->
+<div class="slide s-navy" id="s11">
+  <div class="slide-header">
+    <div class="sh-tag">
+      <span class="sh-num">11</span>
+      <span class="h4 text-white">Team &amp; Leadership</span>
+    </div>
+    <img src="brand/logo2.png" class="logo logo-inv" alt="زرعتي | ZARATI" style="height:68px;">
+  </div>
+
+  <div style="position:absolute;top:86px;left:56px;right:56px;bottom:20px;display:flex;gap:32px;">
+    <!-- Founder card — large -->
+    <div style="width:420px;flex-shrink:0;background:rgba(255,255,255,.05);border:1px solid rgba(76,175,80,.2);border-radius:14px;padding:28px;display:flex;flex-direction:column;gap:16px;">
+      <div style="display:flex;gap:16px;align-items:center;">
+        <div style="width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#0D3B1E,#1565C0);display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:800;color:#4CAF50;border:2px solid rgba(76,175,80,.35);flex-shrink:0;">SE</div>
+        <div>
+          <div class="h3 text-white">Sami Eltayeb</div>
+          <div class="body-sm text-green" style="margin-bottom:2px;">Founder &amp; CEO</div>
+          <div class="caption text-white-50">Khartoum, Sudan / Remote</div>
+        </div>
+      </div>
+      <div style="height:1px;background:rgba(255,255,255,.08);"></div>
+      <div>
+        <div class="overline text-green" style="margin-bottom:10px;">Why This Founder, This Market</div>
+        <div class="body-sm text-white-70" style="margin-bottom:14px;">ZARATI was founded on a specific insight: Sudan's agricultural crisis is fundamentally a <strong class="text-white">logistics, operations, and information problem</strong> — not an agronomy problem. The right founder is one who has solved those problems at scale.</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <div style="width:6px;height:6px;border-radius:50%;background:var(--za-green-400);margin-top:6px;flex-shrink:0;"></div>
+            <div class="body-sm text-white-70"><strong class="text-white">20+ years logistics &amp; operations</strong> — managing complex supply chains in environments where infrastructure fails</div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <div style="width:6px;height:6px;border-radius:50%;background:var(--za-green-400);margin-top:6px;flex-shrink:0;"></div>
+            <div class="body-sm text-white-70"><strong class="text-white">IT sales &amp; technology leadership</strong> — selling enterprise software to institutions that resist change</div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <div style="width:6px;height;6px;border-radius:50%;background:var(--za-green-400);margin-top:6px;flex-shrink:0;"></div>
+            <div class="body-sm text-white-70"><strong class="text-white">Enterprise procurement &amp; digital transformation</strong> — the exact skill set required for government and NGO platform adoption</div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <div style="width:6px;height:6px;border-radius:50%;background:var(--za-green-400);margin-top:6px;flex-shrink:0;"></div>
+            <div class="body-sm text-white-70"><strong class="text-white">Deep Sudan market knowledge</strong> — understands the actual constraints on the ground, not academic assumptions</div>
+          </div>
+        </div>
+      </div>
+      <div style="background:rgba(76,175,80,.08);border-radius:8px;padding:12px 14px;border:1px solid rgba(76,175,80,.15);">
+        <div class="caption text-green" style="margin-bottom:4px;">FOUNDER-MARKET FIT</div>
+        <div class="body-sm text-white-70">The most successful AgriTech founders — Jack Sim (Grameen Phone), Triphon Athanasiadis (Esoko), Caleb Kramer (One Acre Fund) — came from logistics, finance, and technology, not farming.</div>
+      </div>
+    </div>
+
+    <!-- Right — team grid + advisors -->
+    <div style="flex:1;display:flex;flex-direction:column;gap:16px;">
+      <!-- Team cards -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="team-card">
+          <div style="display:flex;gap:12px;align-items:center;">
+            <div style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;font-size:16px;color:rgba(255,255,255,.4);border:1px dashed rgba(255,255,255,.2);">?</div>
+            <div>
+              <div class="body-md text-white" style="font-weight:600;">CTO</div>
+              <div class="caption text-white-50">Actively Recruiting</div>
+            </div>
+          </div>
+          <div class="body-sm text-white-70">Background target: Mobile-first platforms, Africa markets. Django/React/cloud. Experience with SMS/USSD systems preferred.</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <span class="badge badge-white" style="font-size:9px;">Mobile-first</span>
+            <span class="badge badge-white" style="font-size:9px;">Africa tech</span>
+          </div>
+        </div>
+        <div class="team-card">
+          <div style="display:flex;gap:12px;align-items:center;">
+            <div style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;font-size:16px;color:rgba(255,255,255,.4);border:1px dashed rgba(255,255,255,.2);">?</div>
+            <div>
+              <div class="body-md text-white" style="font-weight:600;">Head of Partnerships</div>
+              <div class="caption text-white-50">Actively Recruiting</div>
+            </div>
+          </div>
+          <div class="body-sm text-white-70">Experience with FAO, WFP, USAID institutional partnerships. Sudan/East Africa network preferred.</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <span class="badge badge-white" style="font-size:9px;">FAO/WFP network</span>
+            <span class="badge badge-white" style="font-size:9px;">BD</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Advisory board -->
+      <div>
+        <div class="overline text-green" style="margin-bottom:10px;">Seeking Advisory Board</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
+          <div style="background:rgba(255,255,255,.04);border-radius:10px;padding:14px;border:1px dashed rgba(255,255,255,.15);">
+            <div class="body-sm text-white" style="font-weight:600;margin-bottom:4px;">Agricultural Economist</div>
+            <div class="caption text-white-50">Sudan/Sahel expertise. FAO or World Bank background preferred.</div>
+          </div>
+          <div style="background:rgba(255,255,255,.04);border-radius:10px;padding:14px;border:1px dashed rgba(255,255,255,.15);">
+            <div class="body-sm text-white" style="font-weight:600;margin-bottom:4px;">DFI/Impact Investor</div>
+            <div class="caption text-white-50">IFC, AfDB, or impact fund partner for grant writing and fundraising.</div>
+          </div>
+          <div style="background:rgba(255,255,255,.04);border-radius:10px;padding:14px;border:1px dashed rgba(255,255,255,.15);">
+            <div class="body-sm text-white" style="font-weight:600;margin-bottom:4px;">Sudan Government Liaison</div>
+            <div class="caption text-white-50">Former Ministry of Agriculture or SAF-aligned government access.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Honest note -->
+      <div style="background:rgba(244,168,0,.06);border:1px solid rgba(244,168,0,.2);border-radius:10px;padding:16px;">
+        <div class="caption text-gold" style="margin-bottom:6px;">WHAT WE'RE ASKING INVESTORS TO FUND</div>
+        <div class="body-sm text-white-70">This raise funds: platform completion, first 12-month pilot in 3 states, CTO hire, and partnership infrastructure. The founder has the relationships and domain knowledge. Investment fills the execution capacity.</div>
+      </div>
+    </div>
+  </div>
+  <div class="bottom-bar"></div>
+</div>
+
+<!-- ============================================================
+     SLIDE 12 — FARMER MODULE (gender added)
+============================================================ -->
+<div class="slide s-forest" id="s12">
+  <div class="slide-header">
+    <div class="sh-tag">
+      <span class="sh-num">12</span>
+      <span class="h4 text-white">For Farmers</span>
+    </div>
+    <img src="brand/logo2.png" class="logo logo-inv" alt="زرعتي | ZARATI" style="height:44px;">
+  </div>
+
+  <div style="position:absolute;top:80px;left:56px;right:56px;bottom:20px;display:flex;gap:32px;align-items:center;">
+    <!-- Phone mockup -->
+    <div style="width:220px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:16px;">
+      <div style="width:180px;height:320px;border-radius:28px;background:#1a1a2e;border:6px solid #333;box-shadow:0 20px 60px rgba(0,0,0,.5);overflow:hidden;position:relative;">
+        <div style="height:24px;background:#0d0d1a;display:flex;align-items:center;justify-content:center;">
+          <div style="width:48px;height:4px;border-radius:2px;background:#333;"></div>
+        </div>
+        <div style="background:var(--za-navy-900);padding:12px;">
+          <div style="font-size:8px;color:#4CAF50;font-weight:700;letter-spacing:1px;margin-bottom:4px;">ZARATI</div>
+          <div style="font-size:10px;color:#fff;font-weight:600;margin-bottom:8px;">مرحباً، فاطمة 👋</div>
+          <div style="background:rgba(76,175,80,.15);border-radius:6px;padding:8px;margin-bottom:6px;">
+            <div style="font-size:8px;color:#4CAF50;margin-bottom:2px;">سعر الذرة اليوم</div>
+            <div style="font-size:14px;color:#fff;font-weight:700;">SDG 4,200/قنطار</div>
+            <div style="font-size:7px;color:rgba(255,255,255,.5);">↑ 8% — سوق القضارف</div>
+          </div>
+          <div style="background:rgba(255,255,255,.05);border-radius:6px;padding:8px;margin-bottom:6px;">
+            <div style="font-size:8px;color:rgba(255,255,255,.6);margin-bottom:2px;">توصية اليوم</div>
+            <div style="font-size:9px;color:#fff;">أمطار محتملة خلال 48 ساعة. انتظر قبل الري.</div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;">
+            <div style="background:rgba(76,175,80,.1);border-radius:4px;padding:6px;text-align:center;">
+              <div style="font-size:9px;color:#4CAF50;">أسعار السوق</div>
+            </div>
+            <div style="background:rgba(255,255,255,.05);border-radius:4px;padding:6px;text-align:center;">
+              <div style="font-size:9px;color:rgba(255,255,255,.6);">مزرعتي</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="caption text-white-50" style="text-align:center;">SMS + mobile — works offline</div>
+    </div>
+
+    <!-- Features -->
+    <div style="flex:1;display:flex;flex-direction:column;gap:12px;">
+      <div>
+        <div class="overline text-green" style="margin-bottom:8px;">Built for Sudan's farmers</div>
+        <div class="h2 text-white" style="margin-bottom:4px;">Access to data that was previously impossible</div>
+        <div class="ar body-md text-white-70">وصول إلى معلومات لم تكن متاحة من قبل</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div style="background:rgba(255,255,255,.05);border-radius:10px;padding:14px 16px;border-left:3px solid var(--za-green-400);">
+          <div class="h4 text-white" style="margin-bottom:4px;">📊 Real-time market prices</div>
+          <div class="body-sm text-white-70">Know what traders are paying before you sell. Sorghum, millet, groundnuts, sesame — all major crops, multiple markets.</div>
+        </div>
+        <div style="background:rgba(255,255,255,.05);border-radius:10px;padding:14px 16px;border-left:3px solid var(--za-navy-700);">
+          <div class="h4 text-white" style="margin-bottom:4px;">🌦 Weather intelligence</div>
+          <div class="body-sm text-white-70">7-day forecasts with Arabic-language crop-specific recommendations. Linked to irrigation and planting calendars.</div>
+        </div>
+        <div style="background:rgba(255,255,255,.05);border-radius:10px;padding:14px 16px;border-left:3px solid var(--za-teal-500);">
+          <div class="h4 text-white" style="margin-bottom:4px;">🤖 AI crop advisory</div>
+          <div class="body-sm text-white-70">Personalized recommendations based on local crop, soil type, season, and past performance. Delivered via SMS or app.</div>
+        </div>
+        <div style="background:rgba(255,255,255,.05);border-radius:10px;padding:14px 16px;border-left:3px solid var(--za-gold-500);">
+          <div class="h4 text-white" style="margin-bottom:4px;">👩‍🌾 Women farmer inclusion</div>
+          <div class="body-sm text-white-70">Explicit female farmer registration, gender-disaggregated data, women's groups support. Target: <strong class="text-green">40% female users</strong> by Year 2.</div>
+        </div>
+      </div>
+      <div style="background:rgba(255,255,255,.04);border-radius:10px;padding:12px 16px;display:flex;align-items:center;gap:16px;">
+        <div style="text-align:center;flex-shrink:0;">
+          <div class="h3 text-green">40%</div>
+          <div class="caption text-white-50">Target: female<br>registration Y2</div>
+        </div>
+        <div style="width:1px;height:40px;background:rgba(255,255,255,.1);"></div>
+        <div class="body-sm text-white-70">Women represent 60–80% of food production labor in Sudan but are systematically excluded from formal agricultural services. ZARATI's registration explicitly captures female farmers and enables gender-responsive service design.</div>
+      </div>
+    </div>
+  </div>
+  <div class="bottom-bar"></div>
+</div>
+
+
+<!-- ============================================================
+     SLIDE 13 — TRADER MODULE
+============================================================ -->
+<div class="slide s-warm" id="s13">
+  <div class="slide-header light">
+    <div class="sh-tag">
+      <span class="sh-num">13</span>
+      <span class="h4 text-navy">For Traders</span>
+    </div>
+    <img src="brand/logo2.png" class="logo" alt="زرعتي | ZARATI" style="height:44px;">
+  </div>
+
+  <div style="position:absolute;top:80px;left:56px;right:56px;bottom:20px;display:flex;gap:32px;align-items:center;">
+    <div style="flex:1;display:flex;flex-direction:column;gap:14px;">
+      <div>
+        <div class="overline text-neutral-500" style="margin-bottom:8px;">Supply chain intelligence</div>
+        <div class="h2 text-navy" style="margin-bottom:4px;">Traders see the harvest before it arrives</div>
+        <div class="body-md text-neutral-700">Sudan's agricultural traders currently operate on phone calls and market visits. ZARATI gives them data-driven supply forecasting across the three active producing states.</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div style="background:#fff;border-radius:10px;padding:16px;box-shadow:0 2px 8px rgba(15,45,94,.06);border-left:3px solid var(--za-green-400);">
+          <div class="h4 text-navy" style="margin-bottom:4px;">📦 Supply forecasting</div>
+          <div class="body-sm text-neutral-700">Aggregate crop planting data + weather models = projected regional supply by crop, 4–8 weeks ahead.</div>
+        </div>
+        <div style="background:#fff;border-radius:10px;padding:16px;box-shadow:0 2px 8px rgba(15,45,94,.06);border-left:3px solid var(--za-navy-700);">
+          <div class="h4 text-navy" style="margin-bottom:4px;">🗺 Regional availability maps</div>
+          <div class="body-sm text-neutral-700">Know which districts have surplus sorghum, where sesame is being harvested, before competitors. Updated weekly.</div>
+        </div>
+        <div style="background:#fff;border-radius:10px;padding:16px;box-shadow:0 2px 8px rgba(15,45,94,.06);border-left:3px solid var(--za-teal-500);">
+          <div class="h4 text-navy" style="margin-bottom:4px;">🚛 Logistics coordination</div>
+          <div class="body-sm text-neutral-700">Connect with registered farmers in specific areas. Pre-arrange collection. Reduce dead trips and wasted truck days.</div>
+        </div>
+        <div style="background:#fff;border-radius:10px;padding:16px;box-shadow:0 2px 8px rgba(15,45,94,.06);border-left:3px solid var(--za-gold-500);">
+          <div class="h4 text-navy" style="margin-bottom:4px;">📊 Market intelligence reports</div>
+          <div class="body-sm text-neutral-700">Monthly paid reports: price trends, production forecasts, harvest timing, crop quality data. Sold to traders, banks, and DFIs.</div>
+        </div>
+      </div>
+      <div style="background:rgba(76,175,80,.06);border:1px solid rgba(76,175,80,.2);border-radius:10px;padding:14px 16px;">
+        <div class="caption text-neutral-500" style="margin-bottom:6px;">NOTE ON PAYMENTS (PHASE 1)</div>
+        <div class="body-sm text-neutral-700">Phase 1 does not include digital payment infrastructure or transaction fees. Payment rails will be assessed in Year 2 based on banking system stability and mobile money provider partnerships.</div>
+      </div>
+    </div>
+
+    <div style="width:320px;display:flex;flex-direction:column;gap:14px;">
+      <div style="background:var(--za-navy-900);border-radius:12px;padding:24px;color:#fff;">
+        <div class="overline text-green" style="margin-bottom:12px;">Trader Pain Points Today</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <span style="color:#E53935;font-size:14px;flex-shrink:0;margin-top:1px;">✕</span>
+            <div class="body-sm text-white-70">Travel 4–8 hours to assess crop availability</div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <span style="color:#E53935;font-size:14px;flex-shrink:0;margin-top:1px;">✕</span>
+            <div class="body-sm text-white-70">No advance knowledge of harvest timing or volumes</div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <span style="color:#E53935;font-size:14px;flex-shrink:0;margin-top:1px;">✕</span>
+            <div class="body-sm text-white-70">Trucks return empty 30–40% of trips</div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <span style="color:#E53935;font-size:14px;flex-shrink:0;margin-top:1px;">✕</span>
+            <div class="body-sm text-white-70">Price information from competitors only — no independent source</div>
+          </div>
+        </div>
+        <div style="height:1px;background:rgba(255,255,255,.1);margin:16px 0;"></div>
+        <div class="overline text-green" style="margin-bottom:8px;">With ZARATI</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <span style="color:#4CAF50;font-size:14px;flex-shrink:0;margin-top:1px;">✓</span>
+            <div class="body-sm text-white-70">Remote supply assessment before committing trucks</div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <span style="color:#4CAF50;font-size:14px;flex-shrink:0;margin-top:1px;">✓</span>
+            <div class="body-sm text-white-70">Harvest timing alerts per district</div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <span style="color:#4CAF50;font-size:14px;flex-shrink:0;margin-top:1px;">✓</span>
+            <div class="body-sm text-white-70">Direct farmer contact for pre-arranged purchase</div>
+          </div>
+        </div>
+      </div>
+      <div style="background:#fff;border-radius:10px;padding:16px;box-shadow:0 2px 8px rgba(15,45,94,.06);">
+        <div class="caption text-neutral-500" style="margin-bottom:8px;">SUBSCRIPTION MODEL (TRADERS)</div>
+        <div class="body-sm text-neutral-700"><strong>$120–250/month</strong> per trading company for full platform access. Target 80–120 registered trading companies in Phase 1 states = <strong class="text-navy">$115K–$360K ARR</strong> from traders alone by Year 2.</div>
+      </div>
+    </div>
+  </div>
+  <div class="bottom-bar"></div>
+</div>
+
+<!-- ============================================================
+     SLIDE 14 — GOVERNMENT DASHBOARD
+============================================================ -->
+<div class="slide s-navy" id="s14">
+  <div class="slide-header">
+    <div class="sh-tag">
+      <span class="sh-num">14</span>
+      <span class="h4 text-white">For Government</span>
+    </div>
+    <img src="brand/logo2.png" class="logo logo-inv" alt="زرعتي | ZARATI" style="height:44px;">
+  </div>
+
+  <div style="position:absolute;top:80px;left:56px;right:56px;bottom:20px;display:flex;gap:32px;align-items:center;">
+    <!-- Dashboard mockup -->
+    <div style="flex:1;background:#07162a;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,.08);">
+      <div style="background:rgba(255,255,255,.04);padding:10px 16px;border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:space-between;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div style="width:8px;height:8px;border-radius:50%;background:#E53935;"></div>
+          <div style="width:8px;height:8px;border-radius:50%;background:#F4A800;"></div>
+          <div style="width:8px;height:8px;border-radius:50%;background:#4CAF50;"></div>
+        </div>
+        <div class="caption text-white-50">ZARATI Government Dashboard — Gedaref State</div>
+        <div class="caption text-white-50">Live Data</div>
+      </div>
+      <div style="padding:16px;display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;margin-bottom:10px;">
+        <div style="background:rgba(255,255,255,.05);border-radius:8px;padding:12px;text-align:center;">
+          <div style="font-size:22px;font-weight:800;color:#4CAF50;">142K</div>
+          <div class="caption text-white-50">Registered farms</div>
+        </div>
+        <div style="background:rgba(255,255,255,.05);border-radius:8px;padding:12px;text-align:center;">
+          <div style="font-size:22px;font-weight:800;color:#1565C0;">890K</div>
+          <div class="caption text-white-50">Ha under cultivation</div>
+        </div>
+        <div style="background:rgba(76,175,80,.1);border-radius:8px;padding:12px;text-align:center;border:1px solid rgba(76,175,80,.2);">
+          <div style="font-size:22px;font-weight:800;color:#4CAF50;">↑ 12%</div>
+          <div class="caption text-white-50">Yield vs last season</div>
+        </div>
+        <div style="background:rgba(255,255,255,.05);border-radius:8px;padding:12px;text-align:center;">
+          <div style="font-size:22px;font-weight:800;color:#F4A800;">3</div>
+          <div class="caption text-white-50">Active alerts</div>
+        </div>
+      </div>
+      <div style="padding:0 16px 16px;display:grid;grid-template-columns:2fr 1fr;gap:10px;">
+        <div style="background:rgba(255,255,255,.04);border-radius:8px;padding:12px;">
+          <div class="caption text-green" style="margin-bottom:8px;">CROP PRODUCTION MAP — GEDAREF</div>
+          <div style="height:120px;background:rgba(255,255,255,.03);border-radius:6px;display:flex;align-items:center;justify-content:center;">
+            <div style="text-align:center;">
+              <div style="font-size:32px;margin-bottom:4px;">🗺</div>
+              <div class="caption text-white-30">Regional heat map — production by district</div>
+            </div>
+          </div>
+        </div>
+        <div style="background:rgba(255,255,255,.04);border-radius:8px;padding:12px;">
+          <div class="caption text-green" style="margin-bottom:8px;">FOOD SECURITY ALERTS</div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <div style="background:rgba(229,57,53,.1);border-left:2px solid #E53935;padding:6px 8px;border-radius:4px;"><span class="caption" style="color:#EF9A9A;">⚠ Locality A: Drought stress</span></div>
+            <div style="background:rgba(244,168,0,.08);border-left:2px solid #F4A800;padding:6px 8px;border-radius:4px;"><span class="caption" style="color:#FFE082;">~ Locality B: Below-avg rain</span></div>
+            <div style="background:rgba(76,175,80,.08);border-left:2px solid #4CAF50;padding:6px 8px;border-radius:4px;"><span class="caption" style="color:#A5D6A7;">✓ 14 localities: Normal</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Features -->
+    <div style="width:340px;display:flex;flex-direction:column;gap:14px;">
+      <div>
+        <div class="overline text-green" style="margin-bottom:8px;">National data layer</div>
+        <div class="h3 text-white" style="margin-bottom:4px;">The first real-time view of Sudan's agricultural economy</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <div style="width:32px;height:32px;border-radius:8px;background:rgba(76,175,80,.15);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">📡</div>
+          <div><div class="body-md text-white" style="font-weight:600;margin-bottom:2px;">Real-time production intelligence</div><div class="caption text-white-50">First national crop database updated weekly, not annually</div></div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <div style="width:32px;height:32px;border-radius:8px;background:rgba(76,175,80,.15);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">⚠</div>
+          <div><div class="body-md text-white" style="font-weight:600;margin-bottom:2px;">Early warning system</div><div class="caption text-white-50">Drought, flood, pest, and price shock alerts before crisis escalates</div></div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <div style="width:32px;height:32px;border-radius:8px;background:rgba(76,175,80,.15);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">📋</div>
+          <div><div class="body-md text-white" style="font-weight:600;margin-bottom:2px;">Policy analytics</div><div class="caption text-white-50">Subsidy targeting, input distribution optimization, regional food balance</div></div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <div style="width:32px;height:32px;border-radius:8px;background:rgba(76,175,80,.15);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">🤝</div>
+          <div><div class="body-md text-white" style="font-weight:600;margin-bottom:2px;">Donor reporting</div><div class="caption text-white-50">Automated progress reports for World Bank, AfDB, bilateral donors</div></div>
+        </div>
+      </div>
+      <div style="background:rgba(76,175,80,.08);border-radius:10px;padding:14px;border:1px solid rgba(76,175,80,.2);">
+        <div class="caption text-green" style="margin-bottom:4px;">AR — للحكومة</div>
+        <div class="ar body-sm text-white-70">أول نظام بيانات زراعية حقيقي في السودان — يتيح للحكومة اتخاذ قرارات مبنية على بيانات فعلية</div>
+      </div>
+    </div>
+  </div>
+  <div class="bottom-bar"></div>
+</div>
+
+<!-- ============================================================
+     SLIDE 15 — NGO DASHBOARD (gender / SDG)
+============================================================ -->
+<div class="slide s-light" id="s15">
+  <div class="slide-header light">
+    <div class="sh-tag">
+      <span class="sh-num">15</span>
+      <span class="h4 text-navy">For NGOs &amp; Development Organizations</span>
+    </div>
+    <img src="brand/logo2.png" class="logo" alt="زرعتي | ZARATI" style="height:44px;">
+  </div>
+
+  <div style="position:absolute;top:80px;left:56px;right:56px;bottom:20px;display:flex;gap:28px;align-items:center;">
+    <!-- Left -->
+    <div style="flex:1;display:flex;flex-direction:column;gap:14px;">
+      <div>
+        <div class="overline text-neutral-500" style="margin-bottom:8px;">Built for donor accountability</div>
+        <div class="h2 text-navy" style="margin-bottom:6px;">The tool aid organizations can't build themselves</div>
+        <div class="body-md text-neutral-700">Every major donor (USAID, EU, DFID, Gates Foundation) now requires rigorous beneficiary tracking, gender disaggregation, and verified impact reporting. ZARATI delivers all three.</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div style="background:#fff;border-radius:10px;padding:14px 16px;box-shadow:0 2px 8px rgba(15,45,94,.06);border-left:3px solid var(--za-green-400);display:flex;gap:12px;">
+          <div style="flex:1;"><div class="h4 text-navy" style="margin-bottom:3px;">Beneficiary verification &amp; deduplication</div><div class="body-sm text-neutral-700">Digital farmer ID prevents double-counting across organizations. Solves a documented problem in Sudan aid delivery.</div></div>
+        </div>
+        <div style="background:#fff;border-radius:10px;padding:14px 16px;box-shadow:0 2px 8px rgba(15,45,94,.06);border-left:3px solid #E91E8C;">
+          <div class="h4 text-navy" style="margin-bottom:3px;">👩 Gender-disaggregated data</div>
+          <div class="body-sm text-neutral-700">All data captured with gender flag. Enables women-targeted programs, female participation tracking, and gender-responsive impact reporting to donors.</div>
+        </div>
+        <div style="background:#fff;border-radius:10px;padding:14px 16px;box-shadow:0 2px 8px rgba(15,45,94,.06);border-left:3px solid var(--za-teal-500);">
+          <div class="h4 text-navy" style="margin-bottom:3px;">📊 Automated donor dashboards</div>
+          <div class="body-sm text-neutral-700">Real-time progress reports, outcome tracking, and donor-formatted data exports. Reduce M&amp;E overhead by estimated 60%.</div>
+        </div>
+      </div>
+
+      <!-- SDG alignment -->
+      <div style="background:#F5F5F5;border-radius:10px;padding:14px 16px;">
+        <div class="caption text-neutral-500" style="margin-bottom:10px;">SDG ALIGNMENT — MEASURABLE TARGETS</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <div style="background:#DDA63A;border-radius:6px;padding:8px 12px;display:flex;align-items:center;gap:6px;">
+            <span style="color:#fff;font-size:11px;font-weight:700;">SDG 2</span><span style="color:rgba(255,255,255,.9);font-size:10px;">Zero Hunger</span>
+          </div>
+          <div style="background:#FF3A21;border-radius:6px;padding:8px 12px;display:flex;align-items:center;gap:6px;">
+            <span style="color:#fff;font-size:11px;font-weight:700;">SDG 5</span><span style="color:rgba(255,255,255,.9);font-size:10px;">Gender Equality</span>
+          </div>
+          <div style="background:#56C02B;border-radius:6px;padding:8px 12px;display:flex;align-items:center;gap:6px;">
+            <span style="color:#fff;font-size:11px;font-weight:700;">SDG 8</span><span style="color:rgba(255,255,255,.9);font-size:10px;">Decent Work</span>
+          </div>
+          <div style="background:#FD6925;border-radius:6px;padding:8px 12px;display:flex;align-items:center;gap:6px;">
+            <span style="color:#fff;font-size:11px;font-weight:700;">SDG 9</span><span style="color:rgba(255,255,255,.9);font-size:10px;">Industry &amp; Infrastructure</span>
+          </div>
+          <div style="background:#3F7E44;border-radius:6px;padding:8px 12px;display:flex;align-items:center;gap:6px;">
+            <span style="color:#fff;font-size:11px;font-weight:700;">SDG 13</span><span style="color:rgba(255,255,255,.9);font-size:10px;">Climate Action</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right — KPIs and metrics -->
+    <div style="width:320px;display:flex;flex-direction:column;gap:12px;">
+      <div style="background:var(--za-navy-900);border-radius:12px;padding:24px;">
+        <div class="overline text-green" style="margin-bottom:12px;">Measurable SDG Targets (3-year)</div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span class="body-sm text-white">Farmers with market price access</span><span class="body-sm text-green" style="font-weight:700;">500K</span></div>
+            <div class="prog-bar"><div class="prog-fill" style="width:60%;"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span class="body-sm text-white">Female farmers registered</span><span class="body-sm text-green" style="font-weight:700;">200K</span></div>
+            <div class="prog-bar"><div class="prog-fill" style="width:40%;background:#E91E8C;"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span class="body-sm text-white">Beneficiaries verified (dedup)</span><span class="body-sm text-green" style="font-weight:700;">350K</span></div>
+            <div class="prog-bar"><div class="prog-fill" style="width:50%;background:#00897B;"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span class="body-sm text-white">Aid distribution accuracy</span><span class="body-sm text-green" style="font-weight:700;">&gt;95%</span></div>
+            <div class="prog-bar"><div class="prog-fill" style="width:95%;background:#1565C0;"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:#fff;border-radius:10px;padding:18px;box-shadow:0 2px 12px rgba(15,45,94,.08);">
+        <div class="caption text-neutral-500" style="margin-bottom:8px;">NGO REVENUE MODEL (PHASE 1)</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;justify-content:space-between;">
+            <span class="body-sm text-neutral-700">Pilot integration grant (FAO/WFP)</span>
+            <span class="body-sm text-navy" style="font-weight:600;">$150–300K</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;">
+            <span class="body-sm text-neutral-700">Per-org annual subscription</span>
+            <span class="body-sm text-navy" style="font-weight:600;">$30–60K</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;">
+            <span class="body-sm text-neutral-700">Impact reporting add-on</span>
+            <span class="body-sm text-navy" style="font-weight:600;">$8–15K</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bottom-bar"></div>
+</div>
+
+<!-- ============================================================
+     SLIDE 16 — AI ENGINE (qualified)
+============================================================ -->
+<div class="slide s-dark" id="s16">
+  <div class="slide-header">
+    <div class="sh-tag">
+      <span class="sh-num">16</span>
+      <span class="h4 text-white">AI Advisory Engine</span>
+    </div>
+    <img src="brand/logo2.png" class="logo logo-inv" alt="زرعتي | ZARATI" style="height:44px;">
+  </div>
+
+  <div style="position:absolute;top:80px;left:56px;right:56px;bottom:20px;display:flex;gap:36px;align-items:center;">
+    <div style="flex:1;display:flex;flex-direction:column;gap:16px;">
+      <div>
+        <div class="overline text-green" style="margin-bottom:8px;">Intelligence layer</div>
+        <div class="h2 text-white" style="margin-bottom:6px;">AI that works in low-data, Arabic, offline environments</div>
+        <div class="body-md text-white-70">Agricultural AI models trained on global data fail in Sudan's context. ZARATI builds a Sudan-specific model using local crop data, weather patterns, and market prices as the dataset grows.</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div style="background:rgba(255,255,255,.05);border-radius:10px;padding:14px 16px;">
+          <div class="h4 text-white" style="margin-bottom:4px;">🌱 Crop advisory engine</div>
+          <div class="body-sm text-white-70">Planting recommendations, input timing, pest risk alerts — specific to crop, location, and season. Arabic-language output. SMS delivery.</div>
+          <div style="margin-top:8px;"><span class="status-dev" style="font-size:10px;">In Development</span></div>
+        </div>
+        <div style="background:rgba(255,255,255,.05);border-radius:10px;padding:14px 16px;">
+          <div class="h4 text-white" style="margin-bottom:4px;">📈 Price prediction</div>
+          <div class="body-sm text-white-70">Demand and supply signals aggregated across the platform to project price movements 2–4 weeks ahead. Improves with more data.</div>
+          <div style="margin-top:8px;"><span class="status-planned" style="font-size:10px;">Phase 2</span></div>
+        </div>
+        <div style="background:rgba(255,255,255,.05);border-radius:10px;padding:14px 16px;">
+          <div class="h4 text-white" style="margin-bottom:4px;">🛰 Satellite crop health scoring</div>
+          <div class="body-sm text-white-70">NDVI analysis on registered fields to flag stress, drought, and infestation. Informs government alerts and NGO response targeting.</div>
+          <div style="margin-top:8px;"><span class="status-dev" style="font-size:10px;">Pilot — In Development</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="width:360px;display:flex;flex-direction:column;gap:14px;">
+      <div style="background:rgba(76,175,80,.08);border:1px solid rgba(76,175,80,.2);border-radius:12px;padding:20px;">
+        <div class="overline text-green" style="margin-bottom:10px;">Honest Scope Statement</div>
+        <div class="body-sm text-white-70" style="margin-bottom:10px;">We are not claiming general AI or LLM capabilities. The engine is a rules-based + ML recommendation system trained on Sudan-specific agricultural data — using external data sources initially, becoming more precise as the platform accumulates local data.</div>
+        <div class="body-sm text-white" style="font-weight:600;">What makes it valuable is not the AI — it's the local data layer underneath it.</div>
+      </div>
+      <div style="background:rgba(255,255,255,.05);border-radius:12px;padding:20px;">
+        <div class="overline text-green" style="margin-bottom:10px;">Model Inputs</div>
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <div style="display:flex;gap:8px;"><span class="badge badge-green" style="font-size:9px;">Registered farm data</span></div>
+          <div style="display:flex;gap:8px;"><span class="badge badge-white" style="font-size:9px;">CHIRPS rainfall data</span></div>
+          <div style="display:flex;gap:8px;"><span class="badge badge-white" style="font-size:9px;">Sentinel-2 satellite imagery</span></div>
+          <div style="display:flex;gap:8px;"><span class="badge badge-white" style="font-size:9px;">FAO crop calendar data</span></div>
+          <div style="display:flex;gap:8px;"><span class="badge badge-white" style="font-size:9px;">Platform market price feeds</span></div>
+        </div>
+      </div>
+      <div style="background:rgba(255,255,255,.04);border-radius:10px;padding:14px 16px;">
+        <div class="caption text-white-50" style="margin-bottom:6px;">DATA FLYWHEEL</div>
+        <div class="body-sm text-white-70">More farmers → more local data → better advisory → more farmers. Each season the model improves. This is the moat.</div>
+      </div>
+    </div>
+  </div>
+  <div class="bottom-bar"></div>
+</div>
+
+<!-- ============================================================
+     SLIDE 17 — SMS / OFFLINE
+============================================================ -->
+<div class="slide s-forest" id="s17">
+  <div class="slide-header">
+    <div class="sh-tag">
+      <span class="sh-num">17</span>
+      <span class="h4 text-white">SMS &amp; Offline-First</span>
+    </div>
+    <img src="brand/logo2.png" class="logo logo-inv" alt="زرعتي | ZARATI" style="height:44px;">
+  </div>
+
+  <div style="position:absolute;top:80px;left:56px;right:56px;bottom:20px;display:flex;gap:32px;align-items:center;">
+    <div style="flex:1;display:flex;flex-direction:column;gap:14px;">
+      <div>
+        <div class="overline text-green" style="margin-bottom:8px;">Infrastructure reality</div>
+        <div class="h2 text-white" style="margin-bottom:6px;">A platform built for no internet, no smartphone, no power</div>
+        <div class="body-md text-white-70">Most AgriTech platforms fail in Sudan because they assume internet access. ZARATI does not. SMS is the baseline — everything else is an enhancement.</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div style="background:rgba(255,255,255,.06);border-radius:10px;padding:16px;">
+          <div class="h4 text-white" style="margin-bottom:6px;">📱 SMS / USSD</div>
+          <div class="body-sm text-white-70">Market prices, weather, advisory, registration — all via basic SMS commands. Works on any handset. No app install needed.</div>
+        </div>
+        <div style="background:rgba(255,255,255,.06);border-radius:10px;padding:16px;">
+          <div class="h4 text-white" style="margin-bottom:6px;">📶 Progressive web app</div>
+          <div class="body-sm text-white-70">For smartphones: full PWA with offline caching. Works without internet after initial load. Syncs when connection available.</div>
+        </div>
+        <div style="background:rgba(255,255,255,.06);border-radius:10px;padding:16px;">
+          <div class="h4 text-white" style="margin-bottom:6px;">🤝 Community agents</div>
+          <div class="body-sm text-white-70">Trained local intermediaries serve farmers with no phone access. Batch data entry via agent app. Proven model in East Africa.</div>
+        </div>
+        <div style="background:rgba(255,255,255,.06);border-radius:10px;padding:16px;">
+          <div class="h4 text-white" style="margin-bottom:6px;">🔁 Async sync</div>
+          <div class="body-sm text-white-70">All data operations designed as async. Queue locally, sync when connected. No data loss from interruptions.</div>
+        </div>
+      </div>
+      <div style="background:rgba(255,255,255,.04);border-radius:10px;padding:14px 16px;display:flex;gap:20px;align-items:center;">
+        <div style="text-align:center;flex-shrink:0;">
+          <div class="h3 text-green">68%</div>
+          <div class="caption text-white-50">Rural mobile<br>penetration</div>
+        </div>
+        <div style="width:1px;height:40px;background:rgba(255,255,255,.1);"></div>
+        <div class="body-sm text-white-70">Of Sudan's rural 68% with mobile access, the majority use basic (non-smartphone) handsets. SMS-first is not a compromise — it is correct product-market fit.</div>
+      </div>
+    </div>
+
+    <div style="width:300px;display:flex;flex-direction:column;gap:12px;">
+      <div style="background:rgba(255,255,255,.06);border-radius:12px;padding:20px;">
+        <div class="overline text-green" style="margin-bottom:10px;">SMS Command Examples</div>
+        <div style="font-family:monospace;font-size:12px;display:flex;flex-direction:column;gap:8px;color:rgba(255,255,255,.9);">
+          <div style="background:rgba(0,0,0,.2);border-radius:6px;padding:10px;">
+            <div style="color:rgba(255,255,255,.4);font-size:10px;margin-bottom:4px;">FARMER SENDS:</div>
+            <div style="color:#4CAF50;">PRICE SORGHUM GEDAREF</div>
+            <div style="color:rgba(255,255,255,.3);font-size:9px;margin-top:2px;">→ SDG 4,200/قنطار ↑8% — سوق القضارف</div>
+          </div>
+          <div style="background:rgba(0,0,0,.2);border-radius:6px;padding:10px;">
+            <div style="color:rgba(255,255,255,.4);font-size:10px;margin-bottom:4px;">FARMER SENDS:</div>
+            <div style="color:#4CAF50;">WEATHER KASSALA 7DAY</div>
+            <div style="color:rgba(255,255,255,.3);font-size:9px;margin-top:2px;">→ أمطار يوم الأربعاء، صافٍ بعدها</div>
+          </div>
+          <div style="background:rgba(0,0,0,.2);border-radius:6px;padding:10px;">
+            <div style="color:rgba(255,255,255,.4);font-size:10px;margin-bottom:4px;">FARMER SENDS:</div>
+            <div style="color:#4CAF50;">HELP SESAME PEST</div>
+            <div style="color:rgba(255,255,255,.3);font-size:9px;margin-top:2px;">→ Advisory sent in Arabic by return SMS</div>
+          </div>
+        </div>
+      </div>
+      <div style="background:rgba(76,175,80,.08);border:1px solid rgba(76,175,80,.2);border-radius:10px;padding:14px;">
+        <div class="caption text-green" style="margin-bottom:6px;">COMPARABLE PRECEDENT</div>
+        <div class="body-sm text-white-70">Esoko (Ghana) reached 500K farmers via SMS in 3 years. iCow (Kenya) crossed 1M SMS advisory users before launching a smartphone app. SMS first is the proven playbook.</div>
+      </div>
+    </div>
+  </div>
+  <div class="bottom-bar"></div>
+</div>
+
+<!-- ============================================================
+     SLIDE 18 — SATELLITE (no partner claims)
+============================================================ -->
+<div class="slide s-navy" id="s18">
+  <div class="slide-header">
+    <div class="sh-tag">
+      <span class="sh-num">18</span>
+      <span class="h4 text-white">Satellite Monitoring</span>
+    </div>
+    <img src="brand/logo2.png" class="logo logo-inv" alt="زرعتي | ZARATI" style="height:44px;">
+  </div>
+
+  <div style="position:absolute;top:80px;left:56px;right:56px;bottom:20px;display:flex;gap:36px;align-items:center;">
+    <div style="flex:1;display:flex;flex-direction:column;gap:16px;">
+      <div>
+        <div class="overline text-green" style="margin-bottom:8px;">Remote sensing capability</div>
+        <div class="h2 text-white" style="margin-bottom:6px;">See every field without visiting it</div>
+        <div class="body-md text-white-70">Using openly available satellite data (ESA Sentinel-2, NASA MODIS, CHIRPS), ZARATI monitors registered farmland without requiring on-ground access — critical in conflict-affected areas.</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div style="background:rgba(255,255,255,.05);border-radius:10px;padding:14px 16px;border-left:3px solid var(--za-green-400);">
+          <div class="h4 text-white" style="margin-bottom:4px;">NDVI crop health monitoring</div>
+          <div class="body-sm text-white-70">Normalized Difference Vegetation Index — tracks crop biomass and health over growing season. Identifies stress zones before visible.</div>
+        </div>
+        <div style="background:rgba(255,255,255,.05);border-radius:10px;padding:14px 16px;border-left:3px solid var(--za-navy-700);">
+          <div class="h4 text-white" style="margin-bottom:4px;">Flood and drought detection</div>
+          <div class="body-sm text-white-70">Radar imagery detects flood extent within 24–48 hours. Combined with farm registry, generates automatic affected-farmer lists for NGO response.</div>
+        </div>
+        <div style="background:rgba(255,255,255,.05);border-radius:10px;padding:14px 16px;border-left:3px solid var(--za-teal-500);">
+          <div class="h4 text-white" style="margin-bottom:4px;">Crop type and area estimation</div>
+          <div class="body-sm text-white-70">Machine learning classification of crop types from satellite imagery — enables production estimates where ground surveys are impossible.</div>
+        </div>
+      </div>
+      <div style="background:rgba(76,175,80,.08);border:1px solid rgba(76,175,80,.2);border-radius:10px;padding:14px;">
+        <div class="caption text-green" style="margin-bottom:6px;">DATA SOURCES (OPEN &amp; VERIFIED)</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <span class="badge badge-white" style="font-size:10px;">ESA Sentinel-2 (free)</span>
+          <span class="badge badge-white" style="font-size:10px;">NASA MODIS (free)</span>
+          <span class="badge badge-white" style="font-size:10px;">CHIRPS rainfall (free)</span>
+          <span class="badge badge-white" style="font-size:10px;">SMAP soil moisture</span>
+          <span class="badge badge-white" style="font-size:10px;">Google Earth Engine API</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="bottom-bar"></div>
+</div>
+
+<!-- ============================================================
+     SLIDE 19 — REVENUE MODEL v2 (Phase 1: no payments)
+============================================================ -->
+<div class="slide s-light" id="s19">
+  <div class="slide-header light">
+    <div class="sh-tag">
+      <span class="sh-num">19</span>
+      <span class="h4 text-navy">Revenue Model</span>
+    </div>
+    <img src="brand/logo2.png" class="logo" alt="زرعتي | ZARATI" style="height:44px;">
+  </div>
+
+  <div style="position:absolute;top:80px;left:56px;right:56px;bottom:20px;display:flex;gap:28px;align-items:flex-start;padding-top:10px;">
+    <!-- Chart -->
+    <div style="width:260px;flex-shrink:0;">
+      <div class="overline text-neutral-500" style="margin-bottom:8px;">Phase 1 Revenue Mix</div>
+      <div style="height:220px;">
+        <canvas id="revenueChart"></canvas>
+      </div>
+      <div style="background:#F5F5F5;border-radius:8px;padding:12px;margin-top:12px;">
+        <div class="caption text-neutral-500" style="margin-bottom:6px;">PHASE 1 TOTAL ARR TARGET (Y2)</div>
+        <div class="h3 text-navy">$1.8M – $2.4M</div>
+        <div class="body-sm text-neutral-500">Conservative: 3-state pilot, 6–8 NGO partners, 80+ corporate subscribers</div>
+      </div>
+    </div>
+
+    <!-- Phase cards -->
+    <div style="flex:1;display:flex;flex-direction:column;gap:12px;">
+      <!-- Phase 1 -->
+      <div style="background:rgba(76,175,80,.06);border:2px solid rgba(76,175,80,.25);border-radius:12px;padding:18px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+          <div class="h4 text-navy">Phase 1 Revenue (Now → Year 2)</div>
+          <span class="badge badge-green">Active Focus</span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div style="background:#fff;border-radius:8px;padding:12px;border-left:3px solid var(--za-green-400);">
+            <div class="body-sm text-neutral-900" style="font-weight:600;margin-bottom:3px;">NGO Pilot Integration Grants</div>
+            <div class="caption text-neutral-500" style="margin-bottom:6px;">FAO, WFP, USAID, EU — paid to integrate their data into platform</div>
+            <div class="body-md text-navy" style="font-weight:700;">$150–300K per org</div>
+          </div>
+          <div style="background:#fff;border-radius:8px;padding:12px;border-left:3px solid var(--za-navy-700);">
+            <div class="body-sm text-neutral-900" style="font-weight:600;margin-bottom:3px;">Agricultural Company Subscriptions</div>
+            <div class="caption text-neutral-500" style="margin-bottom:6px;">Input suppliers, commodity traders, agri-processors needing market data</div>
+            <div class="body-md text-navy" style="font-weight:700;">$120–250/mo per org</div>
+          </div>
+          <div style="background:#fff;border-radius:8px;padding:12px;border-left:3px solid var(--za-teal-500);">
+            <div class="body-sm text-neutral-900" style="font-weight:600;margin-bottom:3px;">Market Intelligence Reports</div>
+            <div class="caption text-neutral-500" style="margin-bottom:6px;">Monthly reports sold to banks, DFIs, traders, development organizations</div>
+            <div class="body-md text-navy" style="font-weight:700;">$2,500–8,000/report</div>
+          </div>
+          <div style="background:#fff;border-radius:8px;padding:12px;border-left:3px solid var(--za-gold-500);">
+            <div class="body-sm text-neutral-900" style="font-weight:600;margin-bottom:3px;">Donor Technical Assistance</div>
+            <div class="caption text-neutral-500" style="margin-bottom:6px;">IDA, GIZ, USAID — platform as delivery infrastructure for ag programs</div>
+            <div class="body-md text-navy" style="font-weight:700;">$200–500K project</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 2 -->
+      <div style="background:#FAFAFA;border:1px solid #E0E0E0;border-radius:12px;padding:16px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+          <div class="h4 text-neutral-700">Phase 2 Revenue (Year 2–4, contingent)</div>
+          <span class="badge badge-navy" style="font-size:10px;">Conditional on stability</span>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <div style="background:#fff;border-radius:8px;padding:10px 14px;border:1px solid #E0E0E0;">
+            <div class="body-sm text-neutral-700" style="font-weight:600;">Transaction fees</div>
+            <div class="caption text-neutral-500">Requires banking/mobile money stability</div>
+          </div>
+          <div style="background:#fff;border-radius:8px;padding:10px 14px;border:1px solid #E0E0E0;">
+            <div class="body-sm text-neutral-700" style="font-weight:600;">Farmer premium subscriptions</div>
+            <div class="caption text-neutral-500">~$2/month, requires income recovery</div>
+          </div>
+          <div style="background:#fff;border-radius:8px;padding:10px 14px;border:1px solid #E0E0E0;">
+            <div class="body-sm text-neutral-700" style="font-weight:600;">Input marketplace commission</div>
+            <div class="caption text-neutral-500">Fertilizer, seed, tools — 3–5% take rate</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:#FFF8E1;border-radius:8px;padding:12px 16px;border:1px solid rgba(244,168,0,.3);">
+        <div class="caption" style="color:#F4A800;margin-bottom:4px;">HONEST NOTE ON DIGITAL PAYMENTS</div>
+        <div class="body-sm text-neutral-700">Sudan's banking system is fragmented and mobile money penetration remains low. Phase 1 does not include transaction-based revenue. This is not a gap — it is accurate sequencing. The platform creates value first; payment infrastructure follows stability.</div>
+      </div>
+    </div>
+  </div>
+  <div class="bottom-bar"></div>
+</div>
+
+<!-- ============================================================
+     SLIDE 20 — COMPETITIVE LANDSCAPE (NEW)
+============================================================ -->
+<div class="slide s-warm" id="s20">
+  <div class="slide-header light">
+    <div class="sh-tag">
+      <span class="sh-num">20</span>
+      <span class="h4 text-navy">Competitive Landscape</span>
+    </div>
+    <img src="brand/logo2.png" class="logo" alt="زرعتي | ZARATI" style="height:44px;">
+  </div>
+
+  <div style="position:absolute;top:80px;left:56px;right:56px;bottom:20px;display:flex;flex-direction:column;gap:16px;">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;">
+      <div>
+        <div class="overline text-neutral-500" style="margin-bottom:6px;">Market positioning</div>
+        <div class="h2 text-navy">No direct competitor operates in Sudan at scale</div>
+      </div>
+      <div class="badge badge-green">First-mover advantage</div>
+    </div>
+
+    <div style="background:#fff;border-radius:12px;box-shadow:0 2px 12px rgba(15,45,94,.08);overflow:hidden;">
+      <table class="comp-table">
+        <thead>
+          <tr style="background:var(--za-navy-900);">
+            <th style="text-align:left;color:#fff;padding:12px 16px;width:160px;">Competitor</th>
+            <th style="color:rgba(255,255,255,.6);">Sudan presence</th>
+            <th style="color:rgba(255,255,255,.6);">SMS / offline</th>
+            <th style="color:rgba(255,255,255,.6);">Gov dashboard</th>
+            <th style="color:rgba(255,255,255,.6);">NGO M&amp;E tools</th>
+            <th style="color:rgba(255,255,255,.6);">Gender tracking</th>
+            <th style="color:rgba(255,255,255,.6);">Arabic-first</th>
+            <th style="color:rgba(255,255,255,.6);">Multi-stakeholder</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="background:rgba(76,175,80,.05);border-left:4px solid var(--za-green-400);">
+            <td style="text-align:left;padding:12px 16px;"><strong style="color:#0F2D5E;">ZARATI</strong><br><span style="font-size:10px;color:#757575;">Sudan, 2024</span></td>
+            <td><span class="comp-check">✓</span></td>
+            <td><span class="comp-check">✓</span></td>
+            <td><span class="comp-check">✓</span></td>
+            <td><span class="comp-check">✓</span></td>
+            <td><span class="comp-check">✓</span></td>
+            <td><span class="comp-check">✓</span></td>
+            <td><span class="comp-check">✓</span></td>
+          </tr>
+          <tr>
+            <td style="text-align:left;padding:12px 16px;"><strong>Esoko</strong><br><span style="font-size:10px;color:#757575;">Ghana, West Africa</span></td>
+            <td><span class="comp-no">○</span></td>
+            <td><span class="comp-check">✓</span></td>
+            <td><span class="comp-no">○</span></td>
+            <td><span class="comp-partial">~</span></td>
+            <td><span class="comp-no">○</span></td>
+            <td><span class="comp-no">○</span></td>
+            <td><span class="comp-no">○</span></td>
+          </tr>
+          <tr style="background:#FAFAFA;">
+            <td style="text-align:left;padding:12px 16px;"><strong>iCow</strong><br><span style="font-size:10px;color:#757575;">Kenya, East Africa</span></td>
+            <td><span class="comp-no">○</span></td>
+            <td><span class="comp-check">✓</span></td>
+            <td><span class="comp-no">○</span></td>
+            <td><span class="comp-no">○</span></td>
+            <td><span class="comp-no">○</span></td>
+            <td><span class="comp-no">○</span></td>
+            <td><span class="comp-no">○</span></td>
+          </tr>
+          <tr>
+            <td style="text-align:left;padding:12px 16px;"><strong>Twiga Foods</strong><br><span style="font-size:10px;color:#757575;">Kenya — logistics</span></td>
+            <td><span class="comp-no">○</span></td>
+            <td><span class="comp-no">○</span></td>
+            <td><span class="comp-no">○</span></td>
+            <td><span class="comp-no">○</span></td>
+            <td><span class="comp-no">○</span></td>
+            <td><span class="comp-no">○</span></td>
+            <td><span class="comp-no">○</span></td>
+          </tr>
+          <tr style="background:#FAFAFA;">
+            <td style="text-align:left;padding:12px 16px;"><strong>IGAD ICPALD</strong><br><span style="font-size:10px;color:#757575;">Sudan — gov data</span></td>
+            <td><span class="comp-partial">~</span></td>
+            <td><span class="comp-no">○</span></td>
+            <td><span class="comp-partial">~</span></td>
+            <td><span class="comp-no">○</span></td>
+            <td><span class="comp-no">○</span></td>
+            <td><span class="comp-partial">~</span></td>
+            <td><span class="comp-no">○</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="display:flex;gap:16px;">
+      <div style="flex:1;background:#fff;border-radius:10px;padding:14px 16px;box-shadow:0 2px 8px rgba(15,45,94,.06);">
+        <div class="caption text-neutral-500" style="margin-bottom:6px;">SUSTAINABLE MOAT</div>
+        <div class="body-sm text-neutral-700">First-mover in data accumulation. Government relationships are sticky. NGO integrations create switching costs. Arabic-first + offline capability cannot be replicated quickly by Western platforms.</div>
+      </div>
+      <div style="flex:1;background:#fff;border-radius:10px;padding:14px 16px;box-shadow:0 2px 8px rgba(15,45,94,.06);">
+        <div class="caption text-neutral-500" style="margin-bottom:6px;">RISK: LARGE PLATFORM ENTRY</div>
+        <div class="body-sm text-neutral-700">DigiFarm (Safaricom) or Hello Tractor could enter with large marketing budgets. Mitigation: ZARATI's moat is local data + government relationships, which money cannot buy quickly.</div>
+      </div>
+      <div style="flex:1;background:#fff;border-radius:10px;padding:14px 16px;box-shadow:0 2px 8px rgba(15,45,94,.06);">
+        <div class="caption" style="margin-bottom:6px;color:#F4A800;">LEGEND</div>
+        <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+          <span><span class="comp-check">✓</span> <span class="caption text-neutral-500">Full capability</span></span>
+          <span><span class="comp-partial">~</span> <span class="caption text-neutral-500">Partial</span></span>
+          <span><span class="comp-no">○</span> <span class="caption text-neutral-500">Not present</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bottom-bar"></div>
+</div>
+
+<!-- ============================================================
+     SLIDE 21 — IMPACT (revised measurable targets)
+============================================================ -->
+<div class="slide s-navy" id="s21">
+  <div class="slide-header">
+    <div class="sh-tag">
+      <span class="sh-num">21</span>
+      <span class="h4 text-white">Impact Projections</span>
+    </div>
+    <img src="brand/logo2.png" class="logo logo-inv" alt="زرعتي | ZARATI" style="height:44px;">
+  </div>
+
+  <div style="position:absolute;top:80px;left:56px;right:56px;bottom:20px;display:flex;gap:32px;">
+    <!-- Chart -->
+    <div style="flex:1;display:flex;flex-direction:column;gap:16px;">
+      <div>
+        <div class="overline text-green" style="margin-bottom:6px;">Farmer registration &amp; land coverage targets</div>
+        <div class="h3 text-white">Phase 1 — 3 states, 3 years</div>
+      </div>
+      <div style="height:240px;">
+        <canvas id="impactChart"></canvas>
+      </div>
+      <div style="background:rgba(255,255,255,.04);border-radius:8px;padding:12px 16px;">
+        <div class="caption text-white-50" style="margin-bottom:4px;">METHODOLOGY NOTE</div>
+        <div class="body-sm text-white-70">Targets are based on Esoko and iCow growth curves adjusted for Sudan's lower connectivity and conflict constraints. Y1 is conservative; Y2–3 assumes NGO partner registration drives.</div>
+      </div>
+
+      <!-- States coverage progress -->
+      <div style="background:rgba(255,255,255,.04);border-radius:8px;padding:12px 16px;">
+        <div class="caption text-white-50" style="margin-bottom:8px;">PHASE 1 STATE COVERAGE TARGET</div>
+        <div style="display:flex;gap:8px;">
+          <div style="flex:1;background:rgba(76,175,80,.15);border:1px solid rgba(76,175,80,.3);border-radius:6px;padding:8px;text-align:center;">
+            <div style="font-size:10px;font-weight:700;color:#4CAF50;letter-spacing:1px;">GEDAREF</div>
+            <div style="font-size:10px;color:rgba(255,255,255,.6);margin-top:2px;">القضارف — Sorghum belt</div>
+          </div>
+          <div style="flex:1;background:rgba(76,175,80,.12);border:1px solid rgba(76,175,80,.25);border-radius:6px;padding:8px;text-align:center;">
+            <div style="font-size:10px;font-weight:700;color:#4CAF50;letter-spacing:1px;">KASSALA</div>
+            <div style="font-size:10px;color:rgba(255,255,255,.6);margin-top:2px;">كسلا — Sesame &amp; Taka Mts</div>
+          </div>
+          <div style="flex:1;background:rgba(0,137,123,.12);border:1px solid rgba(0,137,123,.25);border-radius:6px;padding:8px;text-align:center;">
+            <div style="font-size:10px;font-weight:700;color:#00897B;letter-spacing:1px;">RED SEA STATE</div>
+            <div style="font-size:10px;color:rgba(255,255,255,.6);margin-top:2px;">البحر الأحمر — Port Sudan</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Impact metrics -->
+    <div style="width:380px;display:flex;flex-direction:column;gap:14px;">
+      <div class="overline text-green" style="margin-bottom:2px;">3-Year SDG Impact Targets</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="stat-card">
+          <div class="overline text-white-50">Farmers</div>
+          <div class="stat-num text-white">500K<span class="stat-unit text-green" style="font-size:16px;"> farmers</span></div>
+          <div class="body-sm text-white-70">Registered, active users by Year 3</div>
+        </div>
+        <div class="stat-card">
+          <div class="overline text-white-50">Women farmers</div>
+          <div class="stat-num" style="color:#E91E8C;">200K<span class="stat-unit text-white-50" style="font-size:16px;"> women</span></div>
+          <div class="body-sm text-white-70">40% female target — SDG 5</div>
+        </div>
+        <div class="stat-card">
+          <div class="overline text-white-50">Land monitored</div>
+          <div class="stat-num text-white">1.2M<span class="stat-unit text-green" style="font-size:16px;"> ha</span></div>
+          <div class="body-sm text-white-70">Satellite + ground coverage</div>
+        </div>
+        <div class="stat-card">
+          <div class="overline text-white-50">Price fairness</div>
+          <div class="stat-num text-white">+15<span class="stat-unit text-green" style="font-size:16px;">%</span></div>
+          <div class="body-sm text-white-70">Est. improvement in farmer price received vs. baseline</div>
+        </div>
+      </div>
+      <div style="background:rgba(255,255,255,.04);border-radius:10px;padding:14px 16px;">
+        <div class="caption text-white-50" style="margin-bottom:6px;">IMPACT VERIFICATION APPROACH</div>
+        <div class="body-sm text-white-70">Baseline survey (500 farmers) in Q1 before platform launch. Annual cohort tracking. Third-party M&amp;E by Year 2 (required for major donor contracts). Impact data is itself a product — sold to donors and development banks.</div>
+      </div>
+    </div>
+  </div>
+  <div class="bottom-bar"></div>
+</div>
+
+<!-- ============================================================
+     SLIDE 22 — ROLLOUT: GEDAREF / KASSALA / RED SEA
+============================================================ -->
+<div class="slide s-forest" id="s22">
+  <div class="slide-header">
+    <div class="sh-tag">
+      <span class="sh-num">22</span>
+      <span class="h4 text-white">Rollout Strategy</span>
+    </div>
+    <img src="brand/logo2.png" class="logo logo-inv" alt="زرعتي | ZARATI" style="height:44px;">
+  </div>
+
+  <div style="position:absolute;top:80px;left:56px;right:56px;bottom:20px;display:flex;gap:32px;align-items:center;">
+
+    <!-- Phase timeline -->
+    <div style="flex:1;display:flex;flex-direction:column;gap:14px;">
+      <div>
+        <div class="overline text-green" style="margin-bottom:8px;">Sequenced expansion</div>
+        <div class="h2 text-white" style="margin-bottom:4px;">Start where agriculture is active. Expand with stability.</div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <!-- Phase 1 -->
+        <div style="background:rgba(76,175,80,.1);border:1px solid rgba(76,175,80,.25);border-radius:12px;padding:18px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+            <div class="h4 text-white">Phase 1 — Now → Year 2</div>
+            <span class="badge badge-green">Active</span>
+          </div>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:10px;">
+            <div style="background:rgba(76,175,80,.15);border-radius:8px;padding:8px 14px;">
+              <div class="body-sm text-white" style="font-weight:600;">📍 Gedaref State</div>
+              <div class="caption text-white-50">Most productive ag state, relatively stable</div>
+            </div>
+            <div style="background:rgba(76,175,80,.15);border-radius:8px;padding:8px 14px;">
+              <div class="body-sm text-white" style="font-weight:600;">📍 Kassala State</div>
+              <div class="caption text-white-50">Major sorghum and sesame region</div>
+            </div>
+            <div style="background:rgba(76,175,80,.15);border-radius:8px;padding:8px 14px;">
+              <div class="body-sm text-white" style="font-weight:600;">📍 Red Sea State (Port Sudan)</div>
+              <div class="caption text-white-50">Current seat of government — political access</div>
+            </div>
+          </div>
+          <div class="body-sm text-white-70">Target: 50,000 registered farmers, 3 NGO pilot agreements, 2 state government MOU.</div>
+        </div>
+
+        <!-- Phase 2 -->
+        <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:14px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+            <div class="h4 text-white">Phase 2 — Year 2–4 (conditional on stability)</div>
+            <span class="badge badge-white" style="font-size:10px;">Planned</span>
+          </div>
+          <div class="body-sm text-white-70">North Kordofan, North Darfur (where access allows), River Nile State. Expand to 5+ states with national government data agreement.</div>
+        </div>
+
+        <!-- Phase 3 -->
+        <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:14px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+            <div class="h4 text-white-70">Phase 3 — Year 4–6 (post-conflict)</div>
+            <span class="status-planned" style="font-size:10px;padding:3px 10px;">Long-term</span>
+          </div>
+          <div class="body-sm text-white-50">Khartoum and Gezira reintegration when conflict resolves. Full national coverage — 12M+ farmers.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bottom-bar"></div>
+</div>
+
+<!-- ============================================================
+     SLIDE 23 — FUNDING + UNIT ECONOMICS
+============================================================ -->
+<div class="slide s-navy" id="s23">
+  <div class="slide-header">
+    <div class="sh-tag">
+      <span class="sh-num">23</span>
+      <span class="h4 text-white">Funding &amp; Unit Economics</span>
+    </div>
+    <img src="brand/logo2.png" class="logo logo-inv" alt="زرعتي | ZARATI" style="height:44px;">
+  </div>
+
+  <div style="position:absolute;top:80px;left:56px;right:56px;bottom:20px;display:flex;gap:32px;">
+    <!-- Ask -->
+    <div style="width:360px;flex-shrink:0;display:flex;flex-direction:column;gap:14px;">
+      <div>
+        <div class="overline text-green" style="margin-bottom:8px;">The Ask</div>
+        <div class="display-md text-white" style="margin-bottom:4px;">$3.5M</div>
+        <div class="body-lg text-white-70">Seed Round — 18-month runway to pilot close</div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span class="body-sm text-white">Product &amp; Engineering (CTO + team)</span><span class="body-sm text-green" style="font-weight:600;">35%</span></div>
+          <div class="prog-bar"><div class="prog-fill" style="width:35%;"></div></div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span class="body-sm text-white">Pilot operations (3 states)</span><span class="body-sm text-green" style="font-weight:600;">28%</span></div>
+          <div class="prog-bar"><div class="prog-fill" style="width:28%;"></div></div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span class="body-sm text-white">Partnerships &amp; BD</span><span class="body-sm text-green" style="font-weight:600;">18%</span></div>
+          <div class="prog-bar"><div class="prog-fill" style="width:18%;"></div></div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span class="body-sm text-white">Data infrastructure &amp; satellite</span><span class="body-sm text-green" style="font-weight:600;">12%</span></div>
+          <div class="prog-bar"><div class="prog-fill" style="width:12%;"></div></div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span class="body-sm text-white">Operations &amp; working capital</span><span class="body-sm text-green" style="font-weight:600;">7%</span></div>
+          <div class="prog-bar"><div class="prog-fill" style="width:7%;"></div></div>
+        </div>
+      </div>
+
+      <div style="background:rgba(255,255,255,.04);border-radius:10px;padding:14px;">
+        <div class="caption text-white-50" style="margin-bottom:6px;">MILESTONES THIS RAISE FUNDS</div>
+        <div style="display:flex;flex-direction:column;gap:4px;">
+          <div class="body-sm text-white-70">✓ CTO hire + 4-person engineering team</div>
+          <div class="body-sm text-white-70">✓ Platform MVP in 3 target states</div>
+          <div class="body-sm text-white-70">✓ First NGO pilot agreement signed</div>
+          <div class="body-sm text-white-70">✓ 50K farmer registrations</div>
+          <div class="body-sm text-white-70">✓ State government MOU × 2</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Unit economics -->
+    <div style="flex:1;display:flex;flex-direction:column;gap:14px;">
+      <div class="overline text-green" style="margin-bottom:2px;">Unit Economics (Year 2 target)</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="stat-card">
+          <div class="overline text-white-50">CAC — NGO org</div>
+          <div class="stat-num text-white">$8<span class="stat-unit text-green" style="font-size:16px;">K</span></div>
+          <div class="body-sm text-white-70">Integration support + onboarding</div>
+        </div>
+        <div class="stat-card">
+          <div class="overline text-white-50">LTV — NGO org</div>
+          <div class="stat-num text-white">$180<span class="stat-unit text-green" style="font-size:16px;">K</span></div>
+          <div class="body-sm text-white-70">5-year contract at $36K/yr avg</div>
+        </div>
+        <div class="stat-card">
+          <div class="overline text-white-50">CAC — Corporate</div>
+          <div class="stat-num text-white">$1.2<span class="stat-unit text-green" style="font-size:16px;">K</span></div>
+          <div class="body-sm text-white-70">Sales + integration for traders/ag cos</div>
+        </div>
+        <div class="stat-card">
+          <div class="overline text-white-50">LTV — Corporate</div>
+          <div class="stat-num text-white">$12<span class="stat-unit text-green" style="font-size:16px;">K</span></div>
+          <div class="body-sm text-white-70">3-year avg $200/mo × contract</div>
+        </div>
+      </div>
+
+      <div style="background:rgba(255,255,255,.04);border-radius:10px;padding:16px;">
+        <div class="caption text-white-50" style="margin-bottom:8px;">PAYBACK PERIOD &amp; MARGINS</div>
+        <div style="display:flex;gap:24px;">
+          <div>
+            <div class="h4 text-green">3.5 months</div>
+            <div class="caption text-white-50">NGO customer payback</div>
+          </div>
+          <div>
+            <div class="h4 text-green">6 months</div>
+            <div class="caption text-white-50">Corporate customer payback</div>
+          </div>
+          <div>
+            <div class="h4 text-green">72%+</div>
+            <div class="caption text-white-50">Target gross margin (data SaaS)</div>
+          </div>
+          <div>
+            <div class="h4 text-green">22:1</div>
+            <div class="caption text-white-50">LTV:CAC (NGO segment)</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:rgba(76,175,80,.08);border:1px solid rgba(76,175,80,.2);border-radius:10px;padding:14px 16px;">
+        <div class="caption text-green" style="margin-bottom:4px;">REVENUE PATH TO SERIES A</div>
+        <div style="display:flex;gap:20px;">
+          <div style="text-align:center;"><div class="h4 text-white">$400K</div><div class="caption text-white-50">Y1 ARR</div></div>
+          <div style="display:flex;align-items:center;color:rgba(76,175,80,.4);font-size:18px;">→</div>
+          <div style="text-align:center;"><div class="h4 text-white">$1.8M</div><div class="caption text-white-50">Y2 ARR</div></div>
+          <div style="display:flex;align-items:center;color:rgba(76,175,80,.4);font-size:18px;">→</div>
+          <div style="text-align:center;"><div class="h4 text-white">$4.5M</div><div class="caption text-white-50">Y3 ARR</div></div>
+          <div style="display:flex;align-items:center;color:rgba(76,175,80,.4);font-size:18px;">→</div>
+          <div style="text-align:center;"><div class="h4 text-green">Series A</div><div class="caption text-white-50">$12–18M raise</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bottom-bar"></div>
+</div>
+
+<!-- ============================================================
+     SLIDE 24 — VISION 2035 (revised — $50B removed)
+============================================================ -->
+<div class="slide s-forest" id="s24">
+  <div class="wm-z">Z</div>
+  <div style="position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at 30% 60%, rgba(76,175,80,.08) 0%, transparent 60%);pointer-events:none;"></div>
+  <div style="position:absolute;top:0;left:0;right:0;height:4px;background:var(--za-green-400);"></div>
+
+  <!-- Nubian/Meroe + Nile + digital grid — full bleed right watermark, premium -->
+  <svg style="position:absolute;right:0;bottom:0;width:500px;height:500px;opacity:.13;pointer-events:none;" viewBox="0 0 500 500">
+    <defs>
+      <pattern id="grid24" width="30" height="30" patternUnits="userSpaceOnUse">
+        <path d="M 30 0 L 0 0 0 30" fill="none" stroke="rgba(76,175,80,1)" stroke-width="0.4"/>
+      </pattern>
+    </defs>
+    <!-- Subtle grid -->
+    <rect width="500" height="500" fill="url(#grid24)" opacity="0.35"/>
+
+    <!-- Nile — flows from top, meanders gently, main axis of composition -->
+    <path d="M240,0 L238,40 L244,85 L238,130 L242,175 L238,220 L242,270 L238,310 L240,420" fill="none" stroke="rgba(21,101,192,.95)" stroke-width="5" stroke-linecap="round"/>
+    <!-- Nile tributaries / Blue Nile -->
+    <path d="M242,220 L280,206 L318,194 L350,180" fill="none" stroke="rgba(21,101,192,.6)" stroke-width="2.5" stroke-linecap="round"/>
+    <!-- Atbara -->
+    <path d="M240,150 L272,140 L305,130 L330,118" fill="none" stroke="rgba(21,101,192,.4)" stroke-width="1.8" stroke-linecap="round"/>
+
+    <!-- Fertile Nile bank bands (agriculture) -->
+    <rect x="228" y="50" width="24" height="20" rx="2" fill="rgba(76,175,80,.5)"/>
+    <rect x="226" y="95" width="28" height="24" rx="2" fill="rgba(76,175,80,.48)"/>
+    <rect x="228" y="145" width="24" height="26" rx="2" fill="rgba(76,175,80,.48)"/>
+    <rect x="226" y="196" width="28" height="30" rx="2" fill="rgba(76,175,80,.5)"/>
+    <rect x="228" y="250" width="24" height="28" rx="2" fill="rgba(76,175,80,.48)"/>
+    <rect x="226" y="300" width="28" height="30" rx="2" fill="rgba(76,175,80,.5)"/>
+
+    <!-- Meroe/Nubian pyramids — steep, narrow silhouettes (ratio ~1:2 base:height, distinctly Sudanese) -->
+    <!-- Ground line (desert sand) -->
+    <line x1="0" y1="428" x2="500" y2="428" stroke="rgba(200,169,110,.7)" stroke-width="2"/>
+
+    <!-- Pyramid 1 (smallest, left) -->
+    <polygon points="55,428 74,348 93,428" fill="rgba(200,169,110,.7)" stroke="rgba(200,169,110,.9)" stroke-width="1"/>
+    <!-- capstone highlight -->
+    <polygon points="71,354 74,348 77,354" fill="rgba(76,175,80,.8)"/>
+
+    <!-- Pyramid 2 -->
+    <polygon points="88,428 112,332 136,428" fill="rgba(200,169,110,.65)" stroke="rgba(200,169,110,.85)" stroke-width="1.2"/>
+    <polygon points="108,338 112,332 116,338" fill="rgba(76,175,80,.8)"/>
+
+    <!-- Pyramid 3 (tallest, central) -->
+    <polygon points="132,428 162,304 192,428" fill="rgba(200,169,110,.7)" stroke="rgba(200,169,110,.9)" stroke-width="1.5"/>
+    <polygon points="158,310 162,304 166,310" fill="rgba(76,175,80,.9)"/>
+
+    <!-- Pyramid 4 -->
+    <polygon points="184,428 210,320 236,428" fill="rgba(200,169,110,.6)" stroke="rgba(200,169,110,.8)" stroke-width="1.2"/>
+    <polygon points="206,326 210,320 214,326" fill="rgba(76,175,80,.8)"/>
+
+    <!-- Pyramid 5 (right, medium) -->
+    <polygon points="228,428 252,338 276,428" fill="rgba(200,169,110,.55)" stroke="rgba(200,169,110,.75)" stroke-width="1"/>
+    <polygon points="248,344 252,338 256,344" fill="rgba(76,175,80,.7)"/>
+
+    <!-- Digital data network — beams from pyramid tips to sky (future vision) -->
+    <line x1="74" y1="348" x2="162" y2="150" stroke="rgba(76,175,80,.5)" stroke-width="0.8" stroke-dasharray="5,4"/>
+    <line x1="112" y1="332" x2="200" y2="120" stroke="rgba(76,175,80,.4)" stroke-width="0.8" stroke-dasharray="5,4"/>
+    <line x1="162" y1="304" x2="240" y2="80" stroke="rgba(76,175,80,.6)" stroke-width="1" stroke-dasharray="6,4"/>
+    <line x1="210" y1="320" x2="250" y2="100" stroke="rgba(76,175,80,.35)" stroke-width="0.7" stroke-dasharray="5,4"/>
+
+    <!-- Data nodes at pyramid tips -->
+    <circle cx="74" cy="348" r="3" fill="rgba(76,175,80,.9)"/>
+    <circle cx="112" cy="332" r="3.5" fill="rgba(76,175,80,.9)"/>
+    <circle cx="162" cy="304" r="4" fill="rgba(76,175,80,1)"/>
+    <circle cx="210" cy="320" r="3" fill="rgba(76,175,80,.9)"/>
+    <circle cx="252" cy="338" r="2.5" fill="rgba(76,175,80,.8)"/>
+  </svg>
+
+  <div style="position:absolute;top:24px;left:56px;">
+    <img src="brand/logo2.png" class="logo logo-inv" alt="زرعتي | ZARATI" style="height:92px;">
+  </div>
+
+  <div style="position:absolute;top:50%;left:56px;right:56px;transform:translateY(-50%);display:flex;gap:48px;align-items:center;">
+    <!-- Left -->
+    <div style="flex:1;">
+      <div class="overline text-green" style="margin-bottom:16px;">The long-term vision</div>
+      <div class="display-md text-white" style="margin-bottom:12px;line-height:1.1;">Sudan becomes a food-secure nation — and ZARATI is its agricultural data infrastructure.</div>
+      <div class="ar h3 text-white-70" style="margin-bottom:28px;">السودان يصبح دولة آمنة غذائياً — وزرعتي هي بنيتها التحتية للبيانات الزراعية</div>
+      <div class="body-lg text-white-70" style="max-width:480px;margin-bottom:28px;">If Sudan achieves 50% of its arable land potential, it could feed 400 million people across the continent. That is the ceiling. We are building the floor: the data infrastructure that makes it possible.</div>
+      <div style="display:flex;gap:12px;">
+        <span class="badge badge-green">Sudan's national agricultural data platform</span>
+        <span class="badge badge-white">Gateway to East African markets</span>
+      </div>
+    </div>
+
+    <!-- Right — milestones -->
+    <div style="width:380px;display:flex;flex-direction:column;gap:12px;">
+      <div style="background:rgba(255,255,255,.05);border-radius:12px;padding:20px;">
+        <div class="overline text-green" style="margin-bottom:12px;">Milestones to the Vision</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div style="display:flex;gap:12px;align-items:flex-start;">
+            <div style="width:32px;height:32px;border-radius:50%;background:rgba(76,175,80,.2);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#4CAF50;flex-shrink:0;">26</div>
+            <div><div class="body-sm text-white" style="font-weight:600;">Pilot close — 3 states, 50K farmers</div><div class="caption text-white-50">Series A ready. NGO contracts in place.</div></div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-start;">
+            <div style="width:32px;height:32px;border-radius:50%;background:rgba(76,175,80,.15);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:rgba(76,175,80,.7);flex-shrink:0;">28</div>
+            <div><div class="body-sm text-white" style="font-weight:600;">National data platform — 5+ states</div><div class="caption text-white-50">Federal government MOU. 500K farmers.</div></div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-start;">
+            <div style="width:32px;height:32px;border-radius:50%;background:rgba(76,175,80,.1);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:rgba(76,175,80,.5);flex-shrink:0;">31</div>
+            <div><div class="body-sm text-white" style="font-weight:600;">Post-conflict full coverage</div><div class="caption text-white-50">Khartoum and Gezira reintegration. 2M+ farmers.</div></div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-start;">
+            <div style="width:32px;height:32px;border-radius:50%;background:rgba(76,175,80,.06);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:rgba(76,175,80,.4);flex-shrink:0;">35</div>
+            <div><div class="body-sm text-white" style="font-weight:600;">Sudan's agricultural data infrastructure</div><div class="caption text-white-50">The operating system for Sudan's food economy.</div></div>
+          </div>
+        </div>
+      </div>
+      <div style="background:rgba(76,175,80,.08);border:1px solid rgba(76,175,80,.2);border-radius:10px;padding:14px 16px;text-align:center;">
+        <div class="h3 text-white" style="margin-bottom:4px;">The question is not whether Sudan's agriculture will digitize.</div>
+        <div class="body-md text-green">The question is who builds it.</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="position:absolute;bottom:36px;left:56px;right:56px;display:flex;justify-content:space-between;align-items:center;">
+    <div>
+      <div class="body-sm text-white-70">Sami Eltayeb — sam@nexorayyc.io</div>
+    </div>
+    <div class="ar body-sm text-white-50">زرعتي | الزراعة الذكية لمستقبل السودان</div>
+  </div>
+  <div class="bottom-bar"></div>
+</div>
+
+  </div><!-- #pres -->
+</div><!-- #pw -->
+
+<!-- Navigation -->
+<div id="nav">
+  <button onclick="navigate(-1)">&#8592;</button>
+  <span id="slide-counter">1 / 24</span>
+  <button onclick="navigate(1)">&#8594;</button>
+</div>
+
+<script>
+const TOTAL = 24;
+let current = 0;
+const slides = document.querySelectorAll('.slide');
+const counter = document.getElementById('slide-counter');
+const progress = document.getElementById('progress');
+const pw = document.getElementById('pw');
+const pres = document.getElementById('pres');
+
+function scalePresentation() {
+  const s = Math.min(window.innerWidth / 1280, window.innerHeight / 720);
+  pres.style.transform = 'scale(' + s + ')';
+  pres.style.transformOrigin = 'top left';
+  pw.style.width = (1280 * s) + 'px';
+  pw.style.height = (720 * s) + 'px';
+}
+scalePresentation();
+window.addEventListener('resize', scalePresentation);
+
+function updateProgress() {
+  counter.textContent = (current + 1) + ' / ' + TOTAL;
+  progress.style.width = ((current + 1) / TOTAL * 100) + '%';
+}
+
+function navigate(dir) {
+  slides[current].classList.remove('active');
+  current = Math.max(0, Math.min(slides.length - 1, current + dir));
+  slides[current].classList.add('active');
+  updateProgress();
+  initChartsForSlide(current);
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') navigate(1);
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') navigate(-1);
+});
+
+// Chart lazy init
+const chartsInit = {};
+
+function initChartsForSlide(idx) {
+  if (idx === 3 && !chartsInit[3]) { initCropChart(); chartsInit[3] = true; }
+  if (idx === 18 && !chartsInit[18]) { initRevenueChart(); chartsInit[18] = true; }
+  if (idx === 20 && !chartsInit[20]) { initImpactChart(); chartsInit[20] = true; }
+}
+
+function initCropChart() {
+  const ctx = document.getElementById('cropChart');
+  if (!ctx) return;
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Sorghum', 'Millet', 'Groundnuts', 'Sesame', 'Wheat', 'Cotton'],
+      datasets: [{
+        label: 'Production (000 MT)',
+        data: [4800, 1200, 950, 720, 440, 180],
+        backgroundColor: ['#4CAF50','#66BB6A','#2E7D32','#00897B','#1565C0','#0D3B1E'],
+        borderRadius: 6,
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { color: 'rgba(0,0,0,.05)' }, ticks: { font: { size: 11 } } },
+        y: { grid: { display: false }, ticks: { font: { size: 12 } } }
+      }
+    }
+  });
+}
+
+function initRevenueChart() {
+  const ctx = document.getElementById('revenueChart');
+  if (!ctx) return;
+  new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: ['NGO Pilot Grants','Ag Company Subscriptions','Market Intelligence Reports','Gov Technical Assistance'],
+      datasets: [{
+        data: [40, 30, 20, 10],
+        backgroundColor: ['#0F2D5E','#4CAF50','#1565C0','#00897B'],
+        borderWidth: 0, hoverOffset: 6
+      }]
+    },
+    options: {
+      cutout: '62%',
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'right',
+          labels: { font: { size: 11 }, padding: 14, boxWidth: 12, color: '#424242' }
+        }
+      }
+    }
+  });
+}
+
+function initImpactChart() {
+  const ctx = document.getElementById('impactChart');
+  if (!ctx) return;
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Year 1', 'Year 2', 'Year 3'],
+      datasets: [
+        {
+          label: 'Farmers registered (000s)',
+          data: [50, 200, 500],
+          backgroundColor: '#4CAF50',
+          borderRadius: 4, yAxisID: 'y1'
+        },
+        {
+          label: 'Hectares monitored (000s)',
+          data: [120, 480, 1200],
+          backgroundColor: '#1565C0',
+          borderRadius: 4, yAxisID: 'y2'
+        }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { labels: { font: { size: 11 }, color: '#fff' } } },
+      scales: {
+        y1: { type: 'linear', position: 'left', ticks: { color: '#4CAF50', font: { size: 10 } }, grid: { color: 'rgba(255,255,255,.08)' } },
+        y2: { type: 'linear', position: 'right', ticks: { color: '#1565C0', font: { size: 10 } }, grid: { display: false } },
+        x: { ticks: { color: 'rgba(255,255,255,.7)', font: { size: 12 } }, grid: { display: false } }
+      }
+    }
+  });
+}
+
+updateProgress();
+</script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+{
+  "name": "زرعتي | Zarati",
+  "short_name": "زرعتي",
+  "description": "منصة السودان الزراعية الذكية — أسعار آنية، طقس زراعي، سوق رقمي",
+  "start_url": "/ar",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0D3B1E",
+  "theme_color": "#0D3B1E",
+  "lang": "ar",
+  "dir": "rtl",
+  "icons": [
+    {
+      "src": "/logo.png",
+      "sizes": "any",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

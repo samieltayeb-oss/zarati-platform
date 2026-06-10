@@ -153,11 +153,46 @@
     "sudanese": "Proudly Sudanese",
     "sudaneseDesc": "Built in Sudan, for Sudan",
     "contactTitle": "Get in Touch",
-    "contactEmail": "hello@zarati.sd"
+    "contactEmail": "sam@nexorayyc.io"
   },
   "errors": {
     "notFound": "Page not found",
     "notFoundDesc": "The page you're looking for doesn't exist.",
     "backHome": "Back to Home"
+  },
+  "register": {
+    "pageTitle": "Join the Waitlist — Zarati",
+    "heading": "Join the Waitlist",
+    "subheading": "Sudan's smart agriculture platform is launching soon. Reserve your spot and get early access.",
+    "name": "Full Name",
+    "namePlaceholder": "Enter your full name",
+    "email": "Email Address",
+    "emailPlaceholder": "your@email.com",
+    "role": "I am a",
+    "rolePrompt": "Select your role",
+    "roles": {
+      "farmer": "Farmer",
+      "trader": "Trader",
+      "ngo": "NGO / Aid Organisation",
+      "government": "Government Body",
+      "investor": "Investor"
+    },
+    "submit": "Join the Waitlist",
+    "submitting": "Submitting…",
+    "successHeading": "You're on the list!",
+    "successMessage": "We'll notify you as soon as Zarati launches. Thank you for your interest in Sudan's agricultural future.",
+    "successBack": "Back to Home",
+    "alreadyHave": "Already registered?",
+    "loginLink": "Sign in here",
+    "required": "All fields are required.",
+    "invalidEmail": "Please enter a valid email address."
+  },
+  "login": {
+    "pageTitle": "Sign In — Zarati",
+    "heading": "Platform Launching Soon",
+    "subheading": "Zarati is preparing to launch. Join the waitlist to secure early access for your farm, organisation, or business.",
+    "joinCta": "Join the Waitlist",
+    "backHome": "Back to Home",
+    "note": "Full sign-in will be available at launch."
   }
 }
