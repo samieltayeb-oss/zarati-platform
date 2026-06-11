@@ -41,7 +41,10 @@
       "Bash(awk '{print $NF}')",
       "PowerShell(head *)",
       "PowerShell(Get-ChildItem \"C:\\\\Users\\\\mcreg\\\\Desktop\\\\zarati\\\\node_modules\\\\next\\\\dist\\\\docs\\\\01-app\\\\03-api-reference\\\\03-file-conventions\\\\\" | Where-Object { $_.Name -match \"sitemap|robots|metadata\" } | Select-Object -ExpandProperty Name)",
-      "PowerShell(node -e \"const p = require\\('C:/Users/mcreg/Desktop/zarati/package.json'\\); console.log\\(p.dependencies['resend']\\)\")"
+      "PowerShell(node -e \"const p = require\\('C:/Users/mcreg/Desktop/zarati/package.json'\\); console.log\\(p.dependencies['resend']\\)\")",
+      "Bash(Get-Item public/logo.png)",
+      "Bash(Select-Object Length, LastWriteTime)",
+      "Bash(Get-Item brand/logo1.png)"
     ]
   }
 }

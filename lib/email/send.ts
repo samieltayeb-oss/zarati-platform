@@ -57,7 +57,7 @@ function welcomeHtml(name: string, userType: WaitlistUserType, isAr: boolean): s
     <table role="presentation" style="max-width:560px;margin:0 auto;width:100%;border-collapse:collapse;">
       <tr>
         <td class="hd" style="background:#0D3B1E;border-radius:16px 16px 0 0;padding:28px 36px;text-align:center;">
-          <img src="${base}/logo.png" alt="Zarati" width="88" style="height:auto;display:block;margin:0 auto 10px;"/>
+          <img src="${base}/logo.png" alt="Zarati Logo" width="120" style="height:auto;display:block;margin:0 auto 10px;"/>
           <p style="color:#FFFFFF;font-size:18px;font-weight:800;margin:0 0 4px;">زرعتي</p>
           <p style="color:rgba(255,255,255,0.6);font-size:11px;margin:0;letter-spacing:0.8px;">منصة السودان الزراعية الذكية</p>
         </td>
@@ -138,7 +138,7 @@ function welcomeHtml(name: string, userType: WaitlistUserType, isAr: boolean): s
     <table role="presentation" style="max-width:560px;margin:0 auto;width:100%;border-collapse:collapse;">
       <tr>
         <td class="hd" style="background:#0D3B1E;border-radius:16px 16px 0 0;padding:28px 36px;text-align:center;">
-          <img src="${base}/logo.png" alt="Zarati" width="88" style="height:auto;display:block;margin:0 auto 10px;"/>
+          <img src="${base}/logo.png" alt="Zarati Logo" width="120" style="height:auto;display:block;margin:0 auto 10px;"/>
           <p style="color:#FFFFFF;font-size:18px;font-weight:800;margin:0 0 4px;">Zarati</p>
           <p style="color:rgba(255,255,255,0.6);font-size:11px;margin:0;letter-spacing:0.8px;">Sudan's Smart Agriculture Platform</p>
         </td>
