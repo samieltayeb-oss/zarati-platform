@@ -19,6 +19,15 @@ function getLocale(request: NextRequest): string {
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
 
+  // ── Static assets — never locale-redirect ──────────────────────────
+  if (
+    /\.(?:png|jpe?g|gif|webp|svg|ico|webmanifest|json|txt|xml|woff2?)$/i.test(pathname) ||
+    pathname.startsWith('/images/') ||
+    pathname.startsWith('/maps/')
+  ) {
+    return NextResponse.next()
+  }
+
   // ── Admin auth guard ────────────────────────────────────────────────
   if (pathname === '/admin' || pathname.startsWith('/admin/')) {
     // Login page is always accessible
@@ -49,5 +58,7 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!_next|api|icons|manifest\\.webmanifest|favicon\\.ico|.*\\.svg).*)'],
+  matcher: [
+    '/((?!_next|api|icons|images|maps|favicon\\.ico|logo\\.png|robots\\.txt|sitemap\\.xml|manifest\\.json|.*\\.svg|.*\\.webmanifest).*)',
+  ],
 }
