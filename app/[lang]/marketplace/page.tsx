@@ -1,14 +1,15 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useParams } from 'next/navigation'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { PageWrapper } from '@/components/layout/page-wrapper'
 import { formatCurrency } from '@/lib/utils'
-import { listings } from '@/lib/mock-data'
-import type { ListingCategory } from '@/types'
+import { getListings } from '@/lib/services/marketplace-service'
+import { listings as fallbackListings } from '@/lib/mock-data'
+import type { Listing, ListingCategory } from '@/types'
 
 const CATEGORY_ICON: Record<string, string> = {
   crops: '🌾',
@@ -32,9 +33,17 @@ export default function MarketplacePage() {
 
   const [query, setQuery] = useState('')
   const [category, setCategory] = useState<ListingCategory | 'all'>('all')
+  const [activeListings, setActiveListings] = useState<Listing[]>(fallbackListings.filter((l) => l.status === 'active'))
 
-  const active = listings.filter((l) => l.status === 'active')
-  const filtered = active.filter((l) => {
+  useEffect(() => {
+    getListings().then((data) => {
+      if (data && data.length > 0) {
+        setActiveListings(data)
+      }
+    })
+  }, [])
+
+  const filtered = activeListings.filter((l) => {
     const matchesCat = category === 'all' || l.category === category
     const q = query.toLowerCase()
     const title = isAr ? l.titleAr : l.title

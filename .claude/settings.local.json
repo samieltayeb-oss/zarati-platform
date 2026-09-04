@@ -44,7 +44,8 @@
       "PowerShell(node -e \"const p = require\\('C:/Users/mcreg/Desktop/zarati/package.json'\\); console.log\\(p.dependencies['resend']\\)\")",
       "Bash(Get-Item public/logo.png)",
       "Bash(Select-Object Length, LastWriteTime)",
-      "Bash(Get-Item brand/logo1.png)"
+      "Bash(Get-Item brand/logo1.png)",
+      "Bash(node *)"
     ]
   }
 }

@@ -233,7 +233,7 @@ function escapeHtml(str: string): string {
 
 // ── Public API ─────────────────────────────────────────────────────────────
 
-const FROM = () => process.env.RESEND_FROM ?? 'Zarati <waitlist@zarati.sd>'
+const FROM = () => process.env.RESEND_FROM ?? 'Zarati <sam@nexorayyc.io>'
 
 export async function sendWelcomeEmail(entry: WaitlistEntry): Promise<void> {
   const resend = getClient()

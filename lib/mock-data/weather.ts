@@ -47,7 +47,7 @@ export const weatherData: WeatherData[] = [
     ],
   },
   {
-    city: 'Port Sudan', cityAr: 'بور سودان',
+    city: 'Port Sudan', cityAr: 'بورتسودان',
     temp: 33, feelsLike: 37, humidity: 65, windSpeed: 20,
     condition: 'sunny',
     fetchedAt: '2026-06-09T06:00:00Z',
