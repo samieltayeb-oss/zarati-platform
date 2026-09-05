@@ -31,6 +31,10 @@ export async function proxy(request: NextRequest) {
 
   // ── Admin auth guard ────────────────────────────────────────────────
   if (pathname === '/admin' || pathname.startsWith('/admin/')) {
+    if (process.env.NODE_ENV === 'production') {
+      return new NextResponse('Legacy admin is disabled in production.', { status: 403 })
+    }
+
     // Login page is always accessible
     if (pathname === '/admin/login') return NextResponse.next()
 

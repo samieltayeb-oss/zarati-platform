@@ -21,6 +21,10 @@ const COOKIE_OPTIONS = {
 export type AdminLoginResult = { error: string } | null
 
 export async function adminLogin(password: string): Promise<AdminLoginResult> {
+  if (process.env.NODE_ENV === 'production') {
+    return { error: 'Legacy admin access is strictly disabled in production environments.' }
+  }
+
   const forwarded = (await headers()).get('x-forwarded-for')
   const ip = forwarded ? forwarded.split(',')[0].trim() : '127.0.0.1'
   const { success } = await authRateLimit.limit(`admin:${ip}`)
