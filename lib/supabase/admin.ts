@@ -1,4 +1,4 @@
-import { createServerClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/server'
 
 export interface WaitlistRecord {
   id: string
@@ -10,7 +10,7 @@ export interface WaitlistRecord {
 }
 
 export async function getWaitlistEntries(): Promise<WaitlistRecord[]> {
-  const supabase = createServerClient()
+  const supabase = createAdminClient()
   const { data, error } = await supabase
     .from('waitlist')
     .select('*')

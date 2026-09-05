@@ -13,7 +13,11 @@
   },
   "dependencies": {
     "@formatjs/intl-localematcher": "0.8.10",
+    "@supabase/ssr": "^0.12.6",
     "@supabase/supabase-js": "^2.108.1",
+    "@upstash/ratelimit": "^2.0.8",
+    "@upstash/redis": "^1.38.4",
+    "@vercel/kv": "^3.0.0",
     "clsx": "2.1.1",
     "negotiator": "1.0.0",
     "next": "16.2.9",

@@ -1,6 +1,6 @@
 'use server'
 
-import { createServerClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/server'
 import { sendWelcomeEmail, sendAdminNotification } from '@/lib/email/send'
 
 export type WaitlistUserType = 'farmer' | 'trader' | 'ngo' | 'government' | 'investor'
@@ -31,7 +31,7 @@ export async function submitWaitlist(entry: WaitlistEntry): Promise<WaitlistResu
   }
 
   try {
-    const supabase = createServerClient()
+    const supabase = createAdminClient()
     const { error } = await supabase.from('waitlist').insert({
       name: entry.name.trim(),
       email: entry.email.trim().toLowerCase(),

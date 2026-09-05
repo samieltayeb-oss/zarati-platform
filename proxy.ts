@@ -4,6 +4,7 @@ import { match } from '@formatjs/intl-localematcher'
 import Negotiator from 'negotiator'
 import { locales, defaultLocale } from './lib/i18n/config'
 import { verifyAdminToken } from './lib/admin/auth'
+import { updateSession } from './lib/supabase/middleware'
 
 function getLocale(request: NextRequest): string {
   const headers: Record<string, string> = {}
@@ -16,7 +17,7 @@ function getLocale(request: NextRequest): string {
   }
 }
 
-export function proxy(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   // ── Static assets — never locale-redirect ──────────────────────────
@@ -46,13 +47,39 @@ export function proxy(request: NextRequest) {
     return NextResponse.next()
   }
 
-  // ── Locale redirect for public routes ──────────────────────────────
-  const hasLocale = locales.some(
-    (l) => pathname.startsWith(`/${l}/`) || pathname === `/${l}`
-  )
-  if (hasLocale) return NextResponse.next()
+  // ── Supabase Auth & Route Protection ──────────────────────────────
+  // We must await updateSession to ensure SSR cookies are refreshed properly.
+  const { supabaseResponse, user, profile } = await updateSession(request)
 
-  const locale = getLocale(request)
+  const localeMatch = locales.find((l) => pathname.startsWith(`/${l}/`) || pathname === `/${l}`)
+  const locale = localeMatch || getLocale(request)
+
+  const pathWithoutLocale = localeMatch ? pathname.replace(new RegExp(`^/${locale}`), '') || '/' : pathname
+
+  // Protected Dashboard Routes
+  if (pathWithoutLocale === '/dashboard' || pathWithoutLocale.startsWith('/dashboard/')) {
+    if (!user || !profile) {
+      return NextResponse.redirect(new URL(`/${locale}/login`, request.url))
+    }
+
+    if (profile.status !== 'active') {
+      return NextResponse.redirect(new URL(`/${locale}/login?error=account_suspended`, request.url))
+    }
+
+    if ((pathWithoutLocale === '/dashboard/farmer' || pathWithoutLocale.startsWith('/dashboard/farmer/')) && profile.role !== 'farmer') {
+      return NextResponse.redirect(new URL(`/${locale}/login`, request.url))
+    }
+    
+    if ((pathWithoutLocale === '/dashboard/trader' || pathWithoutLocale.startsWith('/dashboard/trader/')) && profile.role !== 'trader') {
+      return NextResponse.redirect(new URL(`/${locale}/login`, request.url))
+    }
+  }
+
+  // ── Locale redirect for public routes ──────────────────────────────
+  if (localeMatch) {
+    return supabaseResponse
+  }
+
   request.nextUrl.pathname = `/${locale}${pathname}`
   return NextResponse.redirect(request.nextUrl)
 }

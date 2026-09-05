@@ -200,7 +200,9 @@
     "subheading": "Zarati is preparing to launch. Join the waitlist to secure early access for your farm, organisation, or business.",
     "joinCta": "Join the Waitlist",
     "backHome": "Back to Home",
-    "note": "Full sign-in will be available at launch."
+    "note": "Full sign-in will be available at launch.",
+    "forgotPassword": "Forgot Password?",
+    "noAccount": "Don't have an account?"
   },
   "privacy": {
     "pageTitle": "Privacy Policy — Zarati",
