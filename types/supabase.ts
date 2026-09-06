@@ -7,10 +7,30 @@
   | Json[]
 
 export type Database = {
-  // Allows to automatically instantiate createClient with right options
-  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
-  __InternalSupabase: {
-    PostgrestVersion: "14.5"
+  graphql_public: {
+    Tables: {
+      [_ in never]: never
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      graphql: {
+        Args: {
+          extensions?: Json
+          operationName?: string
+          query?: string
+          variables?: Json
+        }
+        Returns: Json
+      }
+    }
+    Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
   }
   public: {
     Tables: {
@@ -335,13 +355,6 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "inquiries_listing_id_fkey"
-            columns: ["listing_id"]
-            isOneToOne: false
-            referencedRelation: "public_listings_view"
-            referencedColumns: ["id"]
-          },
-          {
             foreignKeyName: "inquiries_seller_id_fkey"
             columns: ["seller_id"]
             isOneToOne: false
@@ -393,35 +406,24 @@ export type Database = {
             referencedRelation: "listings"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "listing_media_listing_id_fkey"
-            columns: ["listing_id"]
-            isOneToOne: false
-            referencedRelation: "public_listings_view"
-            referencedColumns: ["id"]
-          },
         ]
       }
       listings: {
         Row: {
-          available_from: string | null
-          available_until: string | null
           category: string
           created_at: string
           crop_id: string | null
-          currency: string | null
+          currency: string
           description_ar: string | null
           description_en: string | null
           expires_at: string
-          farm_id: string | null
           featured: boolean
           id: string
           inquiries_count: number
           location_name_ar: string | null
           location_name_en: string | null
           market_id: string | null
-          moderation_status: string
-          price: number | null
+          price: number
           quantity: number
           state_id: string
           status: string
@@ -433,24 +435,20 @@ export type Database = {
           views_count: number
         }
         Insert: {
-          available_from?: string | null
-          available_until?: string | null
           category: string
           created_at?: string
           crop_id?: string | null
-          currency?: string | null
+          currency?: string
           description_ar?: string | null
           description_en?: string | null
           expires_at?: string
-          farm_id?: string | null
           featured?: boolean
           id?: string
           inquiries_count?: number
           location_name_ar?: string | null
           location_name_en?: string | null
           market_id?: string | null
-          moderation_status?: string
-          price?: number | null
+          price: number
           quantity: number
           state_id: string
           status?: string
@@ -462,24 +460,20 @@ export type Database = {
           views_count?: number
         }
         Update: {
-          available_from?: string | null
-          available_until?: string | null
           category?: string
           created_at?: string
           crop_id?: string | null
-          currency?: string | null
+          currency?: string
           description_ar?: string | null
           description_en?: string | null
           expires_at?: string
-          farm_id?: string | null
           featured?: boolean
           id?: string
           inquiries_count?: number
           location_name_ar?: string | null
           location_name_en?: string | null
           market_id?: string | null
-          moderation_status?: string
-          price?: number | null
+          price?: number
           quantity?: number
           state_id?: string
           status?: string
@@ -496,13 +490,6 @@ export type Database = {
             columns: ["crop_id"]
             isOneToOne: false
             referencedRelation: "crops"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "listings_farm_id_fkey"
-            columns: ["farm_id"]
-            isOneToOne: false
-            referencedRelation: "farms"
             referencedColumns: ["id"]
           },
           {
@@ -827,94 +814,6 @@ export type Database = {
         }
         Relationships: []
       }
-      public_listings_view: {
-        Row: {
-          available_from: string | null
-          available_until: string | null
-          category: string | null
-          created_at: string | null
-          crop_id: string | null
-          currency: string | null
-          description_ar: string | null
-          description_en: string | null
-          id: string | null
-          location_name_ar: string | null
-          location_name_en: string | null
-          market_id: string | null
-          price: number | null
-          quantity: number | null
-          state_id: string | null
-          title_ar: string | null
-          title_en: string | null
-          unit: string | null
-          updated_at: string | null
-        }
-        Insert: {
-          available_from?: string | null
-          available_until?: string | null
-          category?: string | null
-          created_at?: string | null
-          crop_id?: string | null
-          currency?: string | null
-          description_ar?: string | null
-          description_en?: string | null
-          id?: string | null
-          location_name_ar?: string | null
-          location_name_en?: string | null
-          market_id?: string | null
-          price?: number | null
-          quantity?: number | null
-          state_id?: string | null
-          title_ar?: string | null
-          title_en?: string | null
-          unit?: string | null
-          updated_at?: string | null
-        }
-        Update: {
-          available_from?: string | null
-          available_until?: string | null
-          category?: string | null
-          created_at?: string | null
-          crop_id?: string | null
-          currency?: string | null
-          description_ar?: string | null
-          description_en?: string | null
-          id?: string | null
-          location_name_ar?: string | null
-          location_name_en?: string | null
-          market_id?: string | null
-          price?: number | null
-          quantity?: number | null
-          state_id?: string | null
-          title_ar?: string | null
-          title_en?: string | null
-          unit?: string | null
-          updated_at?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "listings_crop_id_fkey"
-            columns: ["crop_id"]
-            isOneToOne: false
-            referencedRelation: "crops"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "listings_market_id_fkey"
-            columns: ["market_id"]
-            isOneToOne: false
-            referencedRelation: "markets"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "listings_state_id_fkey"
-            columns: ["state_id"]
-            isOneToOne: false
-            referencedRelation: "states"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       public_traders: {
         Row: {
           business_name: string | null
@@ -945,15 +844,6 @@ export type Database = {
     }
     Functions: {
       current_user_role: { Args: never; Returns: string }
-      get_rfq_contact_details: {
-        Args: { p_inquiry_id: string }
-        Returns: {
-          email: string
-          full_name: string
-          phone: string
-          role: string
-        }[]
-      }
       is_active_user: { Args: never; Returns: boolean }
       is_admin: { Args: never; Returns: boolean }
       show_limit: { Args: never; Returns: number }
@@ -976,12 +866,12 @@ export type Tables<
   DefaultSchemaTableNameOrOptions extends
     | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends (DefaultSchemaTableNameOrOptions extends {
+  TableName extends DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
         DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
-    : never) = never,
+    : never = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -1005,11 +895,11 @@ export type TablesInsert<
   DefaultSchemaTableNameOrOptions extends
     | keyof DefaultSchema["Tables"]
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends (DefaultSchemaTableNameOrOptions extends {
+  TableName extends DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
-    : never) = never,
+    : never = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -1030,11 +920,11 @@ export type TablesUpdate<
   DefaultSchemaTableNameOrOptions extends
     | keyof DefaultSchema["Tables"]
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends (DefaultSchemaTableNameOrOptions extends {
+  TableName extends DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
-    : never) = never,
+    : never = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -1055,11 +945,11 @@ export type Enums<
   DefaultSchemaEnumNameOrOptions extends
     | keyof DefaultSchema["Enums"]
     | { schema: keyof DatabaseWithoutInternals },
-  EnumName extends (DefaultSchemaEnumNameOrOptions extends {
+  EnumName extends DefaultSchemaEnumNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
-    : never) = never,
+    : never = never,
 > = DefaultSchemaEnumNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -1072,11 +962,11 @@ export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
     | keyof DefaultSchema["CompositeTypes"]
     | { schema: keyof DatabaseWithoutInternals },
-  CompositeTypeName extends (PublicCompositeTypeNameOrOptions extends {
+  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
-    : never) = never,
+    : never = never,
 > = PublicCompositeTypeNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -1086,7 +976,11 @@ export type CompositeTypes<
     : never
 
 export const Constants = {
+  graphql_public: {
+    Enums: {},
+  },
   public: {
     Enums: {},
   },
 } as const
+
