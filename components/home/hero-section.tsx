@@ -17,12 +17,7 @@ interface Props {
   dict: HeroDict
 }
 
-const STATS = [
-  { value: '1,250', ar: 'مزارع', en: 'Farmers' },
-  { value: '32°',   ar: 'متوسط', en: 'Avg Temp' },
-  { value: '48',    ar: 'مرفق',  en: 'Facilities' },
-  { value: '+12,500', ar: 'هكتار', en: 'Hectares' },
-]
+
 
 export function HeroSection({ lang, dict }: Props) {
   const isAr = lang === 'ar'
@@ -61,17 +56,7 @@ export function HeroSection({ lang, dict }: Props) {
             {dict.subtitle}
           </p>
 
-          {/* Stats row */}
-          <div className="flex flex-wrap gap-x-6 gap-y-4 mb-8 pb-8 border-b border-border">
-            {STATS.map((s) => (
-              <div key={s.en}>
-                <div className="text-2xl font-bold text-primary leading-none mb-0.5">
-                  {s.value}
-                </div>
-                <div className="text-xs text-muted">{isAr ? s.ar : s.en}</div>
-              </div>
-            ))}
-          </div>
+
 
           {/* CTAs */}
           <div className="flex flex-col sm:flex-row gap-3">

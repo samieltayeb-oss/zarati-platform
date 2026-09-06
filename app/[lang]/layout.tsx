@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
-import { cairo, geist } from '@/lib/fonts'
+import { cairo, geist, ibmPlexArabic } from '@/lib/fonts'
 import { locales, type Locale } from '@/lib/i18n/config'
 import { getDictionary } from '@/lib/i18n/getDictionary'
 import { generatePageMetadata } from '@/config/seo'
@@ -28,8 +28,8 @@ export default async function LocaleLayout({ children, params }: Props) {
   const dict = await getDictionary(locale)
 
   return (
-    <html lang={locale} dir={dir} className={`${cairo.variable} ${geist.variable}`}>
-      <body className="flex flex-col min-h-screen">
+    <html lang={locale} dir={dir} className={`${cairo.variable} ${geist.variable} ${ibmPlexArabic.variable}`}>
+      <body className="flex flex-col min-h-screen font-sans">
         <Header lang={locale} nav={dict.nav} />
         <main className="flex-1">{children}</main>
         <Footer lang={locale} nav={dict.nav} />

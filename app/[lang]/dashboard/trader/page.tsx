@@ -21,7 +21,12 @@ export default async function TraderDashboard({ params }: { params: Promise<{ la
 
   const { data: inquiries } = await supabase
     .from('inquiries')
-    .select('id, listing_id, buyer_id, seller_id, status, message, created_at')
+    .select(`
+      id, listing_id, buyer_id, seller_id, status, message, created_at, requested_quantity,
+      listings ( title_en, title_ar ),
+      buyer:profiles!buyer_id ( full_name, full_name_ar ),
+      seller:profiles!seller_id ( full_name, full_name_ar )
+    `)
     .or(`buyer_id.eq.${user.id},seller_id.eq.${user.id}`)
     .order('created_at', { ascending: false })
 

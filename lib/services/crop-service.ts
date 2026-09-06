@@ -1,17 +1,17 @@
 import type { Crop, CropPrice } from '@/types'
-import { crops as mockCrops } from '@/lib/mock-data'
+
 import { shouldUseMockData } from '@/lib/services/gateway-config'
 import { getSupabaseClient } from '@/lib/supabase/client'
 import { mapDbCropToModel, type DbCropWithPrices } from '@/lib/services/mappers'
 
 export async function getCrops(): Promise<Crop[]> {
   if (shouldUseMockData()) {
-    return mockCrops
+    return []
   }
 
   try {
     const supabase = getSupabaseClient()
-    if (!supabase) return mockCrops
+    if (!supabase) return []
 
     const { data, error } = await supabase
       .from('crops')
@@ -26,12 +26,12 @@ export async function getCrops(): Promise<Crop[]> {
       .order('sort_order', { ascending: true })
 
     if (error || !data || data.length === 0) {
-      return mockCrops
+      return []
     }
 
     return (data as unknown as DbCropWithPrices[]).map(mapDbCropToModel)
   } catch {
-    return mockCrops
+    return []
   }
 }
 

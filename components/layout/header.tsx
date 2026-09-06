@@ -10,10 +10,13 @@ import logoSrc from '@/brand/logo2-transparent.png'
 import type { Locale } from '@/lib/i18n/config'
 
 interface NavDict {
-  home: string
+  overview: string
   marketplace: string
-  weather: string
-  about: string
+  intelligence: string
+  geography: string
+  command: string
+  institutional: string
+  workspace: string
   login: string
   register: string
   language: string
@@ -31,10 +34,11 @@ export function Header({ lang, nav }: HeaderProps) {
   const localePath = pathname.replace(new RegExp(`^/${lang}`), `/${other}`)
 
   const links = [
-    { href: `/${lang}`,             label: nav.home },
+    { href: `/${lang}`,             label: nav.overview },
     { href: `/${lang}/marketplace`, label: nav.marketplace },
-    { href: `/${lang}/weather`,     label: nav.weather },
-    { href: `/${lang}/about`,       label: nav.about },
+    { href: `/${lang}/intelligence`, label: nav.intelligence },
+    { href: `/${lang}/geography`,   label: nav.geography },
+    { href: `/${lang}/about`,       label: nav.institutional },
   ]
 
   const isActive = (href: string) =>

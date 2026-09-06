@@ -13,24 +13,21 @@ const SUDAN_PATH = "M 421.7,10.0 L414.8,15.8 L409.1,20.7 L403.9,19.2 L401.5,18.5
 
 // City coordinates from same projection: x=(lon-21.8137)*29.814+10, y=(23.1429-lat)*29.859+10
 const CITIES = [
-  { id: 'khartoum',  x: 329.6, y: 236.5, label: 'Khartoum',   labelAr: 'الخرطوم',  capital: true,  temp: '34°C' },
-  { id: 'madani',    x: 358.1, y: 271.1, label: 'Wad Madani', labelAr: 'مدني',       capital: false, temp: '36°C' },
-  { id: 'gedaref',   x: 415.0, y: 281.8, label: 'Gedaref',    labelAr: 'القضارف',   capital: false, temp: '35°C' },
-  { id: 'kassala',   x: 444.8, y: 239.6, label: 'Kassala',    labelAr: 'كسلا',       capital: false, temp: '35°C' },
-  { id: 'portsudan', x: 469.2, y: 115.3, label: 'Port Sudan', labelAr: 'بورتسودان', capital: false, temp: '30°C' },
-  { id: 'rabak',     x: 335.6, y: 307.4, label: 'Rabak',      labelAr: 'ربك',        capital: false, temp: '37°C' },
-  { id: 'elobeid',   x: 260.5, y: 307.4, label: 'El Obeid',   labelAr: 'الأبيض',    capital: false, temp: '33°C' },
+  { id: 'khartoum',  x: 329.6, y: 236.5, label: 'Khartoum',   labelAr: 'الخرطوم',  capital: true,  attribute: 'المقرن / ملتقى النيلين', attributeEn: 'Confluence' },
+  { id: 'madani',    x: 358.1, y: 271.1, label: 'Wad Madani', labelAr: 'مدني',       capital: false, attribute: 'المشروع المروي', attributeEn: 'Irrigated Scheme' },
+  { id: 'gedaref',   x: 415.0, y: 281.8, label: 'Gedaref',    labelAr: 'القضارف',   capital: false, attribute: 'المطري الآلي', attributeEn: 'Mechanized Rainfed' },
+  { id: 'kassala',   x: 444.8, y: 239.6, label: 'Kassala',    labelAr: 'كسلا',       capital: false, attribute: 'دلتا القاش', attributeEn: 'Gash Delta' },
+  { id: 'portsudan', x: 469.2, y: 115.3, label: 'Port Sudan', labelAr: 'بورتسودان', capital: false, attribute: 'ميناء الصادر', attributeEn: 'Export Port' },
+  { id: 'rabak',     x: 335.6, y: 307.4, label: 'Rabak',      labelAr: 'ربك',        capital: false, attribute: 'صوامع الغلال', attributeEn: 'Grain Silos' },
+  { id: 'elobeid',   x: 260.5, y: 307.4, label: 'El Obeid',   labelAr: 'الأبيض',    capital: false, attribute: 'حزام الصمغ', attributeEn: 'Gum Arabic Belt' },
 ]
 
 // Nile rivers — bezier approximations of geographic centerlines.
-// White Nile: Sudan entry near Renk (11.8N) -> Kosti/Rabak -> Khartoum confluence
-// Blue Nile:  Fazughli entry (Ethiopia, 11.5N) -> Sennar -> Wad Madani -> Khartoum
-// Main Nile:  Khartoum -> Shendi -> Atbara -> Nubian Great Bend -> Wadi Halfa -> Egypt
-// Atbara Rv:  Ethiopia/Eritrea highlands -> joins main Nile at Atbara town
 const NILE_WHITE  = 'M 337.2,349.6 C 336,328 334.5,315 333.7,308 C 332,285 331,260 329.6,236.5'
 const NILE_BLUE   = 'M 375.7,357 C 370,330 365,312 362,296.4 C 360,284 359,275 358.1,271.1 C 350,257 341,247 329.6,236.5'
 const NILE_MAIN   = 'M 329.6,236.5 C 342,218 353,207 356.3,202.4 C 364,190 370,180 372.4,172.5 L 373,163 C 366,140 358,127 353,117.9 C 338,126 322,138 309,148 C 293,155 280,155 274,148 C 270,140 268.4,134 268.4,128.7 C 276,102 285,72 294.5,50'
 const NILE_ATBARA = 'M 415,128 C 405,140 393,158 372.4,172.5'
+const KHOR_GASH   = 'M 450,260 C 448,250 445,242 444.8,239.6 C 440,230 435,215 430,200'
 
 export function SudanMap({ lang, className = '' }: SudanMapProps) {
   const isAr = lang === 'ar'
@@ -41,7 +38,7 @@ export function SudanMap({ lang, className = '' }: SudanMapProps) {
       style={{ direction: 'ltr' }}
       className={className}
       role="img"
-      aria-label={isAr ? 'خريطة السودان الزراعية' : 'Sudan Agricultural Map'}
+      aria-label={isAr ? 'خريطة السودان الزراعية السيادية' : 'Sovereign Sudan Agricultural Map'}
     >
       <defs>
         <filter id="cityGlow" x="-50%" y="-50%" width="200%" height="200%">
@@ -60,36 +57,47 @@ export function SudanMap({ lang, className = '' }: SudanMapProps) {
       {/* Accurate Sudan outline from geoBoundaries SDN ADM0 */}
       <path
         d={SUDAN_PATH}
-        fill="#0a2540"
-        stroke="#1e6b55"
+        fill="#0D365C"
+        stroke="#4A3B32"
         strokeWidth="1.2"
         strokeLinejoin="round"
       />
 
-      {/* Gezira irrigated zone: triangle between Blue+White Nile, south of Khartoum */}
+      {/* Gezira irrigated zone: polygon mesh */}
       <polygon
         points="329.6,236.5 334,285 345,305 358,271 345,250"
-        fill="#16a34a"
-        fillOpacity="0.18"
-        stroke="#16a34a"
+        fill="#1E5631"
+        fillOpacity="0.15"
+        stroke="#1E5631"
         strokeWidth="0.8"
         strokeDasharray="4 3"
       />
-      <text x="341" y="277" fill="#4ade80" fontSize="8" fontFamily="sans-serif"
+      <text x="341" y="277" fill="#2E7D32" fontSize="8" fontFamily="sans-serif"
         fontStyle="italic" textAnchor="middle" opacity="0.6">
-        Gezira
+        {isAr ? 'مشروع الجزيرة' : 'Gezira'}
       </text>
+
+      {/* Gedaref Semi-mechanized rainfed zone */}
+      <polygon
+        points="415.0,281.8 425,295 405,315 390,290"
+        fill="#C2922E"
+        fillOpacity="0.12"
+        stroke="#C2922E"
+        strokeWidth="0.6"
+        strokeDasharray="2 2"
+      />
 
       {/* Nile system */}
       <path d={NILE_WHITE}  stroke="url(#nileGrad)" strokeWidth="2.2" fill="none" strokeLinecap="round" />
-      <path d={NILE_BLUE}   stroke="#60A5FA"        strokeWidth="1.8" fill="none" strokeLinecap="round" opacity="0.85" />
+      <path d={NILE_BLUE}   stroke="#1565C0"        strokeWidth="1.8" fill="none" strokeLinecap="round" opacity="0.85" />
       <path d={NILE_MAIN}   stroke="url(#nileGrad)" strokeWidth="2.4" fill="none" strokeLinecap="round" />
-      <path d={NILE_ATBARA} stroke="#60A5FA"        strokeWidth="1.2" fill="none" strokeLinecap="round" opacity="0.6" strokeDasharray="3 2" />
+      <path d={NILE_ATBARA} stroke="#1565C0"        strokeWidth="1.2" fill="none" strokeLinecap="round" opacity="0.6" strokeDasharray="3 2" />
+      <path d={KHOR_GASH}   stroke="#42A5F5"        strokeWidth="1.5" fill="none" strokeLinecap="round" opacity="0.4" strokeDasharray="1 3" />
 
-      <text x="339" y="340" fill="#60A5FA" fontSize="7" fontFamily="sans-serif"
-        opacity="0.45" transform="rotate(-82,339,340)">White Nile</text>
-      <text x="381" y="338" fill="#93C5FD" fontSize="7" fontFamily="sans-serif"
-        opacity="0.45" transform="rotate(-52,381,338)">Blue Nile</text>
+      <text x="339" y="340" fill="#42A5F5" fontSize="7" fontFamily="sans-serif"
+        opacity="0.45" transform="rotate(-82,339,340)">{isAr ? 'النيل الأبيض' : 'White Nile'}</text>
+      <text x="381" y="338" fill="#1565C0" fontSize="7" fontFamily="sans-serif"
+        opacity="0.45" transform="rotate(-52,381,338)">{isAr ? 'النيل الأزرق' : 'Blue Nile'}</text>
 
       {/* City markers */}
       {CITIES.map((c) => {
@@ -100,18 +108,18 @@ export function SudanMap({ lang, className = '' }: SudanMapProps) {
           <g key={c.id} filter={c.capital ? 'url(#cityGlow)' : undefined}>
             {c.capital && (
               <circle cx={c.x} cy={c.y} r={12}
-                fill="none" stroke="#4ade80" strokeWidth="0.7" opacity="0.25" />
+                fill="none" stroke="#D4AF37" strokeWidth="0.7" opacity="0.25" />
             )}
             <circle cx={c.x} cy={c.y} r={c.capital ? 5 : 3.5}
-              fill={c.capital ? '#4ade80' : '#00897B'} />
+              fill={c.capital ? '#D4AF37' : '#E8D8B8'} />
             <text x={lx} y={c.y + 2} textAnchor={anchor} fill="white"
               fontSize={c.capital ? 8.5 : 7.5} fontFamily="sans-serif"
               fontWeight={c.capital ? '700' : '500'} opacity="0.92">
               {isAr ? c.labelAr : c.label}
             </text>
-            <text x={lx} y={c.y + 13} textAnchor={anchor} fill="#4ade80"
+            <text x={lx} y={c.y + 13} textAnchor={anchor} fill="#D4AF37"
               fontSize="7" fontFamily="sans-serif" opacity="0.75">
-              {c.temp}
+              {isAr ? c.attribute : c.attributeEn}
             </text>
           </g>
         )

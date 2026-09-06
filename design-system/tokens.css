@@ -7,8 +7,28 @@
 :root {
 
   /* ========================================================
-     COLOR TOKENS — BRAND
+     COLOR TOKENS — BRAND (SOVEREIGN GEOGRAPHY)
      ======================================================== */
+
+  /* Nile Blue */
+  --za-blue-8: #0F4C81;  /* Al-Muqran Blue */
+  --za-blue-9: #082846;  /* Deep River Trench */
+
+  /* Clay Vertisol */
+  --za-clay-7: #4A3B32;  /* Terracotta Silt */
+  --za-clay-9: #2D241E;  /* Clay Vertisol */
+
+  /* Investment Gold */
+  --za-gold-5: #D4AF37;  /* Golden Sesame */
+  --za-gold-7: #C2922E;  /* Acacia Amber */
+
+  /* Sorghum Green */
+  --za-gree-7: #2E7D32;  /* Active Zarati Grn */
+  --za-gree-9: #1E5631;  /* Sorghum Canopy */
+
+  /* Nubian Sandstone */
+  --za-sand-1: #F5EFEB;  /* Parchment Sheet */
+  --za-sand-4: #E8D8B8;  /* Nubian Sandstone */
 
   /* Primary Greens */
   --za-green-50:  #F1F8F2;

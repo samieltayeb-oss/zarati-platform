@@ -4,6 +4,7 @@ import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { Sprout, Tractor, Leaf, FlaskConical, CheckCircle2, Box } from 'lucide-react'
 
 interface PublicListing {
   id: string
@@ -27,11 +28,11 @@ interface Props {
   userId: string | null
 }
 
-const CATEGORY_ICON: Record<string, string> = {
-  crops: '🌾',
-  equipment: '🚜',
-  seeds: '🌱',
-  fertilizer: '🧪',
+const CATEGORY_ICON: Record<string, React.ReactNode> = {
+  crops: <Sprout className="w-8 h-8 text-primary" />,
+  equipment: <Tractor className="w-8 h-8 text-primary" />,
+  seeds: <Leaf className="w-8 h-8 text-primary" />,
+  fertilizer: <FlaskConical className="w-8 h-8 text-primary" />,
 }
 
 const CATEGORIES = [
@@ -117,8 +118,8 @@ export function MarketplaceClient({ locale, listings, userRole }: Props) {
 
       {/* Zero state */}
       {filtered.length === 0 && (
-        <div className="text-center py-20">
-          <p className="text-4xl mb-4">🌾</p>
+        <div className="text-center py-20 flex flex-col items-center justify-center">
+          <Sprout className="w-16 h-16 text-muted mb-4 opacity-30" />
           <p className="text-lg font-medium text-text mb-2">
             {isAr ? 'لا توجد إعلانات حالياً' : 'No listings yet'}
           </p>
@@ -132,44 +133,72 @@ export function MarketplaceClient({ locale, listings, userRole }: Props) {
 
       {/* Grid */}
       {filtered.length > 0 && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+        <div className="flex flex-col gap-6 mt-4">
           {filtered.map(listing => (
             <div
               key={listing.id}
-              className="bg-surface rounded-xl border border-border p-5 hover:border-primary/30 hover:shadow-md transition-all flex flex-col"
+              className="bg-surface-card rounded-none border-2 border-border-strong hover:border-primary transition-colors flex flex-col"
             >
-              <div className="flex items-start justify-between mb-3">
-                <span className="text-3xl">{CATEGORY_ICON[listing.category] ?? '📦'}</span>
+              {/* Header */}
+              <div className="bg-surface-elevated border-b-2 border-border-strong p-4 flex items-start justify-between cursor-pointer group" onClick={() => router.push(`/${locale}/marketplace/${listing.id}`)}>
+                <div className="flex items-center gap-3">
+                  <div className="text-primary">{CATEGORY_ICON[listing.category] ?? <Box className="w-6 h-6" />}</div>
+                  <div>
+                    <h3 className="font-bold text-text text-heading-sm font-cairo group-hover:text-primary transition-colors">
+                      {isAr ? listing.title_ar : listing.title_en}
+                    </h3>
+                  </div>
+                </div>
+                <div className="flex items-center gap-1.5 text-status-verified text-sm font-bold border border-status-verified/20 bg-status-verified/10 px-2 py-1 rounded">
+                  <CheckCircle2 className="w-4 h-4" />
+                  {isAr ? 'موثق' : 'Verified'}
+                </div>
               </div>
-              <h3 className="font-semibold text-text mb-1 leading-snug cursor-pointer hover:text-primary transition-colors" onClick={() => router.push(`/${locale}/marketplace/${listing.id}`)}>
-                {isAr ? listing.title_ar : listing.title_en}
-              </h3>
-              {(listing.description_en || listing.description_ar) && (
-                <p className="text-muted text-sm mb-3 flex-1 line-clamp-2">
-                  {isAr ? listing.description_ar : listing.description_en}
-                </p>
-              )}
-              <div className="border-t border-border pt-3 flex items-center justify-between">
+
+              {/* Data Table */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-4 text-sm bg-surface-canvas/50 font-sans">
                 <div>
+                  <div className="text-muted text-xs mb-1 font-semibold">{isAr ? 'الكمية' : 'Quantity'}</div>
+                  <div className="font-bold text-text tabular-nums text-lg">
+                    {listing.quantity} <span className="text-muted font-normal text-xs">{listing.unit}</span>
+                  </div>
+                </div>
+                <div className="col-span-1 md:col-span-2">
+                  <div className="text-muted text-xs mb-1 font-semibold">{isAr ? 'الوصف' : 'Description'}</div>
+                  <div className="text-text font-medium line-clamp-1">{isAr ? (listing.description_ar || '—') : (listing.description_en || '—')}</div>
+                </div>
+                <div className="flex flex-col md:items-end justify-center">
                   {listing.price != null ? (
-                    <span className="font-bold text-primary text-lg">
-                      {Number(listing.price).toLocaleString(isAr ? 'ar' : 'en')} {listing.currency}
-                      <span className="text-muted text-xs ms-1">/ {listing.unit}</span>
-                    </span>
+                    <div className="text-right">
+                      <div className="text-muted text-xs mb-1 font-semibold">{isAr ? 'السعر (استرشادي)' : 'Price (Indicative)'}</div>
+                      <div className="font-bold text-primary text-xl tabular-nums">
+                        {Number(listing.price).toLocaleString(isAr ? 'ar' : 'en')} {listing.currency}
+                      </div>
+                    </div>
                   ) : (
-                    <span className="font-medium text-muted text-sm">
-                      {isAr ? 'تواصل لمعرفة السعر' : 'Contact for price'}
-                    </span>
+                    <div className="font-medium text-muted text-sm">{isAr ? 'تواصل لمعرفة السعر' : 'Contact for price'}</div>
                   )}
                 </div>
-                {userRole === 'trader' && (
-                  <Button size="sm" onClick={() => { setRfqListing(listing); setRfqError(null) }}>
-                    {isAr ? 'طلب اقتراح' : 'Express Interest'}
+              </div>
+
+              {/* Action Bar */}
+              <div className="border-t-2 border-border-strong p-4 flex items-center justify-between bg-surface-card">
+                <div className="text-xs text-muted flex gap-4">
+                  <span>{isAr ? 'تاريخ النشر:' : 'Posted:'} {new Date(listing.created_at).toLocaleDateString(isAr ? 'ar-SD' : 'en-US')}</span>
+                  <span>{isAr ? 'معرّف:' : 'ID:'} <span className="font-mono">{listing.id.split('-')[0]}</span></span>
+                </div>
+                
+                {userRole === 'trader' ? (
+                  <Button size="sm" onClick={() => { setRfqListing(listing); setRfqError(null) }} className="font-bold rounded-none border-2">
+                    {isAr ? 'التواصل مع البائع ➔' : 'Contact Seller ➔'}
                   </Button>
-                )}
-                {!userRole && (
-                  <Button size="sm" variant="outline" onClick={() => router.push(`/${locale}/login`)}>
-                    {isAr ? 'تسجيل الدخول' : 'Sign In'}
+                ) : userRole === 'farmer' ? (
+                  <Button size="sm" variant="outline" onClick={() => router.push(`/${locale}/marketplace/${listing.id}`)} className="font-bold rounded-none border-2">
+                    {isAr ? 'عرض الإعلان' : 'View Listing'}
+                  </Button>
+                ) : (
+                  <Button size="sm" variant="outline" onClick={() => router.push(`/${locale}/login`)} className="font-bold rounded-none border-2">
+                    {isAr ? 'تسجيل الدخول للتواصل' : 'Sign In to Contact'}
                   </Button>
                 )}
               </div>
@@ -183,8 +212,8 @@ export function MarketplaceClient({ locale, listings, userRole }: Props) {
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-background rounded-xl border p-6 max-w-md w-full space-y-4" dir={isAr ? 'rtl' : 'ltr'}>
             {rfqSuccess ? (
-              <div className="text-center py-4">
-                <p className="text-2xl mb-2">✅</p>
+              <div className="text-center py-4 flex flex-col items-center justify-center">
+                <CheckCircle2 className="w-12 h-12 text-success mb-2" />
                 <p className="font-medium">{isAr ? 'تم إرسال الطلب!' : 'Inquiry submitted!'}</p>
               </div>
             ) : (

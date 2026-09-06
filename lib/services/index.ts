@@ -1,5 +1,5 @@
 export * from './crop-service'
-export * from './weather-service'
+
 export * from './marketplace-service'
 export * from './geo-service'
 export * from './profile-service'

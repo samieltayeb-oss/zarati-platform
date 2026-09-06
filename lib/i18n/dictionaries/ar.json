@@ -1,10 +1,12 @@
 {
   "nav": {
-    "home": "الرئيسية",
+    "overview": "الرئيسية",
     "marketplace": "السوق",
-    "weather": "الطقس",
-    "dashboard": "لوحة التحكم",
-    "about": "من نحن",
+    "intelligence": "الذكاء الزراعي",
+    "geography": "المناطق الزراعية",
+    "command": "غرفة العمليات",
+    "institutional": "المؤسسية",
+    "workspace": "مساحة العمل",
     "login": "تسجيل الدخول",
     "register": "ابدأ الآن",
     "language": "English"

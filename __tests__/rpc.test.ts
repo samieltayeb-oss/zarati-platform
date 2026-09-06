@@ -38,8 +38,8 @@ describe('RFQ RPC Privacy Matrix', () => {
       const { data: authData } = await adminClient.auth.admin.createUser({
         email: u.email, password: 'StrongPassword123!', email_confirm: true, user_metadata: { role: u.role }
       })
-      await adminClient.from('profiles').update({ status: u.status, role: u.role }).eq('id', authData.user.id)
-      createdUsers.push({ ...u, id: authData.user.id })
+      await adminClient.from('profiles').update({ status: u.status, role: u.role }).eq('id', authData.user!.id)
+      createdUsers.push({ ...u, id: authData.user!.id })
 
       const c = createClient(SUPABASE_URL, ANON_KEY, { auth: { autoRefreshToken: false, persistSession: false } })
       await c.auth.signInWithPassword({ email: u.email, password: 'StrongPassword123!' })

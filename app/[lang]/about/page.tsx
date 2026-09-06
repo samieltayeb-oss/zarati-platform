@@ -1,4 +1,5 @@
 import { getDictionary } from '@/lib/i18n/getDictionary'
+import { UserCheck, Search, ShieldCheck } from 'lucide-react'
 import { PageWrapper } from '@/components/layout/page-wrapper'
 import type { Locale } from '@/lib/i18n/config'
 
@@ -11,9 +12,9 @@ export default async function AboutPage({ params }: Props) {
   const t = (await getDictionary(locale)).about
 
   const values = [
-    { key: 'farmerFirst',  title: t.farmerFirst,  desc: t.farmerFirstDesc,    icon: '👨‍🌾' },
-    { key: 'transparent',  title: t.transparent,  desc: t.transparentDesc,    icon: '🔍' },
-    { key: 'sudanese',     title: t.sudanese,      desc: t.sudaneseDesc,       icon: '🇸🇩' },
+    { key: 'farmerFirst',  title: t.farmerFirst,  desc: t.farmerFirstDesc,    icon: <UserCheck className="w-10 h-10 mx-auto text-primary" /> },
+    { key: 'transparent',  title: t.transparent,  desc: t.transparentDesc,    icon: <Search className="w-10 h-10 mx-auto text-primary" /> },
+    { key: 'sudanese',     title: t.sudanese,      desc: t.sudaneseDesc,       icon: <ShieldCheck className="w-10 h-10 mx-auto text-primary" /> },
   ]
 
   return (

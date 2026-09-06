@@ -4,6 +4,7 @@ import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
+import { Sprout, CheckCircle2, MapPin, Star } from 'lucide-react'
 
 interface PublicListing {
   id: string
@@ -99,49 +100,66 @@ export function ListingDetailClient({ locale, listing, media, seller, userRole }
         {/* Left Column: Images & Details */}
         <div className="md:col-span-2 space-y-6">
           
-          {/* Image Gallery */}
-          <div className="bg-surface border rounded-xl overflow-hidden aspect-[4/3] relative flex items-center justify-center">
-            {media.length > 0 ? (
-              <Image 
-                src={`${SUPABASE_URL}/storage/v1/object/public/listing-media/${media[0].storage_path}`}
-                alt={title}
-                fill
-                className="object-cover"
-              />
-            ) : (
-              <div className="text-6xl opacity-20">🌾</div>
-            )}
-          </div>
-
-          {/* Details */}
-          <div className="space-y-4">
-            <h1 className="text-3xl font-bold">{title}</h1>
-            
-            <div className="flex flex-wrap gap-4 text-sm text-muted">
-              <span className="bg-muted/20 px-3 py-1 rounded-full">
-                {isAr ? 'الكمية:' : 'Qty:'} <strong className="text-text">{listing.quantity} {listing.unit}</strong>
-              </span>
+          <div className="bg-surface-card border-2 border-border-strong p-6 flex flex-col gap-6">
+            <div>
+              <div className="flex items-center gap-2 mb-2">
+                <span className="text-primary text-sm font-bold uppercase tracking-wider">{isAr ? 'بيانات السلعة' : 'Commodity Data'}</span>
+                <span className="bg-status-verified/10 text-status-verified border border-status-verified/20 px-2 py-0.5 rounded text-xs font-bold flex items-center gap-1">
+                  <CheckCircle2 className="w-3 h-3" />
+                  {isAr ? 'موثق من المنصة' : 'Platform Verified'}
+                </span>
+              </div>
+              <h1 className="text-display-sm font-bold font-cairo mb-2">{title}</h1>
               {location && (
-                <span className="bg-muted/20 px-3 py-1 rounded-full">📍 {location}</span>
+                <div className="flex items-center gap-1.5 text-muted text-sm font-medium">
+                  <MapPin className="w-4 h-4" /> {location}
+                </div>
               )}
             </div>
 
-            {description && (
-              <div className="prose dark:prose-invert max-w-none">
-                <h3 className="text-lg font-semibold">{isAr ? 'الوصف' : 'Description'}</h3>
-                <p className="text-muted leading-relaxed whitespace-pre-wrap">{description}</p>
-              </div>
-            )}
+            {/* Image Gallery (Structured) */}
+            <div className="bg-surface-canvas border-2 border-border-strong overflow-hidden aspect-[16/9] relative flex items-center justify-center">
+              {media.length > 0 ? (
+                <Image 
+                  src={`${SUPABASE_URL}/storage/v1/object/public/listing-media/${media[0].storage_path}`}
+                  alt={title}
+                  fill
+                  className="object-cover"
+                />
+              ) : (
+                <div className="opacity-20 flex flex-col items-center justify-center h-full w-full gap-2">
+                  <Sprout className="w-12 h-12" />
+                  <span className="font-mono text-sm uppercase">NO_MEDIA_ATTACHED</span>
+                </div>
+              )}
+            </div>
 
-            {(listing.available_from || listing.available_until) && (
-              <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
-                <h3 className="font-medium text-blue-900 dark:text-blue-100 mb-2">
-                  {isAr ? 'فترة التوفر' : 'Availability'}
-                </h3>
-                <p className="text-sm text-blue-800 dark:text-blue-200">
-                  {listing.available_from && <span>{isAr ? 'من: ' : 'From: '} {new Date(listing.available_from).toLocaleDateString()} </span>}
-                  {listing.available_until && <span>{isAr ? 'إلى: ' : 'To: '} {new Date(listing.available_until).toLocaleDateString()}</span>}
-                </p>
+            {/* Structural Data Table */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-border-strong border-2 border-border-strong">
+              <div className="bg-surface-card p-4">
+                <div className="text-muted text-xs mb-1 font-semibold">{isAr ? 'الكمية المتوفرة' : 'Available Qty'}</div>
+                <div className="font-bold text-text tabular-nums">{listing.quantity} <span className="text-muted text-xs">{listing.unit}</span></div>
+              </div>
+              <div className="bg-surface-card p-4">
+                <div className="text-muted text-xs mb-1 font-semibold">{isAr ? 'التصنيف' : 'Category'}</div>
+                <div className="font-bold text-text capitalize">{listing.category}</div>
+              </div>
+              <div className="bg-surface-card p-4">
+                <div className="text-muted text-xs mb-1 font-semibold">{isAr ? 'تاريخ النشر' : 'Listed On'}</div>
+                <div className="font-bold text-text tabular-nums">{new Date(listing.created_at).toLocaleDateString(isAr ? 'ar-SD' : 'en-US')}</div>
+              </div>
+              <div className="bg-surface-card p-4">
+                <div className="text-muted text-xs mb-1 font-semibold">{isAr ? 'فترة التوفر' : 'Availability'}</div>
+                <div className="font-bold text-text text-sm">
+                  {listing.available_from ? new Date(listing.available_from).toLocaleDateString() : (isAr ? 'فوري' : 'Immediate')}
+                </div>
+              </div>
+            </div>
+
+            {description && (
+              <div className="border-t-2 border-border-strong pt-6">
+                <h3 className="text-sm font-bold uppercase tracking-wider text-muted mb-3">{isAr ? 'المواصفات والوصف' : 'Specifications & Description'}</h3>
+                <p className="text-text font-medium leading-relaxed whitespace-pre-wrap">{description}</p>
               </div>
             )}
           </div>
@@ -149,17 +167,21 @@ export function ListingDetailClient({ locale, listing, media, seller, userRole }
 
         {/* Right Column: Sticky Action Card */}
         <div className="md:col-span-1">
-          <div className="bg-surface border rounded-xl p-6 sticky top-24 space-y-6 shadow-sm">
+          <div className="bg-surface-card border-2 border-border-strong p-6 sticky top-24 space-y-6">
             
-            <div className="space-y-1">
-              <p className="text-sm text-muted uppercase tracking-wider">{isAr ? 'السعر' : 'Price'}</p>
+            <div className="space-y-2">
+              <p className="text-sm font-bold text-muted uppercase tracking-wider">{isAr ? 'السعر المعروض' : 'Offer Price'}</p>
               {listing.price != null ? (
-                <p className="text-3xl font-bold text-primary">
-                  {Number(listing.price).toLocaleString(isAr ? 'ar' : 'en')} {listing.currency}
-                  <span className="text-sm text-muted font-normal ms-1">/ {listing.unit}</span>
-                </p>
+                <div>
+                  <p className="text-3xl font-bold text-primary tabular-nums font-cairo">
+                    {Number(listing.price).toLocaleString(isAr ? 'ar' : 'en')} {listing.currency}
+                  </p>
+                  <p className="text-sm text-muted font-medium mt-1">
+                    {isAr ? 'لكل' : 'per'} {listing.unit}
+                  </p>
+                </div>
               ) : (
-                <p className="text-xl font-medium text-muted">
+                <p className="text-lg font-bold text-muted">
                   {isAr ? 'تواصل لمعرفة السعر' : 'Contact for price'}
                 </p>
               )}
@@ -179,9 +201,15 @@ export function ListingDetailClient({ locale, listing, media, seller, userRole }
                       {isAr ? seller.full_name_ar || seller.full_name : seller.full_name}
                       {seller.is_verified && <span className="text-blue-500 ms-1" title="Verified">✓</span>}
                     </p>
-                    <p className="text-xs text-muted">
+                    <p className="text-xs text-muted flex items-center flex-wrap gap-1">
                       {seller.total_deals_completed ? `${seller.total_deals_completed} ${isAr ? 'صفقة مكتملة' : 'deals'}` : (isAr ? 'بائع جديد' : 'New seller')}
-                      {seller.rating && ` · ⭐ ${seller.rating}`}
+                      {seller.rating && (
+                        <>
+                          <span>·</span>
+                          <Star className="w-3 h-3 fill-amber-500 text-amber-500" />
+                          <span>{seller.rating}</span>
+                        </>
+                      )}
                     </p>
                   </div>
                 </div>
@@ -190,15 +218,15 @@ export function ListingDetailClient({ locale, listing, media, seller, userRole }
 
             <div className="pt-4">
               {userRole === 'trader' ? (
-                <Button className="w-full py-6 text-lg" onClick={() => setShowRfqModal(true)}>
+                <Button className="w-full py-6 text-lg font-bold rounded-none border-2" onClick={() => setShowRfqModal(true)}>
                   {isAr ? 'طلب اقتراح (RFQ)' : 'Express Interest (RFQ)'}
                 </Button>
               ) : !userRole ? (
-                <Button className="w-full py-6" variant="outline" onClick={() => router.push(`/${locale}/login`)}>
+                <Button className="w-full py-6 font-bold rounded-none border-2" variant="outline" onClick={() => router.push(`/${locale}/login`)}>
                   {isAr ? 'سجل الدخول للتواصل' : 'Sign In to Contact'}
                 </Button>
               ) : userRole === 'farmer' ? (
-                <div className="bg-muted/30 p-3 rounded text-center text-sm text-muted">
+                <div className="bg-surface-canvas border-2 border-border-strong p-3 text-center text-sm font-medium text-muted">
                   {isAr ? 'حسابات المزارعين لا يمكنها تقديم طلبات شراء.' : 'Farmer accounts cannot submit purchase requests.'}
                 </div>
               ) : null}
@@ -213,8 +241,8 @@ export function ListingDetailClient({ locale, listing, media, seller, userRole }
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-background rounded-xl border p-6 max-w-md w-full space-y-4 shadow-xl" dir={isAr ? 'rtl' : 'ltr'}>
             {rfqSuccess ? (
-              <div className="text-center py-8 space-y-3">
-                <div className="text-5xl mb-4">✅</div>
+              <div className="text-center py-8 space-y-3 flex flex-col items-center justify-center">
+                <CheckCircle2 className="w-16 h-16 text-success mb-2" />
                 <h3 className="text-xl font-bold">{isAr ? 'تم إرسال الطلب بنجاح' : 'Inquiry Submitted'}</h3>
                 <p className="text-muted">{isAr ? 'سيتم تحويلك إلى لوحة التحكم...' : 'Redirecting to dashboard...'}</p>
               </div>

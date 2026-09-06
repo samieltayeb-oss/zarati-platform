@@ -73,7 +73,7 @@ describe('submitRFQ Rate Limiting', () => {
     for (let i = 0; i < 5; i++) {
       const res = await submitRFQ(payload)
       // It might fail on DB insert because we didn't mock insert, but it shouldn't hit rate limit
-      expect(res.error).not.toBe('Rate limit exceeded. Maximum 5 RFQs per minute.')
+      expect((res as any).error).not.toBe('Rate limit exceeded. Maximum 5 RFQs per minute.')
     }
 
     // 6th request should fail due to rate limit

@@ -1,10 +1,12 @@
 {
   "nav": {
-    "home": "Home",
+    "overview": "Overview",
     "marketplace": "Marketplace",
-    "weather": "Weather",
-    "dashboard": "Dashboard",
-    "about": "About",
+    "intelligence": "Intelligence",
+    "geography": "Geography",
+    "command": "Command Center",
+    "institutional": "Institutional",
+    "workspace": "My Workspace",
     "login": "Sign In",
     "register": "Get Started",
     "language": "العربية"

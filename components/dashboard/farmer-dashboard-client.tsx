@@ -49,7 +49,7 @@ const FARMER_TRANSITIONS: Record<string, string[]> = {
 
 type FormStep = 1 | 2 | 3 | 4 | 5
 
-export function FarmerDashboardClient({ locale, profile, listings, states }: Props) {
+export function FarmerDashboardClient({ locale, profile, listings, states, crops }: Props) {
   const isAr = locale === 'ar'
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
@@ -166,197 +166,152 @@ export function FarmerDashboardClient({ locale, profile, listings, states }: Pro
   }
 
   return (
-    <div dir={isAr ? 'rtl' : 'ltr'} className="container py-10 space-y-8">
+    <div dir={isAr ? 'rtl' : 'ltr'} className="container py-6 max-w-4xl space-y-6">
       {/* Header */}
-      <div className="flex justify-between items-center flex-wrap gap-4">
+      <div className="flex justify-between items-center bg-surface-card border-2 border-border-strong p-4">
         <div>
-          <h1 className="text-2xl font-bold">
+          <h1 className="text-xl font-bold font-cairo">
             {isAr
               ? `مرحباً، ${profile.full_name_ar ?? profile.full_name}`
               : `Welcome, ${profile.full_name}`}
           </h1>
-          <p className="text-muted text-sm">{isAr ? 'لوحة تحكم المزارع' : 'Farmer Dashboard'}</p>
+          <p className="text-muted text-sm">{isAr ? 'لوحة تحكم المزارع - تسليم المحصول' : 'Farmer Dashboard - Crop Delivery'}</p>
         </div>
-        <div className="flex gap-3">
-          <Button onClick={() => { setShowForm(!showForm); setError(null); setSuccess(null) }}>
-            {showForm
-              ? (isAr ? 'إلغاء' : 'Cancel')
-              : (isAr ? '+ إضافة إعلان' : '+ Add Listing')}
-          </Button>
-          <Button variant="outline" onClick={() => router.push(`/${locale}/auth/signout`)}>
-            {isAr ? 'تسجيل الخروج' : 'Sign Out'}
+        <div className="flex gap-2">
+          {!showForm && (
+            <Button onClick={() => { setShowForm(true); setError(null); setSuccess(null); setFormStep(1) }} className="font-bold border-2 rounded-none bg-primary text-white">
+              {isAr ? '+ عرض محصول جديد' : '+ New Crop Offer'}
+            </Button>
+          )}
+          <Button variant="outline" onClick={() => router.push(`/${locale}/auth/signout`)} className="font-bold border-2 rounded-none">
+            {isAr ? 'خروج' : 'Sign Out'}
           </Button>
         </div>
       </div>
 
       {/* Notifications */}
       {error && (
-        <div className="bg-red-50 border border-red-200 text-red-800 rounded-lg px-4 py-3 text-sm">
+        <div className="bg-red-50 border-2 border-red-200 text-red-800 p-4 font-bold text-sm">
           {error}
         </div>
       )}
       {success && (
-        <div className="bg-green-50 border border-green-200 text-green-800 rounded-lg px-4 py-3 text-sm">
+        <div className="bg-green-50 border-2 border-green-200 text-green-800 p-4 font-bold text-sm">
           {success}
         </div>
       )}
 
-      {/* Listing Creation Form */}
+      {/* 3-Tap Flow */}
       {showForm && (
-        <div className="bg-surface border rounded-xl p-6 space-y-6">
-          <h2 className="text-xl font-semibold">
-            {isAr ? `إضافة إعلان — الخطوة ${formStep} من 5` : `Add Listing — Step ${formStep} of 5`}
-          </h2>
+        <div className="bg-surface-card border-2 border-border-strong p-6 space-y-6 shadow-sm">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-xl font-bold font-cairo">
+              {formStep === 1 && (isAr ? '1. اختر المحصول' : '1. Select Crop')}
+              {formStep === 2 && (isAr ? '2. الكمية والسعر' : '2. Quantity & Price')}
+              {formStep === 3 && (isAr ? '3. موقع التسليم' : '3. Delivery Location')}
+            </h2>
+            <Button variant="ghost" onClick={() => setShowForm(false)} className="text-muted hover:text-text font-bold">
+              {isAr ? 'إلغاء' : 'Cancel'}
+            </Button>
+          </div>
 
           {formStep === 1 && (
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium mb-1">{isAr ? 'الفئة' : 'Category'}</label>
-                <select
-                  value={form.category}
-                  onChange={e => updateForm('category', e.target.value)}
-                  className="w-full border rounded-lg px-3 py-2 bg-background"
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+              {crops.slice(0, 9).map(crop => (
+                <button
+                  key={crop.id}
+                  onClick={() => {
+                    updateForm('crop_id', crop.id)
+                    updateForm('category', crop.category)
+                    updateForm('title_en', crop.name_en)
+                    updateForm('title_ar', crop.name_ar)
+                    updateForm('unit', 'طن')
+                    setFormStep(2)
+                  }}
+                  className="flex flex-col items-center justify-center p-6 bg-surface-canvas border-2 border-border-strong hover:border-primary hover:bg-primary/5 transition-colors aspect-square gap-3"
                 >
-                  {[['crops', isAr ? 'المحاصيل' : 'Crops'],
-                    ['equipment', isAr ? 'المعدات' : 'Equipment'],
-                    ['seeds', isAr ? 'البذور' : 'Seeds'],
-                    ['fertilizer', isAr ? 'الأسمدة' : 'Fertilizer']].map(([v, l]) => (
-                    <option key={v} value={v}>{l}</option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1">{isAr ? 'الولاية' : 'State'}</label>
-                <select
-                  value={form.state_id}
-                  onChange={e => updateForm('state_id', e.target.value)}
-                  className="w-full border rounded-lg px-3 py-2 bg-background"
-                >
-                  <option value="">{isAr ? '— اختر الولاية —' : '— Select state —'}</option>
-                  {states.map(s => (
-                    <option key={s.id} value={s.id}>{isAr ? s.name_ar : s.name_en}</option>
-                  ))}
-                </select>
-              </div>
-              <Button onClick={() => setFormStep(2)} className="w-full">
-                {isAr ? 'التالي' : 'Next'}
-              </Button>
+                  <div className="w-12 h-12 flex items-center justify-center text-primary">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-full h-full"><path d="M12 22C12 22 17 18 17 13C17 9.68629 14.7614 7 12 7C9.23858 7 7 9.68629 7 13C7 18 12 22 12 22Z"/><path d="M12 7V2"/></svg>
+                  </div>
+                  <span className="font-bold font-cairo text-lg">{isAr ? crop.name_ar : crop.name_en}</span>
+                </button>
+              ))}
             </div>
           )}
 
           {formStep === 2 && (
-            <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium mb-1">{isAr ? 'الكمية' : 'Quantity'}</label>
-                  <Input type="number" min="0" value={form.quantity} onChange={e => updateForm('quantity', e.target.value)} />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-1">{isAr ? 'الوحدة' : 'Unit'}</label>
-                  <Input placeholder={isAr ? 'مثال: طن، كيس' : 'e.g. ton, sack'} value={form.unit} onChange={e => updateForm('unit', e.target.value)} />
+            <div className="space-y-8">
+              <div>
+                <label className="block text-lg font-bold mb-3">{isAr ? 'الكمية المتوفرة' : 'Available Quantity'}</label>
+                <div className="flex gap-4">
+                  <Input 
+                    type="number" 
+                    min="1" 
+                    value={form.quantity} 
+                    onChange={e => updateForm('quantity', e.target.value)} 
+                    className="text-3xl h-16 border-2 border-border-strong rounded-none font-bold tabular-nums" 
+                    placeholder="0"
+                  />
+                  <select 
+                    value={form.unit} 
+                    onChange={e => updateForm('unit', e.target.value)}
+                    className="h-16 px-4 border-2 border-border-strong bg-surface-canvas rounded-none font-bold text-lg"
+                  >
+                    <option value="طن">{isAr ? 'طن متري' : 'MT'}</option>
+                    <option value="قنطار">{isAr ? 'قنطار' : 'Qintar'}</option>
+                    <option value="شوال">{isAr ? 'شوال' : 'Sack'}</option>
+                  </select>
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium mb-1">{isAr ? 'متاح من' : 'Available From'}</label>
-                  <Input type="date" value={form.available_from} onChange={e => updateForm('available_from', e.target.value)} />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-1">{isAr ? 'متاح حتى' : 'Available Until'}</label>
-                  <Input type="date" value={form.available_until} onChange={e => updateForm('available_until', e.target.value)} />
+
+              <div>
+                <label className="block text-lg font-bold mb-3">{isAr ? 'السعر المقترح (لكل وحدة)' : 'Proposed Price (Per Unit)'}</label>
+                <div className="flex gap-4">
+                  <Input 
+                    type="number" 
+                    min="1" 
+                    value={form.price} 
+                    onChange={e => updateForm('price', e.target.value)} 
+                    className="text-3xl h-16 border-2 border-border-strong rounded-none font-bold tabular-nums" 
+                    placeholder={isAr ? 'اتركه فارغاً للتفاوض' : 'Leave empty to negotiate'}
+                  />
+                  <div className="h-16 px-6 flex items-center bg-surface-elevated border-2 border-border-strong rounded-none font-bold text-lg text-muted">
+                    {form.currency}
+                  </div>
                 </div>
               </div>
-              <div className="flex gap-3">
-                <Button variant="outline" onClick={() => setFormStep(1)}>{isAr ? 'رجوع' : 'Back'}</Button>
-                <Button onClick={() => setFormStep(3)} className="flex-1">{isAr ? 'التالي' : 'Next'}</Button>
+
+              <div className="flex gap-4 pt-4 border-t-2 border-border-strong">
+                <Button variant="outline" onClick={() => setFormStep(1)} className="h-14 px-8 border-2 rounded-none font-bold text-lg">{isAr ? 'رجوع' : 'Back'}</Button>
+                <Button onClick={() => { if(form.quantity) setFormStep(3) }} disabled={!form.quantity} className="flex-1 h-14 border-2 rounded-none font-bold text-lg">{isAr ? 'التالي' : 'Next'}</Button>
               </div>
             </div>
           )}
 
           {formStep === 3 && (
-            <div className="space-y-4">
+            <div className="space-y-8">
               <div>
-                <label className="block text-sm font-medium mb-1">{isAr ? 'العنوان (عربي)' : 'Title (Arabic)'}</label>
-                <Input dir="rtl" value={form.title_ar} onChange={e => updateForm('title_ar', e.target.value)} placeholder="مثال: ذرة رفيعة ٥٠ طن" />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1">{isAr ? 'العنوان (إنجليزي)' : 'Title (English)'}</label>
-                <Input value={form.title_en} onChange={e => updateForm('title_en', e.target.value)} placeholder="e.g. Sorghum 50 Tons" />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1">
-                  {isAr ? 'السعر (اتركه فارغاً للتفاوض)' : 'Price (leave empty for negotiable)'}
-                </label>
-                <Input type="number" min="0.01" step="any" value={form.price} onChange={e => updateForm('price', e.target.value)}
-                  placeholder={isAr ? 'تواصل لمعرفة السعر' : 'Contact for price'} />
-                <p className="text-xs text-muted mt-1">
-                  {isAr ? 'ملاحظة: القيمة صفر غير مقبولة' : 'Note: zero price is not accepted'}
-                </p>
-              </div>
-              <div className="flex gap-3">
-                <Button variant="outline" onClick={() => setFormStep(2)}>{isAr ? 'رجوع' : 'Back'}</Button>
-                <Button onClick={() => setFormStep(4 as FormStep)} className="flex-1">{isAr ? 'التالي' : 'Next'}</Button>
-              </div>
-            </div>
-          )}
-
-          {formStep === 4 && (
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium mb-1">{isAr ? 'الصور (اختياري)' : 'Images (Optional)'}</label>
-                <input
-                  type="file"
-                  multiple
-                  accept="image/jpeg,image/png,image/webp"
-                  onChange={handleFileSelect}
-                  className="w-full border rounded-lg px-3 py-2 bg-background"
-                  disabled={selectedFiles.length >= 5}
-                />
-                <p className="text-xs text-muted mt-1">
-                  {isAr ? 'الحد الأقصى 5 صور. الأحجام أقل من 5 ميجابايت.' : 'Max 5 images. Size under 5MB.'}
-                </p>
-              </div>
-              
-              {selectedFiles.length > 0 && (
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mt-4">
-                  {selectedFiles.map((f, i) => (
-                    <div key={i} className="relative border rounded p-2 text-xs truncate">
-                      <button 
-                        onClick={() => removeFile(i)} 
-                        className="absolute top-1 right-1 bg-red-100 text-red-600 rounded-full w-5 h-5 flex items-center justify-center font-bold"
-                      >
-                        ×
-                      </button>
-                      <p>{f.name}</p>
-                      <p className="text-muted">{(f.size / 1024 / 1024).toFixed(1)} MB</p>
-                    </div>
+                <label className="block text-lg font-bold mb-3">{isAr ? 'مكان تسليم المحصول' : 'Delivery Location'}</label>
+                <select
+                  value={form.state_id}
+                  onChange={e => updateForm('state_id', e.target.value)}
+                  className="w-full h-16 px-4 border-2 border-border-strong bg-surface-canvas rounded-none font-bold text-lg"
+                >
+                  <option value="">{isAr ? '— اختر الولاية —' : '— Select State —'}</option>
+                  {states.map(s => (
+                    <option key={s.id} value={s.id}>{isAr ? s.name_ar : s.name_en}</option>
                   ))}
-                </div>
-              )}
-              
-              <div className="flex gap-3 mt-6">
-                <Button variant="outline" onClick={() => setFormStep(3)}>{isAr ? 'رجوع' : 'Back'}</Button>
-                <Button onClick={() => setFormStep(5 as FormStep)} className="flex-1">{isAr ? 'مراجعة' : 'Review'}</Button>
+                </select>
               </div>
-            </div>
-          )}
 
-          {formStep === 5 && (
-            <div className="space-y-4">
-              <h3 className="font-medium">{isAr ? 'مراجعة البيانات' : 'Review Your Listing'}</h3>
-              <div className="bg-muted/20 rounded-lg p-4 space-y-2 text-sm">
-                <div className="flex justify-between"><span className="text-muted">{isAr ? 'العنوان' : 'Title'}:</span> <span>{isAr ? form.title_ar : form.title_en}</span></div>
-                <div className="flex justify-between"><span className="text-muted">{isAr ? 'الكمية' : 'Qty'}:</span> <span>{form.quantity} {form.unit}</span></div>
-                <div className="flex justify-between">
-                  <span className="text-muted">{isAr ? 'السعر' : 'Price'}:</span>
-                  <span>{form.price ? `${Number(form.price).toLocaleString()} ${form.currency}` : (isAr ? 'تواصل لمعرفة السعر' : 'Contact for price')}</span>
-                </div>
+              <div className="bg-surface-canvas border-2 border-border-strong p-4 text-sm font-medium">
+                {isAr ? 'سيتم تحويل هذا المحصول إلى السوق فور اعتماده.' : 'This crop will be posted to the marketplace upon approval.'}
               </div>
-              <p className="text-xs text-muted">{isAr ? 'سيتم إرسال الإعلان للمراجعة قبل النشر.' : 'Your listing will be reviewed before going live.'}</p>
-              <div className="flex gap-3">
-                <Button variant="outline" onClick={() => setFormStep(4 as FormStep)}>{isAr ? 'رجوع' : 'Back'}</Button>
-                <Button onClick={handleSubmitListing} disabled={isPending || uploadProgress} className="flex-1">
-                  {isPending || uploadProgress ? (isAr ? 'جاري الإرسال...' : 'Submitting...') : (isAr ? 'إرسال للمراجعة' : 'Submit for Review')}
+
+              <div className="flex gap-4 pt-4 border-t-2 border-border-strong">
+                <Button variant="outline" onClick={() => setFormStep(2)} className="h-14 px-8 border-2 rounded-none font-bold text-lg">{isAr ? 'رجوع' : 'Back'}</Button>
+                <Button onClick={handleSubmitListing} disabled={isPending || !form.state_id} className="flex-1 h-14 border-2 rounded-none font-bold text-lg bg-status-verified text-white hover:bg-status-verified/90">
+                  {isPending ? (isAr ? 'جاري الإرسال...' : 'Submitting...') : (isAr ? 'إرسال ونشر' : 'Submit Offer')}
                 </Button>
               </div>
             </div>
@@ -364,47 +319,56 @@ export function FarmerDashboardClient({ locale, profile, listings, states }: Pro
         </div>
       )}
 
-      {/* My Listings */}
-      <div className="bg-surface border rounded-xl p-6">
-        <h2 className="text-xl font-semibold mb-4">{isAr ? 'إعلاناتي' : 'My Listings'}</h2>
+      {/* Active Listings Dashboard (State Machine) */}
+      <div className="bg-surface-card border-2 border-border-strong p-6">
+        <h2 className="text-2xl font-bold font-cairo mb-6">{isAr ? 'سجل عروض التسليم' : 'Delivery Offers Register'}</h2>
+        
         {listings.length === 0 ? (
-          <div className="text-center py-10 space-y-3">
-            <p className="text-muted">{isAr ? 'لا توجد إعلانات بعد.' : 'No listings yet.'}</p>
-            <Button size="sm" onClick={() => setShowForm(true)}>
-              {isAr ? '+ إضافة أول إعلان' : '+ Add your first listing'}
-            </Button>
+          <div className="text-center py-12 border-2 border-dashed border-border-strong bg-surface-canvas">
+            <p className="text-muted font-bold">{isAr ? 'لا توجد أي عروض تسليم مسجلة حالياً.' : 'No delivery offers registered.'}</p>
           </div>
         ) : (
-          <div className="space-y-3">
+          <div className="space-y-4">
             {listings.map(listing => {
-              const statusInfo = STATUS_LABELS[listing.status] ?? { en: listing.status, ar: listing.status, color: '' }
+              // Master plan simplification: Active, Pending, Sold
+              const simplifiedStatus = listing.status === 'active' ? { label: isAr ? '🟢 متاح في السوق' : '🟢 Available', bg: 'bg-green-100 text-green-900 border-green-300' }
+                                     : listing.status === 'sold' ? { label: isAr ? '⚫ تم البيع' : '⚫ Sold', bg: 'bg-gray-200 text-gray-800 border-gray-300' }
+                                     : listing.status === 'paused' ? { label: isAr ? '🟡 معلق مؤقتاً' : '🟡 Paused', bg: 'bg-yellow-100 text-yellow-900 border-yellow-300' }
+                                     : { label: isAr ? '🟡 قيد المراجعة' : '🟡 Under Review', bg: 'bg-yellow-50 text-yellow-800 border-yellow-200' }
+              
               const allowed = FARMER_TRANSITIONS[listing.status] ?? []
+              
               return (
-                <div key={listing.id} className="border rounded-lg p-4 flex flex-wrap items-center justify-between gap-3">
-                  <div className="space-y-0.5">
-                    <p className="font-medium">{isAr ? listing.title_ar : listing.title_en}</p>
-                    <p className="text-sm text-muted">
+                <div key={listing.id} className="border-2 border-border-strong p-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-surface-elevated">
+                  <div>
+                    <div className="flex items-center gap-3 mb-1">
+                      <h3 className="font-bold text-lg font-cairo">{isAr ? listing.title_ar : listing.title_en}</h3>
+                      <span className={`text-xs font-bold px-2 py-0.5 border ${simplifiedStatus.bg}`}>
+                        {simplifiedStatus.label}
+                      </span>
+                    </div>
+                    <p className="text-sm text-muted font-bold tabular-nums">
                       {listing.quantity} {listing.unit}
-                      {listing.price != null
-                        ? ` · ${Number(listing.price).toLocaleString()} SDG`
-                        : ` · ${isAr ? 'تواصل لمعرفة السعر' : 'Contact for price'}`}
+                      {listing.price != null && ` · ${Number(listing.price).toLocaleString()} SDG`}
                     </p>
                   </div>
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${statusInfo.color}`}>
-                      {isAr ? statusInfo.ar : statusInfo.en}
-                    </span>
-                    {allowed.map(next => (
-                      <Button
-                        key={next}
-                        size="sm"
-                        variant="outline"
-                        disabled={isPending}
-                        onClick={() => handleStatusChange(listing.id, next)}
-                      >
-                        {STATUS_LABELS[next] ? (isAr ? STATUS_LABELS[next].ar : STATUS_LABELS[next].en) : next}
+                  
+                  <div className="flex items-center gap-2">
+                    {allowed.includes('sold') && (
+                      <Button size="sm" onClick={() => handleStatusChange(listing.id, 'sold')} className="border-2 rounded-none font-bold bg-surface-canvas text-text hover:bg-gray-200">
+                        {isAr ? 'تأكيد البيع' : 'Mark Sold'}
                       </Button>
-                    ))}
+                    )}
+                    {allowed.includes('paused') && (
+                      <Button size="sm" onClick={() => handleStatusChange(listing.id, 'paused')} variant="outline" className="border-2 rounded-none font-bold">
+                        {isAr ? 'إيقاف مؤقت' : 'Pause'}
+                      </Button>
+                    )}
+                    {allowed.includes('active') && (
+                      <Button size="sm" onClick={() => handleStatusChange(listing.id, 'active')} className="border-2 rounded-none font-bold bg-primary text-white hover:bg-primary/90">
+                        {isAr ? 'إعادة التفعيل' : 'Reactivate'}
+                      </Button>
+                    )}
                   </div>
                 </div>
               )

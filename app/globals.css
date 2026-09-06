@@ -40,12 +40,15 @@
   --color-info:            #0277BD;   /* ZA-COLOR-INFO    */
 
   /* ── Typography (v0.1 — IBM Plex Arabic / Inter deferred to v0.2) ── */
-  --font-arabic: var(--font-cairo), 'Cairo', sans-serif;
+  --font-arabic: var(--font-ibm-plex), 'IBM Plex Sans Arabic', sans-serif;
+  --font-cairo: var(--font-cairo), 'Cairo', sans-serif;
   --font-latin:  var(--font-geist), 'Geist', sans-serif;
 }
 
 html[lang="ar"] body {
   font-family: var(--font-arabic);
+  line-height: 1.6;
+  letter-spacing: 0 !important;
 }
 
 html[lang="en"] body {

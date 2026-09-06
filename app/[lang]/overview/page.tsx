@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { ClipboardList, Sprout, Plus, Bell, ShoppingCart } from 'lucide-react'
 import { getDictionary } from '@/lib/i18n/getDictionary'
 import { getTopCrops } from '@/lib/services/crop-service'
 import { getListings } from '@/lib/services/marketplace-service'
@@ -24,16 +25,14 @@ export default async function DashboardPage({ params }: Props) {
   const t = dict.dashboard
 
   const stats = [
-    { label: t.myListings,    value: listings.length,  icon: '📋', color: 'text-primary' },
-    { label: t.activeCrops,   value: crops.length,     icon: '🌾', color: 'text-success' },
-    { label: t.priceAlerts,   value: 3,                icon: '🔔', color: 'text-warning' },
-    { label: t.messages,      value: 2,                icon: '💬', color: 'text-primary' },
+    { label: t.myListings,    value: listings.length,  icon: <ClipboardList className="w-6 h-6" />, color: 'text-primary' },
+    { label: t.activeCrops,   value: crops.length,     icon: <Sprout className="w-6 h-6" />, color: 'text-success' },
   ]
 
   const quickActions = [
-    { label: t.addListing,   href: `/${locale}/marketplace`, icon: '➕' },
-    { label: t.setPriceAlert, href: `/${locale}/crops`,      icon: '🔔' },
-    { label: t.viewMarket,   href: `/${locale}/marketplace`, icon: '🛒' },
+    { label: t.addListing,   href: `/${locale}/marketplace`, icon: <Plus className="w-4 h-4 me-2" /> },
+    { label: t.setPriceAlert, href: `/${locale}/crops`,      icon: <Bell className="w-4 h-4 me-2" /> },
+    { label: t.viewMarket,   href: `/${locale}/marketplace`, icon: <ShoppingCart className="w-4 h-4 me-2" /> },
   ]
 
   return (
@@ -49,8 +48,8 @@ export default async function DashboardPage({ params }: Props) {
         {stats.map(({ label, value, icon, color }) => (
           <div key={label} className="bg-surface rounded-xl border border-border p-5 shadow-sm">
             <div className="flex items-center justify-between mb-3">
-              <span className="text-2xl">{icon}</span>
-              <span className={`text-2xl font-bold ${color}`}>{value}</span>
+              <span className={`text-muted`}>{icon}</span>
+              <span className={`text-2xl font-bold ${color}`}><bdi dir="ltr">{value}</bdi></span>
             </div>
             <p className="text-sm font-medium text-text">{label}</p>
           </div>
@@ -66,7 +65,8 @@ export default async function DashboardPage({ params }: Props) {
           {quickActions.map(({ label, href, icon }) => (
             <Link key={label} href={href}>
               <Button variant="outline" size="sm">
-                <span className="me-2">{icon}</span>{label}
+                {icon}
+                {label}
               </Button>
             </Link>
           ))}
@@ -95,11 +95,11 @@ export default async function DashboardPage({ params }: Props) {
                       {isAr ? crop.nameAr : crop.name}
                     </td>
                     <td className="px-5 py-3.5 text-end font-mono tabular-nums">
-                      {formatCurrency(crop.currentPrice.price, numLocale)}
+                      <bdi dir="ltr">{formatCurrency(crop.currentPrice.price, numLocale)}</bdi>
                     </td>
                     <td className="px-5 py-3.5 text-end">
                       <span className={`font-medium ${up ? 'text-success' : 'text-danger'}`}>
-                        {formatPercent(crop.currentPrice.changePercent, numLocale)}
+                        <bdi dir="ltr">{formatPercent(crop.currentPrice.changePercent, numLocale)}</bdi>
                       </span>
                     </td>
                     <td className="px-5 py-3.5 text-end text-muted hidden sm:table-cell">
@@ -117,7 +117,6 @@ export default async function DashboardPage({ params }: Props) {
       <div className="bg-surface rounded-xl border border-border overflow-hidden shadow-sm">
         <div className="px-5 py-4 border-b border-border flex items-center justify-between">
           <h2 className="font-semibold text-text">{t.myListings}</h2>
-          <Badge variant="outline">{dict.common.demoData}</Badge>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
@@ -134,7 +133,7 @@ export default async function DashboardPage({ params }: Props) {
                     {isAr ? listing.locationAr : listing.location}
                   </td>
                   <td className="px-5 py-3.5 text-end font-semibold text-primary">
-                    {formatCurrency(listing.price, numLocale)}
+                    <bdi dir="ltr">{formatCurrency(listing.price, numLocale)}</bdi>
                   </td>
                   <td className="px-5 py-3.5 text-end">
                     <Badge variant="primary">
