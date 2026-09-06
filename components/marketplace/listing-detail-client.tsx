@@ -103,7 +103,7 @@ export function ListingDetailClient({ locale, listing, media, seller, userRole }
           <div className="bg-surface border rounded-xl overflow-hidden aspect-[4/3] relative flex items-center justify-center">
             {media.length > 0 ? (
               <Image 
-                src={`${SUPABASE_URL}/storage/v1/object/public/listings/${media[0].storage_path}`}
+                src={`${SUPABASE_URL}/storage/v1/object/public/listing-media/${media[0].storage_path}`}
                 alt={title}
                 fill
                 className="object-cover"

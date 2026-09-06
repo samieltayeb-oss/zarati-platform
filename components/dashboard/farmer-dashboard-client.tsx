@@ -47,7 +47,7 @@ const FARMER_TRANSITIONS: Record<string, string[]> = {
   paused: ['active', 'archived'],
 }
 
-type FormStep = 1 | 2 | 3 | 4
+type FormStep = 1 | 2 | 3 | 4 | 5
 
 export function FarmerDashboardClient({ locale, profile, listings, states }: Props) {
   const isAr = locale === 'ar'
@@ -77,40 +77,80 @@ export function FarmerDashboardClient({ locale, profile, listings, states }: Pro
     location_name_ar: '',
   })
 
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([])
+  const [uploadProgress, setUploadProgress] = useState(false)
+
   function updateForm(key: string, value: string) {
     setForm(f => ({ ...f, [key]: value }))
   }
 
+  function handleFileSelect(e: React.ChangeEvent<HTMLInputElement>) {
+    if (e.target.files) {
+      const newFiles = Array.from(e.target.files).filter(f => f.type.startsWith('image/') && !f.type.includes('svg'))
+      setSelectedFiles(prev => [...prev, ...newFiles].slice(0, 5))
+    }
+  }
+
+  function removeFile(index: number) {
+    setSelectedFiles(prev => prev.filter((_, i) => i !== index))
+  }
+
   async function handleSubmitListing() {
     setError(null)
-    startTransition(async () => {
-      const result = await createListing({
-        category: form.category,
-        crop_id: form.crop_id || null,
-        state_id: form.state_id || null,
-        title_en: form.title_en,
-        title_ar: form.title_ar,
-        description_en: form.description_en || null,
-        description_ar: form.description_ar || null,
-        quantity: Number(form.quantity),
-        unit: form.unit,
-        price: form.price === '' ? null : Number(form.price),
-        currency: form.currency,
-        location_name_en: form.location_name_en || null,
-        location_name_ar: form.location_name_ar || null,
-        available_from: form.available_from || null,
-        available_until: form.available_until || null,
-        farm_id: null,
-      })
-      if (result.success) {
-        setSuccess(isAr ? 'تم إنشاء الإعلان بنجاح! سيراجعه الفريق قريباً.' : 'Listing created! It will be reviewed shortly.')
-        setShowForm(false)
-        setFormStep(1)
-        router.refresh()
-      } else {
-        setError(result.error)
-      }
+    setUploadProgress(true)
+    
+    // Create listing as draft first
+    const result = await createListing({
+      category: form.category,
+      crop_id: form.crop_id || null,
+      state_id: form.state_id || null,
+      title_en: form.title_en,
+      title_ar: form.title_ar,
+      description_en: form.description_en || null,
+      description_ar: form.description_ar || null,
+      quantity: Number(form.quantity),
+      unit: form.unit,
+      price: form.price === '' ? null : Number(form.price),
+      currency: form.currency,
+      location_name_en: form.location_name_en || null,
+      location_name_ar: form.location_name_ar || null,
+      available_from: form.available_from || null,
+      available_until: form.available_until || null,
+      farm_id: null,
     })
+
+    if (!result.success) {
+      setError(result.error)
+      setUploadProgress(false)
+      return
+    }
+
+    const listingId = result.listingId!
+
+    // Upload files using the Server Action directly from client!
+    // Next.js forms or direct invocations work. We import it at top.
+    try {
+      const { uploadListingMediaServerAction } = await import('@/lib/actions/upload')
+      for (const file of selectedFiles) {
+        if (file.size > 5 * 1024 * 1024) continue // Skip over 5MB client side check
+        const formData = new FormData()
+        formData.append('listing_id', listingId)
+        formData.append('file', file)
+        await uploadListingMediaServerAction(formData)
+      }
+    } catch (err) {
+      console.error('Upload failed', err)
+    }
+
+    // Move to pending review
+    await updateListingStatus(listingId, 'pending_review')
+
+    setSuccess(isAr ? 'تم إنشاء الإعلان بنجاح! سيراجعه الفريق قريباً.' : 'Listing created! It will be reviewed shortly.')
+    setShowForm(false)
+    setFormStep(1)
+    setSelectedFiles([])
+    setUploadProgress(false)
+    router.refresh()
   }
 
   async function handleStatusChange(listingId: string, newStatus: string) {
@@ -165,7 +205,7 @@ export function FarmerDashboardClient({ locale, profile, listings, states }: Pro
       {showForm && (
         <div className="bg-surface border rounded-xl p-6 space-y-6">
           <h2 className="text-xl font-semibold">
-            {isAr ? `إضافة إعلان — الخطوة ${formStep} من 4` : `Add Listing — Step ${formStep} of 4`}
+            {isAr ? `إضافة إعلان — الخطوة ${formStep} من 5` : `Add Listing — Step ${formStep} of 5`}
           </h2>
 
           {formStep === 1 && (
@@ -255,12 +295,53 @@ export function FarmerDashboardClient({ locale, profile, listings, states }: Pro
               </div>
               <div className="flex gap-3">
                 <Button variant="outline" onClick={() => setFormStep(2)}>{isAr ? 'رجوع' : 'Back'}</Button>
-                <Button onClick={() => setFormStep(4 as FormStep)} className="flex-1">{isAr ? 'مراجعة' : 'Review'}</Button>
+                <Button onClick={() => setFormStep(4 as FormStep)} className="flex-1">{isAr ? 'التالي' : 'Next'}</Button>
               </div>
             </div>
           )}
 
           {formStep === 4 && (
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-1">{isAr ? 'الصور (اختياري)' : 'Images (Optional)'}</label>
+                <input
+                  type="file"
+                  multiple
+                  accept="image/jpeg,image/png,image/webp"
+                  onChange={handleFileSelect}
+                  className="w-full border rounded-lg px-3 py-2 bg-background"
+                  disabled={selectedFiles.length >= 5}
+                />
+                <p className="text-xs text-muted mt-1">
+                  {isAr ? 'الحد الأقصى 5 صور. الأحجام أقل من 5 ميجابايت.' : 'Max 5 images. Size under 5MB.'}
+                </p>
+              </div>
+              
+              {selectedFiles.length > 0 && (
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mt-4">
+                  {selectedFiles.map((f, i) => (
+                    <div key={i} className="relative border rounded p-2 text-xs truncate">
+                      <button 
+                        onClick={() => removeFile(i)} 
+                        className="absolute top-1 right-1 bg-red-100 text-red-600 rounded-full w-5 h-5 flex items-center justify-center font-bold"
+                      >
+                        ×
+                      </button>
+                      <p>{f.name}</p>
+                      <p className="text-muted">{(f.size / 1024 / 1024).toFixed(1)} MB</p>
+                    </div>
+                  ))}
+                </div>
+              )}
+              
+              <div className="flex gap-3 mt-6">
+                <Button variant="outline" onClick={() => setFormStep(3)}>{isAr ? 'رجوع' : 'Back'}</Button>
+                <Button onClick={() => setFormStep(5 as FormStep)} className="flex-1">{isAr ? 'مراجعة' : 'Review'}</Button>
+              </div>
+            </div>
+          )}
+
+          {formStep === 5 && (
             <div className="space-y-4">
               <h3 className="font-medium">{isAr ? 'مراجعة البيانات' : 'Review Your Listing'}</h3>
               <div className="bg-muted/20 rounded-lg p-4 space-y-2 text-sm">
@@ -273,9 +354,9 @@ export function FarmerDashboardClient({ locale, profile, listings, states }: Pro
               </div>
               <p className="text-xs text-muted">{isAr ? 'سيتم إرسال الإعلان للمراجعة قبل النشر.' : 'Your listing will be reviewed before going live.'}</p>
               <div className="flex gap-3">
-                <Button variant="outline" onClick={() => setFormStep(3)}>{isAr ? 'رجوع' : 'Back'}</Button>
-                <Button onClick={handleSubmitListing} disabled={isPending} className="flex-1">
-                  {isPending ? (isAr ? 'جاري الإرسال...' : 'Submitting...') : (isAr ? 'إرسال للمراجعة' : 'Submit for Review')}
+                <Button variant="outline" onClick={() => setFormStep(4 as FormStep)}>{isAr ? 'رجوع' : 'Back'}</Button>
+                <Button onClick={handleSubmitListing} disabled={isPending || uploadProgress} className="flex-1">
+                  {isPending || uploadProgress ? (isAr ? 'جاري الإرسال...' : 'Submitting...') : (isAr ? 'إرسال للمراجعة' : 'Submit for Review')}
                 </Button>
               </div>
             </div>
