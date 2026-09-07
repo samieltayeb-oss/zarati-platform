@@ -41,7 +41,7 @@ export default async function IntelligencePreviewPage({ params }: { params: Prom
         <div className="bg-surface-canvas border-2 border-border-strong p-8 opacity-75">
           <h3 className="font-bold text-xl font-cairo mb-3 text-muted">{isAr ? 'تحليلات المناخ والأمطار' : 'Climate & Rainfall Analytics'}</h3>
           <p className="text-muted text-sm font-medium">
-            {isAr ? 'بيانات الطقس المتقدمة وتوقعات هطول الأمطار للمناطق الزراعية المطرية.' : 'Advanced weather telemetry and precipitation forecasting for rainfed agricultural zones.'}
+            {isAr ? 'بيانات الطقس المخططة وتوقعات هطول الأمطار للمناطق الزراعية المطرية.' : 'Planned weather data and precipitation forecasting for rainfed agricultural zones.'}
           </p>
           <div className="mt-6 border-t-2 border-dashed border-border-strong pt-6 flex gap-4">
             <div className="w-12 h-12 rounded-full bg-border-strong"></div>

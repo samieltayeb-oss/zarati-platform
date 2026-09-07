@@ -64,7 +64,7 @@ export default async function AboutPage({ params }: Props) {
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent flex items-end p-6 sm:p-8">
               <div>
                 <span className="text-[10px] font-mono tracking-widest uppercase text-amber-300 font-bold mb-1 block">
-                  {isAr ? 'البنية التحتية القومية' : 'NATIONAL SCALE CAPABILITY'}
+                  {isAr ? 'رؤية البنية التحتية السيادية' : 'SOVEREIGN ARCHITECTURAL VISION'}
                 </span>
                 <p className="text-white text-lg sm:text-xl font-bold font-cairo">
                   {isAr ? 'تأمين سلاسل الإمداد ومراكز التخزين الاستراتيجي' : 'Securing Agricultural Supply Chains & Strategic Storage'}

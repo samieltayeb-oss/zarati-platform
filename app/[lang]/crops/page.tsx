@@ -182,7 +182,7 @@ export default async function CropsPage({ params }: Props) {
           {isAr ? 'مؤشرات الأسعار التوجيهية' : 'Indicative Market Price Register'}
         </h2>
         <p className="text-xs sm:text-sm text-muted">
-          {isAr ? 'الأسعار المسجلة في أسواق المحاصيل الإقليمية' : 'Recorded prices across regional exchange centers'}
+          {isAr ? 'بيانات استرشادية توضيحية لنموذج أسعار المحاصيل الإقليمية (غير حية)' : 'Informational demonstration data illustrating market price structures (non-live)'}
         </p>
       </div>
 

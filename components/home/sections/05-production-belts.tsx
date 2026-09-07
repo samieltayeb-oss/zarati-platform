@@ -37,18 +37,18 @@ export function AgriculturalGeography({ locale, dict }: { locale: Locale; dict: 
               <div className="relative z-10 w-full h-full p-6 flex flex-col justify-between">
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] font-mono tracking-widest uppercase bg-black/60 backdrop-blur-sm text-white px-2.5 py-1 rounded border border-white/20 font-bold">
-                    {isAr ? 'بيانات أحزمة الإنتاج' : 'PRODUCTION BELT TELEMETRY'}
+                    {isAr ? 'معاينة هيكلية أحزمة الإنتاج' : 'PRODUCTION BELT ARCHITECTURE'}
                   </span>
-                  <span className="flex items-center gap-1.5 text-[11px] font-mono text-emerald-400 font-bold bg-black/50 px-2 py-0.5 rounded">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                    ACTIVE
+                  <span className="flex items-center gap-1.5 text-[11px] font-mono text-amber-300 font-bold bg-black/50 px-2 py-0.5 rounded border border-amber-300/30">
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                    {isAr ? 'معاينة (R4 مخطط)' : 'PREVIEW (R4 PLANNED)'}
                   </span>
                 </div>
                 
                 <div className="bg-black/70 backdrop-blur-md border border-white/15 p-4 rounded-md">
                   <div className="flex justify-between items-center text-xs text-white/90">
                     <span className="font-bold font-cairo">{isAr ? 'حزام الإنتاج المطري الشرقي' : 'Eastern Rainfed Belt'}</span>
-                    <span className="font-mono text-emerald-300 font-bold">14M Feddans</span>
+                    <span className="font-mono text-amber-200 font-bold">{isAr ? '١٤ مليون فدان (تقدير مساحي)' : '14M Feddans (Spatial Estimate)'}</span>
                   </div>
                   <div className="text-[11px] text-white/70 mt-1">
                     {isAr ? 'القضارف، سنار، الدمازين — الذرة والسمسم وزهرة الشمس' : 'Gedaref, Sennar, Damazine — Sorghum, Sesame, Sunflower'}

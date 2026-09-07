@@ -36,18 +36,18 @@ export function B2bMarketplace({ locale, dict }: { locale: Locale; dict: unknown
           </div>
           <div className="p-6 lg:p-8 lg:col-span-8 flex flex-col justify-center">
             <div className="flex items-center gap-2 mb-2">
-              <span className="w-2 h-2 rounded-full bg-success"></span>
+              <span className="w-2 h-2 rounded-full bg-amber-500"></span>
               <span className="text-xs font-mono tracking-widest text-muted uppercase">
-                {isAr ? 'شبكة مراكز التجميع الإقليمية' : 'REGIONAL AGGREGATION NETWORK'}
+                {isAr ? 'شبكة مراكز التجميع الإقليمية (مخطط R5)' : 'REGIONAL AGGREGATION NETWORK (R5 PLANNED)'}
               </span>
             </div>
             <h3 className="text-xl font-bold font-cairo text-text mb-2">
-              {isAr ? 'مستودعات الفرز والتسوية العينية المعتمدة' : 'Verified Aggregation & Physical Settlement Hubs'}
+              {isAr ? 'نموذج مستودعات الفرز والتسوية العينية' : 'Physical Aggregation & Settlement Framework'}
             </h3>
             <p className="text-muted text-sm leading-relaxed">
               {isAr 
-                ? 'ربط مباشر بالمستودعات الإقليمية المعتمدة في القضارف، الجزيرة، وبورتسودان لضمان فحص الجودة وتأكيد أوزان الشحنات.' 
-                : 'Direct linkage to verified physical aggregation hubs across Gedaref, Gezira, and Port Sudan for quality inspection and batch weight verification.'}
+                ? 'إطار عمل مخطط لتنسيق شحنات السلع التجارية مع مرافق التخزين الإقليمية في القضارف والجزيرة وبورتسودان عند تفعيل المرحلة الخامسة.' 
+                : 'Planned operational framework for coordinating commercial commodity lots with regional storage facilities across Gedaref, Gezira, and Port Sudan in R5.'}
             </p>
           </div>
         </div>
