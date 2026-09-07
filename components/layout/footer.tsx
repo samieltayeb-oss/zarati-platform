@@ -118,13 +118,27 @@ export function Footer({ lang, nav }: FooterProps) {
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-12 pt-6 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted">
-          <div className="flex items-center gap-2">
-            <SudanFlag className="w-4 h-2.5" />
-            <span>
-              © 2026 Zarati · زرعتي.{' '}
-              {isAr ? 'جميع الحقوق محفوظة — صُمم للسودان.' : 'All rights reserved — Built for Sudan.'}
-            </span>
+        <div className="mt-12 pt-6 border-t border-border flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-muted">
+          <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 text-center sm:text-start">
+            <div className="flex items-center gap-2">
+              <SudanFlag className="w-4 h-2.5" />
+              <span>
+                © 2026 Zarati · زرعتي.{' '}
+                {isAr ? 'جميع الحقوق محفوظة — صُمم للسودان.' : 'All rights reserved — Built for Sudan.'}
+              </span>
+            </div>
+            <span className="hidden sm:inline text-muted/40">·</span>
+            <div className="flex items-center gap-1.5 text-muted/90">
+              <span>{isAr ? 'تم البناء والتطوير بواسطة' : 'Built and developed by'}</span>
+              <a
+                href="https://nexorayyc.io"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-semibold text-text hover:text-primary transition-colors underline-offset-4 hover:underline"
+              >
+                NEXORA
+              </a>
+            </div>
           </div>
           <div className="flex items-center gap-5">
             <Link href={`/${lang}/privacy`} className="hover:text-primary transition-colors">

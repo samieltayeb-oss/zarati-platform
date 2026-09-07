@@ -37,12 +37,12 @@ export default async function AboutPage({ params }: Props) {
         <section className="mb-16">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center bg-surface border border-border rounded-2xl p-6 sm:p-8 overflow-hidden shadow-sm">
             <div className="md:col-span-7">
-              <span className="text-[11px] font-mono tracking-widest uppercase text-muted mb-2 block">
+              <span className={`text-[11px] mb-2 block ${isAr ? 'font-arabic font-bold text-muted/90' : 'font-mono tracking-widest uppercase text-muted'}`}>
                 {isAr ? 'الرسالة السيادية' : 'SOVEREIGN PURPOSE'}
               </span>
               <h2 className="text-2xl sm:text-3xl font-bold font-cairo text-text mb-4">{t.missionTitle}</h2>
               <p className="text-muted text-base sm:text-lg leading-relaxed">{t.missionDescription}</p>
-              <div className="mt-4 flex flex-wrap gap-2 text-xs font-mono text-muted">
+              <div className={`mt-4 flex flex-wrap gap-2 text-xs text-muted ${isAr ? 'font-arabic font-medium' : 'font-mono'}`}>
                 <span className="bg-primary/5 text-primary border border-primary/20 px-2.5 py-1 rounded-sm">
                   {isAr ? 'القضارف والجزيرة' : 'Gedaref & Gezira'}
                 </span>
@@ -78,7 +78,7 @@ export default async function AboutPage({ params }: Props) {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent flex items-end p-6 sm:p-8">
               <div>
-                <span className="text-[10px] font-mono tracking-widest uppercase text-amber-300 font-bold mb-1 block">
+                <span className={`text-[10px] font-bold mb-1 block ${isAr ? 'font-arabic text-amber-300' : 'font-mono tracking-widest uppercase text-amber-300'}`}>
                   {isAr ? 'رؤية البنية التحتية السيادية' : 'SOVEREIGN ARCHITECTURAL VISION'}
                 </span>
                 <p className="text-white text-lg sm:text-xl font-bold font-cairo">

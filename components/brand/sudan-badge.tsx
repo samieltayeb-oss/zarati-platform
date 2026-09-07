@@ -54,17 +54,18 @@ export function SudanBadge({
     return (
       <div
         className={cn(
-          'inline-flex items-center gap-2 px-2.5 py-1 rounded-full border border-border-strong bg-surface-elevated/70 backdrop-blur-xs text-xs font-mono font-medium text-text/80 shadow-xs hover:border-primary/40 transition-colors',
+          'inline-flex items-center gap-2 px-2.5 py-1 rounded-full border border-border-strong bg-surface-elevated/70 backdrop-blur-xs text-xs text-text/80 shadow-xs hover:border-primary/40 transition-colors',
+          isAr ? 'font-arabic font-medium' : 'font-mono font-medium',
           className
         )}
         {...props}
       >
         <SudanFlag className="w-4 h-2.5" />
-        <span className="font-bold tracking-wider text-[11px]">
+        <span className={cn('text-[11px] font-bold', isAr ? 'font-arabic' : 'tracking-wider')}>
           {isAr ? 'السودان' : 'SUDAN'}
         </span>
         <span className="text-muted/40 text-[10px]">/</span>
-        <span className="text-[10px] text-muted tracking-tight font-sans">
+        <span className={cn('text-[10px] text-muted', isAr ? 'font-arabic' : 'tracking-tight font-sans')}>
           {isAr ? 'بنية زراعية' : 'Agri-Infra'}
         </span>
       </div>
@@ -75,15 +76,16 @@ export function SudanBadge({
     return (
       <div
         className={cn(
-          'inline-flex items-center gap-2.5 px-3 py-1.5 rounded-full border border-primary/20 bg-primary/5 text-primary text-xs font-mono font-semibold tracking-wide shadow-xs',
+          'inline-flex items-center gap-2.5 px-3 py-1.5 rounded-full border border-primary/20 bg-primary/5 text-primary text-xs shadow-xs',
+          isAr ? 'font-arabic font-medium' : 'font-mono font-semibold tracking-wide',
           className
         )}
         {...props}
       >
         <SudanFlag className="w-4 h-2.5" />
-        <span>{isAr ? 'صُمم للزراعة في السودان' : 'BUILT FOR SUDAN'}</span>
+        <span className={isAr ? 'font-arabic font-semibold' : ''}>{isAr ? 'صُمم للزراعة في السودان' : 'BUILT FOR SUDAN'}</span>
         <span className="text-primary/30">|</span>
-        <span className="text-[10px] text-text/70 uppercase tracking-widest font-mono">
+        <span className={cn('text-[10px] text-text/70', isAr ? 'font-arabic' : 'font-mono uppercase tracking-widest')}>
           {isAr ? 'بنية تحتية زراعية' : 'AGRI-INFRASTRUCTURE'}
         </span>
       </div>
@@ -94,7 +96,8 @@ export function SudanBadge({
     return (
       <div
         className={cn(
-          'inline-flex flex-wrap items-center gap-2.5 text-xs text-muted font-mono',
+          'inline-flex flex-wrap items-center gap-2.5 text-xs text-muted',
+          isAr ? 'font-arabic' : 'font-mono',
           className
         )}
         {...props}
@@ -106,7 +109,7 @@ export function SudanBadge({
           </span>
         </div>
         <span className="text-muted/40">·</span>
-        <span className="text-[11px] text-muted/80">
+        <span dir="ltr" className="text-[11px] text-muted/80 font-mono">
           15.5007° N, 32.5599° E
         </span>
       </div>

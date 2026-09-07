@@ -151,13 +151,13 @@ export function ZaratiLogo({
               |
             </span>
             {/* Arabic Name */}
-            <span className="font-cairo font-bold text-text text-lg sm:text-xl leading-none">
+            <span className="font-arabic font-bold text-text text-lg sm:text-xl leading-none">
               زرعتي
             </span>
           </div>
           {/* Subtle National Agri Descriptor */}
-          <span className="text-[9.5px] font-mono tracking-widest text-muted uppercase mt-0.5 hidden sm:block">
-            {isAr ? 'البنية التحتية الزراعية' : 'Agricultural Infrastructure'}
+          <span className={cn('mt-0.5 hidden sm:block', isAr ? 'text-[10.5px] font-arabic font-medium text-muted/90' : 'text-[9.5px] font-mono tracking-widest text-muted uppercase')}>
+            {isAr ? 'البنية التحتية للذكاء الزراعي' : 'Agricultural Infrastructure'}
           </span>
         </div>
       </div>
@@ -179,11 +179,11 @@ export function ZaratiLogo({
           <span className="text-border-strong font-light text-xl select-none">
             |
           </span>
-          <span className="font-cairo font-bold text-text text-2xl leading-none">
+          <span className="font-arabic font-bold text-text text-2xl leading-none">
             زرعتي
           </span>
         </div>
-        <p className="text-xs font-mono text-muted tracking-wider uppercase mt-1.5">
+        <p className={cn('mt-1.5', isAr ? 'text-xs font-arabic text-muted/90' : 'text-xs font-mono text-muted tracking-wider uppercase')}>
           {isAr ? 'منصة السودان الزراعية السيادية' : "Sudan's Sovereign Agri-Platform"}
         </p>
       </div>
@@ -207,17 +207,17 @@ export function ZaratiLogo({
               <span className="text-border-strong font-light text-lg select-none">
                 |
               </span>
-              <span className="font-cairo font-bold text-text text-xl leading-none">
+              <span className="font-arabic font-bold text-text text-xl leading-none">
                 زرعتي
               </span>
             </div>
-            <p className="text-[10px] font-mono tracking-widest text-muted uppercase mt-0.5">
+            <p className={cn('mt-0.5', isAr ? 'text-[11px] font-arabic font-medium text-muted/90' : 'text-[10px] font-mono tracking-widest text-muted uppercase')}>
               {isAr ? 'البنية التحتية للذكاء الزراعي' : 'Agricultural Intelligence Infrastructure'}
             </p>
           </div>
         </div>
         {showTagline && (
-          <p className="text-xs text-muted/80 font-sans mt-2.5 leading-relaxed">
+          <p className={cn('mt-2.5 leading-relaxed', isAr ? 'text-xs font-arabic text-muted/90' : 'text-xs text-muted/80 font-sans')}>
             {isAr
               ? 'الزراعة الذكية لمستقبل السودان'
               : "Smart Agriculture for Sudan's Future"}
@@ -242,12 +242,12 @@ export function ZaratiLogo({
           <span className="text-border-strong font-light text-lg select-none">
             |
           </span>
-          <span className="font-cairo font-bold text-text text-xl leading-none">
+          <span className="font-arabic font-bold text-text text-xl leading-none">
             زرعتي
           </span>
         </div>
         {showTagline && (
-          <span className="text-[10px] font-mono text-muted uppercase tracking-wider mt-1">
+          <span className={cn('mt-1', isAr ? 'text-[11px] font-arabic text-muted/90' : 'text-[10px] font-mono text-muted uppercase tracking-wider')}>
             {isAr ? 'الزراعة الذكية لمستقبل السودان' : "Smart Agriculture for Sudan's Future"}
           </span>
         )}

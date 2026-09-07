@@ -48,15 +48,15 @@ export function SovereignHero({ locale }: { locale: Locale; dict?: unknown }) {
             </p>
 
             {/* Sovereign Context Ticker */}
-            <div className="flex items-center gap-4 text-xs font-mono text-muted mb-8 pb-6 border-b border-border/80">
+            <div className={`flex items-center gap-4 text-xs text-muted mb-8 pb-6 border-b border-border/80 ${isAr ? 'font-arabic' : 'font-mono'}`}>
               <span className="flex items-center gap-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
-                {isAr ? '٢٤ مليون فدان مزروع' : '24M Cultivated Feddans'}
+                <span>{isAr ? '24 مليون فدان مزروع' : '24M Cultivated Feddans'}</span>
               </span>
               <span className="text-muted/40">·</span>
               <span>{isAr ? 'حوض النيل والقضارف' : 'Nile & Gedaref Belts'}</span>
               <span className="text-muted/40">·</span>
-              <span>15.5007° N</span>
+              <span dir="ltr" className="font-mono">15.5007° N</span>
             </div>
 
             {/* Actions */}
