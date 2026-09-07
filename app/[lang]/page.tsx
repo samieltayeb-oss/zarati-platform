@@ -5,6 +5,7 @@ import { NationalReality } from '@/components/home/sections/02-national-reality'
 import { TechnicalRegister } from '@/components/home/sections/03-technical-register'
 import { B2bMarketplace } from '@/components/home/sections/04-b2b-marketplace'
 import { AgriculturalGeography } from '@/components/home/sections/05-production-belts'
+import { SovereignPostersShowcase } from '@/components/home/sections/sovereign-posters-showcase'
 import { TrustProvenance } from '@/components/home/sections/08-trust-provenance'
 import { InstitutionalCta } from '@/components/home/sections/09-institutional-cta'
 
@@ -22,6 +23,7 @@ export default async function Page({ params }: Props) {
       <TechnicalRegister locale={locale} dict={dict.home} />
       <B2bMarketplace locale={locale} dict={dict.home} />
       <AgriculturalGeography locale={locale} dict={dict.home} />
+      <SovereignPostersShowcase locale={locale} dict={dict.home} />
       <TrustProvenance locale={locale} dict={dict.home} />
       <InstitutionalCta locale={locale} dict={dict.home} />
     </>

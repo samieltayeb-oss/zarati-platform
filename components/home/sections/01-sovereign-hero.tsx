@@ -34,7 +34,7 @@ export function SovereignHero({ locale }: { locale: Locale; dict?: unknown }) {
           <Image
             src={zheroSrc}
             alt={isAr ? "زرعتي | ZARATI — من أرض السودان إلى مستقبل أكثر ازدهاراً" : "ZARATI — Sudan's Agricultural Intelligence Infrastructure"}
-            width={1672}
+            width={1671}
             height={941}
             priority
             quality={100}

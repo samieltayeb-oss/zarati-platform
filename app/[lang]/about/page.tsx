@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import { getDictionary } from '@/lib/i18n/getDictionary'
 import { UserCheck, Search, ShieldCheck } from 'lucide-react'
+import { PosterModal } from '@/components/brand/poster-modal'
 import { PageWrapper } from '@/components/layout/page-wrapper'
 import { SudanBadge } from '@/components/brand/sudan-badge'
 import type { Locale } from '@/lib/i18n/config'
@@ -33,7 +34,7 @@ export default async function AboutPage({ params }: Props) {
       </section>
 
       <PageWrapper narrow>
-        {/* Mission with Photographic Proof */}
+        {/* Mission with Sovereign Poster 1 */}
         <section className="mb-16">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center bg-surface border border-border rounded-2xl p-6 sm:p-8 overflow-hidden shadow-sm">
             <div className="md:col-span-7">
@@ -54,13 +55,12 @@ export default async function AboutPage({ params }: Props) {
                 </span>
               </div>
             </div>
-            <div className="md:col-span-5 relative aspect-[4/3] rounded-xl overflow-hidden border border-border bg-muted/20">
-              <Image
-                src="/images/zarati/about/agronomist-field-inspection.jpg"
-                alt={isAr ? 'باحثة زراعية سودانية تفحص عينات المحاصيل في الحقل' : 'Sudanese agricultural agronomist inspecting crops in the field'}
-                fill
-                sizes="(max-width: 768px) 100vw, 40vw"
-                className="object-cover"
+            <div className="md:col-span-5">
+              <PosterModal
+                src="/images/zarati/posters/poster-1-our-land.png"
+                alt={isAr ? 'بوستر زرعتي: أرضنا .. غذاؤنا .. مستقبلنا' : 'ZARATI Poster: Our Land .. Our Food .. Our Future'}
+                title={isAr ? 'أرضنا .. غذاؤنا .. مستقبلنا' : 'Our Land .. Our Food .. Our Future'}
+                priority
               />
             </div>
           </div>

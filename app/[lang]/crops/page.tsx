@@ -4,6 +4,7 @@ import { getCrops } from '@/lib/services/crop-service'
 import { PageWrapper } from '@/components/layout/page-wrapper'
 import { Badge } from '@/components/ui/badge'
 import { SudanBadge } from '@/components/brand/sudan-badge'
+import { PosterModal } from '@/components/brand/poster-modal'
 import { formatCurrency, formatPercent } from '@/lib/utils'
 import type { Locale } from '@/lib/i18n/config'
 
@@ -125,6 +126,49 @@ export default async function CropsPage({ params }: Props) {
           <Badge variant="outline">{common.demoData}</Badge>
         </div>
         <p className="text-muted text-base sm:text-lg max-w-3xl leading-relaxed">{t.subtitle}</p>
+      </div>
+
+      {/* Featured Agronomy Poster 3 Banner */}
+      <div className="mb-14 bg-[#0a180f] border border-white/15 rounded-3xl p-6 sm:p-8 text-white shadow-xl overflow-hidden">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+          <div className="md:col-span-7 space-y-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/20 border border-primary/40 text-primary-light text-xs font-mono font-bold">
+              <span>{isAr ? 'المعرفة الميدانية والتحليلات الذكية' : 'AGRONOMIC INTELLIGENCE & CROP TRENDS'}</span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-bold font-cairo text-white leading-snug">
+              {isAr ? 'معرفة اليوم .. لحصاد أفضل غداً' : 'Knowledge Today .. A Stronger Harvest Tomorrow'}
+            </h2>
+            <p className="text-white/80 text-sm sm:text-base leading-relaxed">
+              {isAr
+                ? 'توثيق علمي وميداني لأكثر من 25 محصولاً رئيسياً بالسودان، مع مؤشرات حية لأسواق السمسم في كسلا والذرة الرفيعة بالقضارف نحو قطاع زراعي أكثر إنتاجية واستدامة.'
+                : 'Scientific field documentation covering 25+ primary Sudanese crop categories, paired with live price trend tracking for Kassala sesame and Gedaref sorghum.'}
+            </p>
+            <div className="grid grid-cols-3 gap-3 pt-2 text-xs font-mono">
+              <div className="bg-white/5 border border-white/10 p-3 rounded-xl text-center">
+                <span className="text-primary-light block font-bold text-lg font-cairo">+25</span>
+                <span className="text-white/60">{isAr ? 'فئة محصولية' : 'Crop Categories'}</span>
+              </div>
+              <div className="bg-white/5 border border-white/10 p-3 rounded-xl text-center">
+                <span className="text-primary-light block font-bold text-lg font-cairo">+12%</span>
+                <span className="text-white/60">{isAr ? 'ذرة القضارف' : 'Gedaref Sorghum'}</span>
+              </div>
+              <div className="bg-white/5 border border-white/10 p-3 rounded-xl text-center">
+                <span className="text-primary-light block font-bold text-lg font-cairo">+8%</span>
+                <span className="text-white/60">{isAr ? 'سمسم كسلا' : 'Kassala Sesame'}</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="md:col-span-5">
+            <PosterModal
+              src="/images/zarati/posters/poster-3-knowledge-today.png"
+              alt={isAr ? 'بوستر زرعتي: معرفة اليوم لحصاد أفضل غدًا' : 'ZARATI Poster: Knowledge Today .. A Stronger Harvest Tomorrow'}
+              title={isAr ? 'معرفة اليوم لحصاد أفضل غدًا — سجل المحاصيل والمعرفة' : 'Knowledge Today .. Stronger Harvest — Crop Knowledge'}
+              priority
+              className="border-white/20 shadow-2xl"
+            />
+          </div>
+        </div>
       </div>
 
       {/* Botanical Crop Visual Library */}

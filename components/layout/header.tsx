@@ -48,7 +48,10 @@ export function Header({ lang, nav }: HeaderProps) {
   return (
     <header className="bg-surface/95 backdrop-blur-md border-b border-border sticky top-0 z-50 transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-[72px] md:h-[80px]">
+        <div className={cn(
+          "flex items-center justify-between h-[72px] md:h-[80px]",
+          lang === 'en' && "flex-row-reverse lg:flex-row"
+        )}>
 
           {/* Logo lockup: Original ZARATI Brand */}
           <Link
@@ -101,8 +104,11 @@ export function Header({ lang, nav }: HeaderProps) {
             </Link>
           </div>
 
-          {/* Mobile Right Controls: Country badge + Hamburger (visible below lg) */}
-          <div className="flex lg:hidden items-center gap-2">
+          {/* Mobile Controls: Country badge + Hamburger (visible below lg) */}
+          <div className={cn(
+            "flex lg:hidden items-center gap-2",
+            lang === 'en' && "flex-row-reverse"
+          )}>
             <SudanBadge lang={lang} variant="header" className="hidden sm:inline-flex px-2 py-0.5 text-[10px]" />
             <div className="sm:hidden flex items-center pr-1">
               <SudanFlag className="w-4 h-2.5" />
