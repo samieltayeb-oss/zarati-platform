@@ -1,4 +1,5 @@
 import type { Locale } from '@/lib/i18n/config'
+import Image from 'next/image'
 
 export function TrustProvenance({ locale }: { locale: Locale; dict?: unknown }) {
   const isAr = locale === 'ar'
@@ -18,29 +19,30 @@ export function TrustProvenance({ locale }: { locale: Locale; dict?: unknown }) 
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="border border-border-strong rounded-md p-8 bg-bg">
-            <h3 className="font-bold font-cairo text-xl mb-4">{isAr ? 'بروتوكول الإفصاح المتبادل' : 'Bilateral Reveal Protocol'}</h3>
-            <p className="text-muted text-sm leading-relaxed mb-6">
-              {isAr ? 'حماية تامة لهوية المزارعين والتجار حتى يتم تبادل القبول. لا يتم كشف أرقام الهواتف أو التفاصيل الدقيقة علناً.' : 'Total identity protection for producers and traders until mutual acceptance. Phone numbers and exact details are never public.'}
-            </p>
-            <div className="flex items-center gap-3">
-              <span className="px-2.5 py-1 text-[10px] font-mono tracking-widest bg-surface border border-border-strong rounded-sm text-text">SSMO ALIGNED</span>
-              <span className="px-2.5 py-1 text-[10px] font-mono tracking-widest bg-surface border border-border-strong rounded-sm text-text">R2 SECURED</span>
-            </div>
+          <div className="overflow-hidden rounded-xl border border-border-strong shadow-sm hover:shadow-md transition-shadow bg-bg">
+            <Image 
+              src="/images/trust-disclosure.png" 
+              alt={isAr ? 'بروتوكول الإفصاح المتبادل' : 'Exchange Disclosure Protocol'} 
+              width={1200}
+              height={600}
+              className="w-full h-auto object-cover"
+              sizes="(max-width: 768px) 100vw, 50vw"
+            />
           </div>
           
-          <div className="border border-border-strong rounded-md p-8 bg-bg">
-            <h3 className="font-bold font-cairo text-xl mb-4">{isAr ? 'سلامة البيانات' : 'Data Integrity'}</h3>
-            <p className="text-muted text-sm leading-relaxed mb-6">
-              {isAr ? 'جميع المعلومات المعروضة يتم فلترتها لضمان الجودة، مع دعم مستقبلي لمعايير منظمة الأغذية والزراعة (FAO) وغيرها من المصادر المفتوحة.' : 'All displayed information is strictly filtered for quality, with planned support for FAO standards and open data pipelines.'}
-            </p>
-            <div className="flex items-center gap-3">
-              <span className="px-2.5 py-1 text-[10px] font-mono tracking-widest bg-surface border border-border-strong rounded-sm text-text">WFP VAM (PLANNED)</span>
-              <span className="px-2.5 py-1 text-[10px] font-mono tracking-widest bg-surface border border-border-strong rounded-sm text-text">ESA SENTINEL (VISION)</span>
-            </div>
+          <div className="overflow-hidden rounded-xl border border-border-strong shadow-sm hover:shadow-md transition-shadow bg-bg">
+            <Image 
+              src="/images/trust-integrity.png" 
+              alt={isAr ? 'سلامة البيانات' : 'Data Integrity'} 
+              width={1200}
+              height={600}
+              className="w-full h-auto object-cover"
+              sizes="(max-width: 768px) 100vw, 50vw"
+            />
           </div>
         </div>
       </div>
     </section>
   )
 }
+
