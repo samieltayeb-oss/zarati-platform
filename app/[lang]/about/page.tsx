@@ -2,6 +2,7 @@ import Image from 'next/image'
 import { getDictionary } from '@/lib/i18n/getDictionary'
 import { UserCheck, Search, ShieldCheck } from 'lucide-react'
 import { PageWrapper } from '@/components/layout/page-wrapper'
+import { SudanBadge } from '@/components/brand/sudan-badge'
 import type { Locale } from '@/lib/i18n/config'
 
 type Props = { params: Promise<{ lang: string }> }
@@ -23,6 +24,9 @@ export default async function AboutPage({ params }: Props) {
       {/* Hero */}
       <section className="bg-gradient-to-b from-navy to-navy-dark text-white py-20 sm:py-28 relative overflow-hidden">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+          <div className="flex justify-center mb-4">
+            <SudanBadge lang={locale} variant="hero" className="bg-white/10 text-white border-white/20 shadow-none" />
+          </div>
           <h1 className="text-4xl sm:text-5xl font-bold font-cairo mb-4 leading-tight">{t.heroTitle}</h1>
           <p className="text-white/80 text-lg max-w-2xl mx-auto leading-relaxed">{t.heroSubtitle}</p>
         </div>
@@ -38,6 +42,17 @@ export default async function AboutPage({ params }: Props) {
               </span>
               <h2 className="text-2xl sm:text-3xl font-bold font-cairo text-text mb-4">{t.missionTitle}</h2>
               <p className="text-muted text-base sm:text-lg leading-relaxed">{t.missionDescription}</p>
+              <div className="mt-4 flex flex-wrap gap-2 text-xs font-mono text-muted">
+                <span className="bg-primary/5 text-primary border border-primary/20 px-2.5 py-1 rounded-sm">
+                  {isAr ? 'القضارف والجزيرة' : 'Gedaref & Gezira'}
+                </span>
+                <span className="bg-primary/5 text-primary border border-primary/20 px-2.5 py-1 rounded-sm">
+                  {isAr ? 'حوض النيل الأزرق' : 'Blue Nile Basin'}
+                </span>
+                <span className="bg-primary/5 text-primary border border-primary/20 px-2.5 py-1 rounded-sm">
+                  {isAr ? 'حزام الصمغ العربي' : 'Gum Arabic Belt'}
+                </span>
+              </div>
             </div>
             <div className="md:col-span-5 relative aspect-[4/3] rounded-xl overflow-hidden border border-border bg-muted/20">
               <Image
@@ -67,7 +82,7 @@ export default async function AboutPage({ params }: Props) {
                   {isAr ? 'رؤية البنية التحتية السيادية' : 'SOVEREIGN ARCHITECTURAL VISION'}
                 </span>
                 <p className="text-white text-lg sm:text-xl font-bold font-cairo">
-                  {isAr ? 'تأمين سلاسل الإمداد ومراكز التخزين الاستراتيجي' : 'Securing Agricultural Supply Chains & Strategic Storage'}
+                  {isAr ? 'تأمين سلاسل الإمداد ومراكز التخزين الاستراتيجي بالسودان' : 'Securing Strategic Storage & Commodity Supply Chains in Sudan'}
                 </p>
               </div>
             </div>
@@ -98,7 +113,7 @@ export default async function AboutPage({ params }: Props) {
             {t.contactEmail}
           </a>
           {isAr && (
-            <p className="text-muted text-sm mt-2">نرحب بمقترحاتكم وتعاونكم</p>
+            <p className="text-muted text-sm mt-2">نرحب بمقترحاتكم وتعاونكم لخدمة الزراعة السودانية</p>
           )}
         </section>
       </PageWrapper>

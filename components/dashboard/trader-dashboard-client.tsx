@@ -4,6 +4,7 @@ import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { updateRFQStatus, getRFQContactDetails } from '@/lib/actions/rfq'
+import { SudanBadge } from '@/components/brand/sudan-badge'
 
 interface Inquiry {
   id: string
@@ -91,12 +92,15 @@ export function TraderDashboardClient({ locale, profile, inquiries }: Props) {
     <div dir={isAr ? 'rtl' : 'ltr'} className="container py-6 max-w-6xl space-y-6">
       <div className="flex justify-between items-center bg-surface-card border-2 border-border-strong p-4">
         <div>
+          <div className="flex items-center gap-2 mb-1">
+            <SudanBadge lang={locale === 'ar' ? 'ar' : 'en'} variant="header" className="text-[10px] py-0.5 px-2" />
+          </div>
           <h1 className="text-xl font-bold font-cairo">
             {isAr
               ? `مرحباً، ${profile.full_name_ar ?? profile.full_name}`
               : `Welcome, ${profile.full_name}`}
           </h1>
-          <p className="text-muted text-sm">{isAr ? 'لوحة تحكم التاجر - السجل التجاري' : 'Trader Dashboard - Commercial Ledger'}</p>
+          <p className="text-muted text-sm">{isAr ? 'لوحة تحكم التاجر — السجل التجاري والصفقات بالسودان' : 'Trader Dashboard — Sudan Commercial Ledger & RFQs'}</p>
         </div>
         <div className="flex gap-2">
           <Button onClick={() => router.push(`/${locale}/marketplace`)} className="font-bold border-2 rounded-none bg-primary text-white">

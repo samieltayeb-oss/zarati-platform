@@ -151,7 +151,7 @@
   "about": {
     "title": "About Zarati",
     "heroTitle": "Building Sudan's Agricultural Future",
-    "heroSubtitle": "Zarati is the national smart agriculture platform connecting Sudan's farmers to technology, markets, and opportunity.",
+    "heroSubtitle": "Zarati is the national-scale agricultural intelligence infrastructure platform connecting Sudan's farmers to verified technology, regional markets, and sovereign opportunity.",
     "missionTitle": "Our Mission",
     "missionDescription": "Sudan has 45 million hectares of agricultural potential — one of the largest in Africa. Yet farmers lack access to market prices, modern tools, and financial services. Zarati changes that.",
     "valuesTitle": "Our Values",
@@ -159,8 +159,8 @@
     "farmerFirstDesc": "Every feature is built for the farmer's needs",
     "transparent": "Transparent",
     "transparentDesc": "Open data, fair prices, honest platform",
-    "sudanese": "Proudly Sudanese",
-    "sudaneseDesc": "Built in Sudan, for Sudan",
+    "sudanese": "Built for Sudan",
+    "sudaneseDesc": "Engineered specifically for Sudan's soil vertisols, river corridors, and market realities",
     "contactTitle": "Get in Touch",
     "contactEmail": "sam@nexorayyc.io"
   },

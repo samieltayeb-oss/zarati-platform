@@ -1,6 +1,6 @@
 import type { Locale } from '@/lib/i18n/config'
 
-export function TechnicalRegister({ locale, dict }: { locale: Locale; dict: unknown }) {
+export function TechnicalRegister({ locale }: { locale: Locale; dict?: unknown }) {
   const isAr = locale === 'ar'
   return (
     <section id="architecture" className="py-24 md:py-32 border-b border-border-strong bg-[#061D38] text-white">

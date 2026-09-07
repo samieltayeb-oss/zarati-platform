@@ -1,14 +1,20 @@
 import Image from 'next/image'
 import type { Locale } from '@/lib/i18n/config'
 
-export function NationalReality({ locale, dict }: { locale: Locale; dict: unknown }) {
+import { SudanBadge } from '@/components/brand/sudan-badge'
+
+export function NationalReality({ locale }: { locale: Locale; dict?: unknown }) {
   const isAr = locale === 'ar'
   return (
     <section className="py-24 md:py-32 border-b border-border-strong bg-[#F9F6F0]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-16 md:mb-24 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-border-strong pb-8">
           <div className="max-w-2xl">
-            <span className="text-[11px] font-mono tracking-widest uppercase text-muted mb-4 block">01 / {isAr ? 'الواقع الهيكلي' : 'Structural Reality'}</span>
+            <div className="flex items-center gap-2.5 mb-4">
+              <span className="text-[11px] font-mono tracking-widest uppercase text-muted block">01 / {isAr ? 'الواقع الهيكلي' : 'Structural Reality'}</span>
+              <span className="text-muted/40">·</span>
+              <SudanBadge lang={locale} variant="compact" />
+            </div>
             <h2 className="text-[40px] md:text-[52px] font-bold font-cairo leading-tight text-text">
               {isAr ? 'الواقع الزراعي القومي' : 'National Ground Reality'}
             </h2>

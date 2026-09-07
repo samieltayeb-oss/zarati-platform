@@ -1,19 +1,19 @@
 import Image from 'next/image'
-import { getDictionary } from '@/lib/i18n/getDictionary'
 import { SudanMap } from '@/components/maps/SudanMap'
+import { SudanBadge } from '@/components/brand/sudan-badge'
 import type { Locale } from '@/lib/i18n/config'
 
 export default async function GeographyPreviewPage({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params
   const isAr = lang === 'ar'
   const locale = lang as Locale
-  const dict = await getDictionary(locale)
 
   return (
     <div dir={isAr ? 'rtl' : 'ltr'} className="container py-24 max-w-6xl space-y-12">
       <div className="space-y-4">
         <div className="flex items-center gap-3">
-          <span className="bg-primary/10 text-primary border-2 border-primary px-3 py-1 text-sm font-bold uppercase tracking-wider font-mono">
+          <SudanBadge lang={locale} variant="header" className="text-[11px]" />
+          <span className="bg-primary/10 text-primary border-2 border-primary px-3 py-1 text-xs font-bold uppercase tracking-wider font-mono">
             INFORMATIONAL
           </span>
         </div>

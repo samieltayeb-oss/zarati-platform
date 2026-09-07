@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Sprout, Tractor, Leaf, FlaskConical, CheckCircle2, Box } from 'lucide-react'
+import { SudanBadge } from '@/components/brand/sudan-badge'
 
 interface PublicListing {
   id: string
@@ -84,11 +85,14 @@ export function MarketplaceClient({ locale, listings, userRole }: Props) {
     <div dir={isAr ? 'rtl' : 'ltr'}>
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-text mb-1">
-          {isAr ? 'السوق الزراعي' : 'Agricultural Marketplace'}
+        <div className="flex items-center gap-2 mb-2">
+          <SudanBadge lang={locale === 'ar' ? 'ar' : 'en'} variant="header" className="text-[10px] py-0.5 px-2" />
+        </div>
+        <h1 className="text-3xl font-bold text-text mb-1 font-cairo">
+          {isAr ? 'السوق الزراعي في السودان' : 'Sudan Agricultural Marketplace'}
         </h1>
         <p className="text-muted">
-          {isAr ? 'اشترِ وبِع في جميع الفئات الزراعية' : 'Buy and sell across all agricultural categories'}
+          {isAr ? 'تبادل وتداول السلع والمدخلات الزراعية بين ولايات ومراكز الإنتاج' : 'Verified spot listings and commercial commodity matching across Sudan'}
         </p>
       </div>
 

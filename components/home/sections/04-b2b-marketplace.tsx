@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import type { Locale } from '@/lib/i18n/config'
 
-export function B2bMarketplace({ locale, dict }: { locale: Locale; dict: unknown }) {
+export function B2bMarketplace({ locale }: { locale: Locale; dict?: unknown }) {
   const isAr = locale === 'ar'
   return (
     <section className="py-24 md:py-32 border-b border-border bg-surface">

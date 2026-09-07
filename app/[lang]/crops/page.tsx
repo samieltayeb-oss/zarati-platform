@@ -3,6 +3,7 @@ import { getDictionary } from '@/lib/i18n/getDictionary'
 import { getCrops } from '@/lib/services/crop-service'
 import { PageWrapper } from '@/components/layout/page-wrapper'
 import { Badge } from '@/components/ui/badge'
+import { SudanBadge } from '@/components/brand/sudan-badge'
 import { formatCurrency, formatPercent } from '@/lib/utils'
 import type { Locale } from '@/lib/i18n/config'
 
@@ -119,6 +120,7 @@ export default async function CropsPage({ params }: Props) {
     <PageWrapper>
       <div className="mb-10">
         <div className="flex items-center gap-3 mb-2">
+          <SudanBadge lang={locale} variant="header" className="text-[10px] py-0.5 px-2" />
           <h1 className="text-3xl sm:text-4xl font-bold font-cairo text-text">{t.title}</h1>
           <Badge variant="outline">{common.demoData}</Badge>
         </div>

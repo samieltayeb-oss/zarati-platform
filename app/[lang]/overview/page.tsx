@@ -6,6 +6,7 @@ import { getListings } from '@/lib/services/marketplace-service'
 import { PageWrapper } from '@/components/layout/page-wrapper'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { SudanBadge } from '@/components/brand/sudan-badge'
 import { formatCurrency, formatPercent } from '@/lib/utils'
 import type { Locale } from '@/lib/i18n/config'
 
@@ -39,6 +40,9 @@ export default async function DashboardPage({ params }: Props) {
     <PageWrapper>
       {/* Header */}
       <div className="mb-8">
+        <div className="flex items-center gap-2 mb-2">
+          <SudanBadge lang={locale} variant="header" className="text-[10px] py-0.5 px-2" />
+        </div>
         <p className="text-muted text-sm mb-1">{t.welcome}</p>
         <h1 className="text-3xl font-bold text-text">{t.title}</h1>
       </div>

@@ -1,12 +1,12 @@
 'use client'
 
 import Link from 'next/link'
-import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
-import logoSrc from '@/brand/logo2-transparent.png'
+import { ZaratiLogo } from '@/components/brand/zarati-logo'
+import { SudanBadge, SudanFlag } from '@/components/brand/sudan-badge'
 import type { Locale } from '@/lib/i18n/config'
 
 interface NavDict {
@@ -45,25 +45,29 @@ export function Header({ lang, nav }: HeaderProps) {
     href === `/${lang}` ? pathname === href : pathname.startsWith(href)
 
   return (
-    <header className="bg-surface border-b border-border sticky top-0 z-50">
+    <header className="bg-surface/95 backdrop-blur-md border-b border-border sticky top-0 z-50 transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-[80px] md:h-[96px]">
+        <div className="flex items-center justify-between h-[72px] md:h-[80px]">
 
-          {/* Logo lockup */}
-          <Link href={`/${lang}`} className="shrink-0">
-            <Image
-              src={logoSrc}
-              alt="زرعتي | ZARATI"
-              height={68}
-              width={102}
-              className="h-[56px] md:h-[72px] w-auto object-contain"
-              style={{ mixBlendMode: 'multiply' }}
-              priority
-            />
-          </Link>
+          {/* Logo & Sudan Sovereign Identity Badge */}
+          <div className="flex items-center gap-3 sm:gap-4 shrink-0">
+            <Link
+              href={`/${lang}`}
+              className="shrink-0 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+              aria-label="زرعتي | ZARATI Home"
+            >
+              <ZaratiLogo lang={lang} variant="header" size="md" />
+            </Link>
 
-          {/* Desktop nav */}
-          <nav className="hidden md:flex items-center gap-1">
+            {/* Subtle Divider & Sudan Identity Badge on Desktop */}
+            <div className="hidden xl:block h-6 w-[1px] bg-border-strong/80" aria-hidden="true" />
+            <div className="hidden xl:flex items-center">
+              <SudanBadge lang={lang} variant="header" />
+            </div>
+          </div>
+
+          {/* Desktop nav (lg: 1024px+) */}
+          <nav className="hidden lg:flex items-center gap-1" aria-label="Main Navigation">
             {links.map(({ href, label }) => (
               <Link
                 key={href}
@@ -80,11 +84,11 @@ export function Header({ lang, nav }: HeaderProps) {
             ))}
           </nav>
 
-          {/* Desktop actions */}
-          <div className="hidden md:flex items-center gap-3">
+          {/* Desktop actions (lg: 1024px+) */}
+          <div className="hidden lg:flex items-center gap-3">
             <Link
               href={localePath}
-              className="text-sm text-muted hover:text-text transition-colors font-medium"
+              className="text-sm text-muted hover:text-text transition-colors font-medium px-2 py-1 rounded hover:bg-black/5 dark:hover:bg-white/5"
             >
               {nav.language}
             </Link>
@@ -96,24 +100,30 @@ export function Header({ lang, nav }: HeaderProps) {
             </Link>
           </div>
 
-          {/* Mobile toggle */}
-          <button
-            className="md:hidden p-2 rounded-lg text-muted hover:text-text hover:bg-black/5 transition-colors"
-            onClick={() => setOpen(!open)}
-            aria-label="Toggle menu"
-            aria-expanded={open}
-          >
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              {open
-                ? <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                : <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />}
-            </svg>
-          </button>
+          {/* Mobile Right Controls: Country badge + Hamburger (visible below lg) */}
+          <div className="flex lg:hidden items-center gap-2">
+            <SudanBadge lang={lang} variant="header" className="hidden sm:inline-flex px-2 py-0.5 text-[10px]" />
+            <div className="sm:hidden flex items-center pr-1">
+              <SudanFlag className="w-4 h-2.5" />
+            </div>
+            <button
+              className="p-2 rounded-lg text-muted hover:text-text hover:bg-black/5 transition-colors"
+              onClick={() => setOpen(!open)}
+              aria-label="Toggle menu"
+              aria-expanded={open}
+            >
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                {open
+                  ? <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  : <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />}
+              </svg>
+            </button>
+          </div>
         </div>
 
-        {/* Mobile menu */}
+        {/* Mobile menu (visible below lg) */}
         {open && (
-          <div className="md:hidden pb-4 border-t border-border pt-3 space-y-1">
+          <div className="lg:hidden pb-4 border-t border-border pt-3 space-y-1">
             {links.map(({ href, label }) => (
               <Link
                 key={href}
@@ -129,16 +139,18 @@ export function Header({ lang, nav }: HeaderProps) {
                 {label}
               </Link>
             ))}
-            <div className="flex items-center gap-3 px-3 pt-3 mt-2 border-t border-border">
+            <div className="flex items-center justify-between gap-3 px-3 pt-3 mt-2 border-t border-border">
               <Link href={localePath} onClick={() => setOpen(false)} className="text-sm text-muted font-medium">
                 {nav.language}
               </Link>
-              <Link href={`/${lang}/login`} onClick={() => setOpen(false)} className="text-sm text-text font-medium">
-                {nav.login}
-              </Link>
-              <Link href={`/${lang}/register`} onClick={() => setOpen(false)}>
-                <Button variant="primary" size="sm">{nav.register}</Button>
-              </Link>
+              <div className="flex items-center gap-2">
+                <Link href={`/${lang}/login`} onClick={() => setOpen(false)} className="text-sm text-text font-medium px-2 py-1">
+                  {nav.login}
+                </Link>
+                <Link href={`/${lang}/register`} onClick={() => setOpen(false)}>
+                  <Button variant="primary" size="sm">{nav.register}</Button>
+                </Link>
+              </div>
             </div>
           </div>
         )}

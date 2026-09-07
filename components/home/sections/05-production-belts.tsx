@@ -1,14 +1,20 @@
 import Image from 'next/image'
 import type { Locale } from '@/lib/i18n/config'
 
-export function AgriculturalGeography({ locale, dict }: { locale: Locale; dict: unknown }) {
+import { SudanBadge } from '@/components/brand/sudan-badge'
+
+export function AgriculturalGeography({ locale }: { locale: Locale; dict?: unknown }) {
   const isAr = locale === 'ar'
   return (
     <section className="py-24 md:py-32 border-b border-border bg-bg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row gap-16 items-center">
           <div className="md:w-1/2">
-            <span className="text-[11px] font-mono tracking-widest uppercase text-muted mb-4 block">04 / {isAr ? 'الجغرافيا' : 'Geography'}</span>
+            <div className="flex items-center gap-2.5 mb-3">
+              <span className="text-[11px] font-mono tracking-widest uppercase text-muted block">04 / {isAr ? 'الجغرافيا' : 'Geography'}</span>
+              <span className="text-muted/40">·</span>
+              <SudanBadge lang={locale} variant="compact" />
+            </div>
             <h2 className="text-[40px] md:text-[52px] font-bold font-cairo leading-tight text-text mb-6">
               {isAr ? 'أحزمة الإنتاج الزراعي' : 'Agricultural Production Belts'}
             </h2>

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { createListing, updateListingStatus } from '@/lib/actions/listings'
+import { SudanBadge } from '@/components/brand/sudan-badge'
 
 interface Listing {
   id: string
@@ -29,16 +30,6 @@ interface Props {
   listings: Listing[]
   crops: Crop[]
   states: State[]
-}
-
-const STATUS_LABELS: Record<string, { en: string; ar: string; color: string }> = {
-  draft: { en: 'Draft', ar: 'مسودة', color: 'bg-gray-100 text-gray-700' },
-  pending_review: { en: 'Under Review', ar: 'قيد المراجعة', color: 'bg-yellow-100 text-yellow-800' },
-  active: { en: 'Active', ar: 'نشط', color: 'bg-green-100 text-green-800' },
-  paused: { en: 'Paused', ar: 'موقوف', color: 'bg-blue-100 text-blue-800' },
-  sold: { en: 'Sold', ar: 'مباع', color: 'bg-purple-100 text-purple-700' },
-  archived: { en: 'Archived', ar: 'مؤرشف', color: 'bg-gray-200 text-gray-600' },
-  expired: { en: 'Expired', ar: 'منتهي', color: 'bg-red-100 text-red-700' },
 }
 
 const FARMER_TRANSITIONS: Record<string, string[]> = {
@@ -77,27 +68,12 @@ export function FarmerDashboardClient({ locale, profile, listings, states, crops
     location_name_ar: '',
   })
 
-  const [selectedFiles, setSelectedFiles] = useState<File[]>([])
-  const [uploadProgress, setUploadProgress] = useState(false)
-
   function updateForm(key: string, value: string) {
     setForm(f => ({ ...f, [key]: value }))
   }
 
-  function handleFileSelect(e: React.ChangeEvent<HTMLInputElement>) {
-    if (e.target.files) {
-      const newFiles = Array.from(e.target.files).filter(f => f.type.startsWith('image/') && !f.type.includes('svg'))
-      setSelectedFiles(prev => [...prev, ...newFiles].slice(0, 5))
-    }
-  }
-
-  function removeFile(index: number) {
-    setSelectedFiles(prev => prev.filter((_, i) => i !== index))
-  }
-
   async function handleSubmitListing() {
     setError(null)
-    setUploadProgress(true)
     
     // Create listing as draft first
     const result = await createListing({
@@ -121,26 +97,10 @@ export function FarmerDashboardClient({ locale, profile, listings, states, crops
 
     if (!result.success) {
       setError(result.error)
-      setUploadProgress(false)
       return
     }
 
     const listingId = result.listingId!
-
-    // Upload files using the Server Action directly from client!
-    // Next.js forms or direct invocations work. We import it at top.
-    try {
-      const { uploadListingMediaServerAction } = await import('@/lib/actions/upload')
-      for (const file of selectedFiles) {
-        if (file.size > 5 * 1024 * 1024) continue // Skip over 5MB client side check
-        const formData = new FormData()
-        formData.append('listing_id', listingId)
-        formData.append('file', file)
-        await uploadListingMediaServerAction(formData)
-      }
-    } catch (err) {
-      console.error('Upload failed', err)
-    }
 
     // Move to pending review
     await updateListingStatus(listingId, 'pending_review')
@@ -148,8 +108,6 @@ export function FarmerDashboardClient({ locale, profile, listings, states, crops
     setSuccess(isAr ? 'تم إنشاء الإعلان بنجاح! سيراجعه الفريق قريباً.' : 'Listing created! It will be reviewed shortly.')
     setShowForm(false)
     setFormStep(1)
-    setSelectedFiles([])
-    setUploadProgress(false)
     router.refresh()
   }
 
@@ -170,12 +128,15 @@ export function FarmerDashboardClient({ locale, profile, listings, states, crops
       {/* Header */}
       <div className="flex justify-between items-center bg-surface-card border-2 border-border-strong p-4">
         <div>
+          <div className="flex items-center gap-2 mb-1">
+            <SudanBadge lang={locale === 'ar' ? 'ar' : 'en'} variant="header" className="text-[10px] py-0.5 px-2" />
+          </div>
           <h1 className="text-xl font-bold font-cairo">
             {isAr
               ? `مرحباً، ${profile.full_name_ar ?? profile.full_name}`
               : `Welcome, ${profile.full_name}`}
           </h1>
-          <p className="text-muted text-sm">{isAr ? 'لوحة تحكم المزارع - تسليم المحصول' : 'Farmer Dashboard - Crop Delivery'}</p>
+          <p className="text-muted text-sm">{isAr ? 'لوحة تحكم المزارع — تداول وتسليم المحاصيل بالسودان' : 'Farmer Dashboard — Sudan Agricultural Delivery'}</p>
         </div>
         <div className="flex gap-2">
           {!showForm && (
