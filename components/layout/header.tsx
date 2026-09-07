@@ -48,15 +48,12 @@ export function Header({ lang, nav }: HeaderProps) {
   return (
     <header className="bg-surface/95 backdrop-blur-md border-b border-border sticky top-0 z-50 transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className={cn(
-          "flex items-center justify-between h-[72px] md:h-[80px]",
-          lang === 'en' && "flex-row-reverse lg:flex-row"
-        )}>
+        <div className="flex items-center justify-between h-[72px] md:h-[80px]">
 
           {/* Logo lockup: Original ZARATI Brand */}
           <Link
             href={`/${lang}`}
-            className="shrink-0 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            className="shrink-0 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary order-last lg:order-first"
             aria-label="زرعتي | ZARATI Home"
           >
             <Image
@@ -104,15 +101,12 @@ export function Header({ lang, nav }: HeaderProps) {
             </Link>
           </div>
 
-          {/* Mobile Controls: Country badge + Hamburger (visible below lg) */}
-          <div className={cn(
-            "flex lg:hidden items-center gap-2",
-            lang === 'en' && "flex-row-reverse"
-          )}>
-            <SudanBadge lang={lang} variant="header" className="hidden sm:inline-flex px-2 py-0.5 text-[10px]" />
-            <div className="sm:hidden flex items-center pr-1">
-              <SudanFlag className="w-4 h-2.5" />
-            </div>
+          {/* Mobile Controls: Hamburger + Country badge (visible below lg)
+              order-first puts this at the start of the reading direction on mobile:
+              - In Arabic (RTL): start = RIGHT (menu on right)
+              - In English (LTR): start = LEFT (menu on left)
+          */}
+          <div className="flex lg:hidden items-center gap-2 order-first lg:order-none">
             <button
               className="p-2 rounded-lg text-muted hover:text-text hover:bg-black/5 transition-colors"
               onClick={() => setOpen(!open)}
@@ -125,6 +119,10 @@ export function Header({ lang, nav }: HeaderProps) {
                   : <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />}
               </svg>
             </button>
+            <div className="sm:hidden flex items-center px-1">
+              <SudanFlag className="w-4 h-2.5" />
+            </div>
+            <SudanBadge lang={lang} variant="header" className="hidden sm:inline-flex px-2 py-0.5 text-[10px]" />
           </div>
         </div>
 
