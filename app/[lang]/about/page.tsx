@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import { getDictionary } from '@/lib/i18n/getDictionary'
 import { UserCheck, Search, ShieldCheck } from 'lucide-react'
 import { PageWrapper } from '@/components/layout/page-wrapper'
@@ -20,18 +21,57 @@ export default async function AboutPage({ params }: Props) {
   return (
     <>
       {/* Hero */}
-      <section className="bg-gradient-to-b from-navy to-navy-dark text-white py-20 sm:py-28">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl sm:text-5xl font-bold mb-4 leading-tight">{t.heroTitle}</h1>
+      <section className="bg-gradient-to-b from-navy to-navy-dark text-white py-20 sm:py-28 relative overflow-hidden">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+          <h1 className="text-4xl sm:text-5xl font-bold font-cairo mb-4 leading-tight">{t.heroTitle}</h1>
           <p className="text-white/80 text-lg max-w-2xl mx-auto leading-relaxed">{t.heroSubtitle}</p>
         </div>
       </section>
 
       <PageWrapper narrow>
-        {/* Mission */}
+        {/* Mission with Photographic Proof */}
         <section className="mb-16">
-          <h2 className="text-2xl font-bold text-text mb-4">{t.missionTitle}</h2>
-          <p className="text-muted text-lg leading-relaxed">{t.missionDescription}</p>
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center bg-surface border border-border rounded-2xl p-6 sm:p-8 overflow-hidden shadow-sm">
+            <div className="md:col-span-7">
+              <span className="text-[11px] font-mono tracking-widest uppercase text-muted mb-2 block">
+                {isAr ? 'الرسالة السيادية' : 'SOVEREIGN PURPOSE'}
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-bold font-cairo text-text mb-4">{t.missionTitle}</h2>
+              <p className="text-muted text-base sm:text-lg leading-relaxed">{t.missionDescription}</p>
+            </div>
+            <div className="md:col-span-5 relative aspect-[4/3] rounded-xl overflow-hidden border border-border bg-muted/20">
+              <Image
+                src="/images/zarati/about/agronomist-field-inspection.jpg"
+                alt={isAr ? 'باحثة زراعية سودانية تفحص عينات المحاصيل في الحقل' : 'Sudanese agricultural agronomist inspecting crops in the field'}
+                fill
+                sizes="(max-width: 768px) 100vw, 40vw"
+                className="object-cover"
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* Sovereign Infrastructure Foundation */}
+        <section className="mb-16 bg-surface border border-border rounded-2xl overflow-hidden shadow-sm">
+          <div className="relative aspect-[21/9] w-full bg-muted/20">
+            <Image
+              src="/images/zarati/institutional/strategic-grain-silos.jpg"
+              alt={isAr ? 'صوامع تخزين الحبوب الاستراتيجية في السودان' : 'Strategic agricultural grain storage silos in Sudan'}
+              fill
+              sizes="(max-width: 1024px) 100vw, 800px"
+              className="object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent flex items-end p-6 sm:p-8">
+              <div>
+                <span className="text-[10px] font-mono tracking-widest uppercase text-amber-300 font-bold mb-1 block">
+                  {isAr ? 'البنية التحتية القومية' : 'NATIONAL SCALE CAPABILITY'}
+                </span>
+                <p className="text-white text-lg sm:text-xl font-bold font-cairo">
+                  {isAr ? 'تأمين سلاسل الإمداد ومراكز التخزين الاستراتيجي' : 'Securing Agricultural Supply Chains & Strategic Storage'}
+                </p>
+              </div>
+            </div>
+          </div>
         </section>
 
         {/* Values */}

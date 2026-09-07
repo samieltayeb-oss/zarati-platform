@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import type { Locale } from '@/lib/i18n/config'
 
 export function AgriculturalGeography({ locale, dict }: { locale: Locale; dict: unknown }) {
@@ -21,19 +22,38 @@ export function AgriculturalGeography({ locale, dict }: { locale: Locale; dict: 
             </a>
           </div>
           <div className="md:w-1/2 w-full">
-            {/* Subtle Data Viz / Node Concept */}
-            <div className="aspect-video bg-surface border border-border-strong rounded-md p-6 relative overflow-hidden flex items-center justify-center shadow-sm">
-              <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+            {/* Real Landscape + Spatial Node Overlay */}
+            <div className="aspect-video bg-surface border border-border-strong rounded-md relative overflow-hidden shadow-sm">
+              <Image
+                src="/images/zarati/hero/gedaref-fertile-plains.jpg"
+                alt={isAr ? 'سهول القضارف الزراعية للإنتاج المطري' : 'Gedaref agricultural fertile rainfed plains'}
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                className="object-cover opacity-75"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-black/30"></div>
+              <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff10_1px,transparent_1px),linear-gradient(to_bottom,#ffffff10_1px,transparent_1px)] bg-[size:24px_24px]"></div>
               
-              <div className="relative z-10 w-full h-full">
-                <div className="absolute top-1/4 left-1/4 w-32 h-32 border border-primary/20 rounded-full animate-[ping_4s_ease-in-out_infinite] opacity-50"></div>
-                <div className="absolute top-1/4 left-1/4 w-3 h-3 bg-success rounded-full shadow-[0_0_15px_rgba(46,125,50,0.6)]"></div>
+              <div className="relative z-10 w-full h-full p-6 flex flex-col justify-between">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-mono tracking-widest uppercase bg-black/60 backdrop-blur-sm text-white px-2.5 py-1 rounded border border-white/20 font-bold">
+                    {isAr ? 'بيانات أحزمة الإنتاج' : 'PRODUCTION BELT TELEMETRY'}
+                  </span>
+                  <span className="flex items-center gap-1.5 text-[11px] font-mono text-emerald-400 font-bold bg-black/50 px-2 py-0.5 rounded">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                    ACTIVE
+                  </span>
+                </div>
                 
-                <div className="absolute bottom-1/3 right-1/3 w-2 h-2 bg-warning rounded-full transform rotate-45 shadow-[0_0_15px_rgba(230,81,0,0.6)]"></div>
-                
-                <svg className="absolute inset-0 w-full h-full" style={{ pointerEvents: 'none' }}>
-                  <path d="M 30% 30% L 66% 66%" stroke="currentColor" strokeWidth="1" strokeDasharray="4 4" className="text-primary/30" />
-                </svg>
+                <div className="bg-black/70 backdrop-blur-md border border-white/15 p-4 rounded-md">
+                  <div className="flex justify-between items-center text-xs text-white/90">
+                    <span className="font-bold font-cairo">{isAr ? 'حزام الإنتاج المطري الشرقي' : 'Eastern Rainfed Belt'}</span>
+                    <span className="font-mono text-emerald-300 font-bold">14M Feddans</span>
+                  </div>
+                  <div className="text-[11px] text-white/70 mt-1">
+                    {isAr ? 'القضارف، سنار، الدمازين — الذرة والسمسم وزهرة الشمس' : 'Gedaref, Sennar, Damazine — Sorghum, Sesame, Sunflower'}
+                  </div>
+                </div>
               </div>
             </div>
           </div>

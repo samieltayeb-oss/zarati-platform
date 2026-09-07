@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
@@ -118,14 +119,25 @@ export function MarketplaceClient({ locale, listings, userRole }: Props) {
 
       {/* Zero state */}
       {filtered.length === 0 && (
-        <div className="text-center py-20 flex flex-col items-center justify-center">
-          <Sprout className="w-16 h-16 text-muted mb-4 opacity-30" />
-          <p className="text-lg font-medium text-text mb-2">
-            {isAr ? 'لا توجد إعلانات حالياً' : 'No listings yet'}
+        <div className="text-center py-16 flex flex-col items-center justify-center bg-surface border border-border rounded-xl p-8 max-w-md mx-auto my-8">
+          <div className="relative w-28 h-28 rounded-full overflow-hidden mb-4 border border-border bg-muted/20 shadow-inner">
+            <Image
+              src="/images/zarati/empty-states/empty-grain-sieve.jpg"
+              alt={isAr ? 'غربال حبوب زراعي فارغ' : 'Empty wooden agricultural grain sieve'}
+              fill
+              sizes="112px"
+              className="object-cover"
+            />
+          </div>
+          <p className="text-lg font-bold font-cairo text-text mb-1">
+            {isAr ? 'لا توجد إعلانات مطابقة حالياً' : 'No matching listings found'}
+          </p>
+          <p className="text-xs text-muted max-w-xs mb-4">
+            {isAr ? 'جرب تغيير فئة المحصول أو مسح نص البحث' : 'Try adjusting crop category filters or clearing the search query'}
           </p>
           {userRole === 'farmer' && (
-            <Button className="mt-4" onClick={() => router.push(`/${locale}/dashboard/farmer`)}>
-              {isAr ? '+ إضافة إعلان' : '+ Add Listing'}
+            <Button className="mt-2 font-bold" onClick={() => router.push(`/${locale}/dashboard/farmer`)}>
+              {isAr ? '+ إضافة إعلان جديد' : '+ Create New Listing'}
             </Button>
           )}
         </div>

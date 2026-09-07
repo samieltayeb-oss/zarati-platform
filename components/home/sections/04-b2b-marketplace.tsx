@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import type { Locale } from '@/lib/i18n/config'
 
 export function B2bMarketplace({ locale, dict }: { locale: Locale; dict: unknown }) {
@@ -5,7 +6,7 @@ export function B2bMarketplace({ locale, dict }: { locale: Locale; dict: unknown
   return (
     <section className="py-24 md:py-32 border-b border-border bg-surface">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mb-16 flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div className="max-w-2xl">
             <span className="text-[11px] font-mono tracking-widest uppercase text-muted mb-4 block">03 / {isAr ? 'السوق' : 'Marketplace'}</span>
             <h2 className="text-[40px] md:text-[52px] font-bold font-cairo leading-tight text-text mb-4">
@@ -19,6 +20,35 @@ export function B2bMarketplace({ locale, dict }: { locale: Locale; dict: unknown
             <a href={`/${locale}/marketplace`} className="inline-flex items-center justify-center border border-border-strong px-6 py-2.5 rounded-sm text-sm font-bold hover:bg-bg transition-colors">
               {isAr ? 'تصفح السوق بالكامل' : 'View Full Marketplace'}
             </a>
+          </div>
+        </div>
+
+        {/* Aggregation Infrastructure Callout */}
+        <div className="mb-8 bg-surface-card border border-border-strong rounded-md overflow-hidden grid grid-cols-1 lg:grid-cols-12 shadow-sm">
+          <div className="relative h-48 lg:h-auto lg:col-span-4 bg-muted/20">
+            <Image
+              src="/images/zarati/marketplace/grain-aggregation-warehouse.jpg"
+              alt={isAr ? 'مستودع تجميع الحبوب والسلع الزراعية ومرفق التسوية العينية في السودان' : 'Primary agricultural commodity grain warehouse and physical settlement facility in Sudan'}
+              fill
+              sizes="(max-width: 1024px) 100vw, 33vw"
+              className="object-cover"
+            />
+          </div>
+          <div className="p-6 lg:p-8 lg:col-span-8 flex flex-col justify-center">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="w-2 h-2 rounded-full bg-success"></span>
+              <span className="text-xs font-mono tracking-widest text-muted uppercase">
+                {isAr ? 'شبكة مراكز التجميع الإقليمية' : 'REGIONAL AGGREGATION NETWORK'}
+              </span>
+            </div>
+            <h3 className="text-xl font-bold font-cairo text-text mb-2">
+              {isAr ? 'مستودعات الفرز والتسوية العينية المعتمدة' : 'Verified Aggregation & Physical Settlement Hubs'}
+            </h3>
+            <p className="text-muted text-sm leading-relaxed">
+              {isAr 
+                ? 'ربط مباشر بالمستودعات الإقليمية المعتمدة في القضارف، الجزيرة، وبورتسودان لضمان فحص الجودة وتأكيد أوزان الشحنات.' 
+                : 'Direct linkage to verified physical aggregation hubs across Gedaref, Gezira, and Port Sudan for quality inspection and batch weight verification.'}
+            </p>
           </div>
         </div>
 

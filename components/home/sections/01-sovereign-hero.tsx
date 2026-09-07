@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import { SudanMap } from '@/components/maps/SudanMap'
 import type { Locale } from '@/lib/i18n/config'
 
@@ -45,9 +46,30 @@ export function SovereignHero({ locale, dict }: { locale: Locale; dict: unknown 
             </div>
           </div>
           
-          {/* RIGHT: Map */}
-          <div className="lg:col-span-6 relative h-[350px] md:h-[500px] lg:h-[700px] w-full flex items-center justify-center order-1 lg:order-2">
+          {/* RIGHT: Map & Environmental Lens */}
+          <div className="lg:col-span-6 relative h-[380px] md:h-[520px] lg:h-[700px] w-full flex items-center justify-center order-1 lg:order-2">
             <SudanMap lang={locale} className="w-full h-full object-contain" />
+            
+            {/* Environmental Corridor Provenance Card */}
+            <div className="absolute bottom-2 start-2 md:bottom-6 md:start-6 bg-white/95 dark:bg-surface/95 backdrop-blur-md border border-border-strong rounded-md p-2.5 shadow-lg flex items-center gap-3 max-w-xs pointer-events-auto">
+              <div className="relative w-12 h-12 rounded overflow-hidden shrink-0 border border-border">
+                <Image
+                  src="/images/zarati/hero/sudan-nile-agricultural-corridor.jpg"
+                  alt={isAr ? 'حوض النيل الزراعي بالسودان' : 'Sudan Nile Agricultural Corridor'}
+                  fill
+                  sizes="48px"
+                  className="object-cover"
+                />
+              </div>
+              <div className="text-xs overflow-hidden">
+                <p className="font-bold font-cairo text-text truncate">
+                  {isAr ? 'حوض النيل الأزرق الزراعي' : 'Blue Nile Agricultural Corridor'}
+                </p>
+                <p className="text-[10px] font-mono text-muted tracking-tight">
+                  {isAr ? '٢٤ مليون فدان إنتاجي' : '24M Cultivated Feddans'}
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -1,10 +1,18 @@
+import Image from 'next/image'
 import type { Locale } from '@/lib/i18n/config'
 
 export function InstitutionalCta({ locale, dict }: { locale: Locale; dict: unknown }) {
   const isAr = locale === 'ar'
   return (
-    <section className="py-32 bg-primary text-white text-center relative overflow-hidden">
-      <div className="absolute inset-0 bg-[url('/_next/static/media/logo2-transparent.01-62sxipjt9q.png')] bg-center bg-no-repeat bg-[length:120%_auto] opacity-5 pointer-events-none mix-blend-overlay"></div>
+    <section className="py-32 bg-[#061D38] text-white text-center relative overflow-hidden">
+      <Image
+        src="/images/zarati/institutional/strategic-grain-silos.jpg"
+        alt={isAr ? 'صوامع تخزين الحبوب الاستراتيجية في القضارف بالسودان' : 'Strategic grain storage silos in Gedaref, Sudan'}
+        fill
+        sizes="100vw"
+        className="object-cover opacity-25 mix-blend-luminosity scale-105 pointer-events-none"
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#061D38] via-[#061D38]/70 to-[#061D38]/90 pointer-events-none"></div>
       
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <h2 className="text-[44px] md:text-[64px] font-bold font-cairo mb-6 leading-tight">
