@@ -1,26 +1,28 @@
 import { getDictionary } from '@/lib/i18n/getDictionary'
 import { SudanMap } from '@/components/maps/SudanMap'
+import type { Locale } from '@/lib/i18n/config'
 
 export default async function GeographyPreviewPage({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params
   const isAr = lang === 'ar'
-  const dict = await getDictionary(lang as any)
+  const locale = lang as Locale
+  const dict = await getDictionary(locale)
 
   return (
     <div dir={isAr ? 'rtl' : 'ltr'} className="container py-24 max-w-6xl space-y-12">
       <div className="space-y-4">
         <div className="flex items-center gap-3">
           <span className="bg-primary/10 text-primary border-2 border-primary px-3 py-1 text-sm font-bold uppercase tracking-wider font-mono">
-            R5 ARCHITECTURAL PREVIEW
+            INFORMATIONAL
           </span>
         </div>
         <h1 className="text-display-md font-bold font-cairo">
-          {isAr ? 'الجغرافيا السياسية والزراعية' : 'Agricultural & Sovereign Geography'}
+          {isAr ? 'الجغرافيا السياسية والزراعية' : 'Agricultural Geography'}
         </h1>
         <p className="text-lg text-muted max-w-3xl font-medium leading-relaxed">
           {isAr
-            ? 'هذه الوحدة قيد التطوير للبنية الخامسة (R5). ستعرض بيانات جغرافية هيكلية دقيقة للأراضي الزراعية، البنية التحتية للحصاد، ومسارات التصدير الحيوية.'
-            : 'This module is under development for Release 5 (R5). It will map precise structural agricultural data, harvest infrastructure, and critical export corridors.'}
+            ? 'هذه الوحدة تقدم نظرة استرشادية لقطاعات الإنتاج الأساسية.'
+            : 'This module presents an informational overview of the primary production sectors.'}
         </p>
       </div>
 

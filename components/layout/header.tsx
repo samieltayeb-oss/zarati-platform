@@ -56,7 +56,7 @@ export function Header({ lang, nav }: HeaderProps) {
               alt="زرعتي | ZARATI"
               height={68}
               width={102}
-              className="h-[48px] md:h-[64px] w-auto object-contain"
+              className="h-[56px] md:h-[72px] w-auto object-contain"
               style={{ mixBlendMode: 'multiply' }}
               priority
             />

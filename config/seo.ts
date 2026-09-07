@@ -9,7 +9,7 @@ const SEO: Record<Locale, { title: string; description: string; siteName: string
   },
   en: {
     title: 'Zarati - Sudan Smart Agriculture Platform',
-    description: "Zarati is Sudan's smart agriculture platform — real-time crop prices, weather intelligence, marketplace, and AI advisor.",
+    description: "Zarati is Sudan's smart agriculture platform — structured crop prices, marketplace, and planned agricultural intelligence.",
     siteName: 'Zarati',
   },
 }

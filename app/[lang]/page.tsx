@@ -4,9 +4,7 @@ import { SovereignHero } from '@/components/home/sections/01-sovereign-hero'
 import { NationalReality } from '@/components/home/sections/02-national-reality'
 import { TechnicalRegister } from '@/components/home/sections/03-technical-register'
 import { B2bMarketplace } from '@/components/home/sections/04-b2b-marketplace'
-import { ProductionBelts } from '@/components/home/sections/05-production-belts'
-import { CommandCenterPreview } from '@/components/home/sections/06-command-center'
-import { FieldExperience } from '@/components/home/sections/07-field-experience'
+import { AgriculturalGeography } from '@/components/home/sections/05-production-belts'
 import { TrustProvenance } from '@/components/home/sections/08-trust-provenance'
 import { InstitutionalCta } from '@/components/home/sections/09-institutional-cta'
 
@@ -23,9 +21,7 @@ export default async function Page({ params }: Props) {
       <NationalReality locale={locale} dict={dict.home} />
       <TechnicalRegister locale={locale} dict={dict.home} />
       <B2bMarketplace locale={locale} dict={dict.home} />
-      <ProductionBelts locale={locale} dict={dict.home} />
-      <CommandCenterPreview locale={locale} dict={dict.home} />
-      <FieldExperience locale={locale} dict={dict.home} />
+      <AgriculturalGeography locale={locale} dict={dict.home} />
       <TrustProvenance locale={locale} dict={dict.home} />
       <InstitutionalCta locale={locale} dict={dict.home} />
     </>

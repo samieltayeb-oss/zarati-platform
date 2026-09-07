@@ -196,7 +196,7 @@ export function TraderDashboardClient({ locale, profile, inquiries }: Props) {
                         </div>
                       )}
 
-                      {/* Contact reveal (escrow) */}
+                      {/* Contact reveal (secure bilateral) */}
                       {contact ? (
                         <div className="bg-status-verified/10 border-2 border-status-verified p-4">
                           <p className="font-bold text-status-verified mb-2 flex items-center gap-2">

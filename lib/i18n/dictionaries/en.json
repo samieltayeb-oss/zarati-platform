@@ -31,16 +31,16 @@
   "home": {
     "hero": {
       "title": "Sudan's Smart Agriculture Platform",
-      "subtitle": "Connecting farmers, traders, and markets across Sudan with real-time prices, weather intelligence, and AI-powered tools.",
+      "subtitle": "Connecting farmers, traders, and markets across Sudan with digital agricultural infrastructure.",
       "ctaPrimary": "Get Started Free",
       "ctaSecondary": "Explore Platform"
     },
     "mission": {
       "title": "Our Mission",
       "description": "Zarati empowers Sudan's 15 million farmers with technology, market access, and financial tools to build a food-secure nation.",
-      "transparency": { "title": "Price Transparency", "description": "Real-time crop prices from markets across Sudan" },
+      "transparency": { "title": "Price Transparency", "description": "Structured commodity prices from markets across Sudan" },
       "access": { "title": "Market Access", "description": "Direct connections between farmers and buyers" },
-      "intelligence": { "title": "Smart Insights", "description": "AI-powered recommendations tailored to your farm" }
+      "intelligence": { "title": "Smart Insights", "description": "Planned structured insights tailored to your farm" }
     },
     "stats": {
       "title": "Sudan Agriculture at a Glance",

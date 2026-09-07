@@ -1,5 +1,5 @@
 ﻿import type { Locale } from '@/lib/i18n/config'
-export function FieldExperience({ locale, dict }: { locale: Locale; dict: any }) {
+export function FieldExperience({ locale, dict }: { locale: Locale; dict: unknown }) {
   const isAr = locale === 'ar'
   return (
     <section className="py-20 border-b border-border bg-surface-canvas">

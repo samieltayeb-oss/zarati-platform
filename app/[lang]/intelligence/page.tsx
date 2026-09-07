@@ -1,16 +1,18 @@
 import { getDictionary } from '@/lib/i18n/getDictionary'
+import type { Locale } from '@/lib/i18n/config'
 
 export default async function IntelligencePreviewPage({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params
   const isAr = lang === 'ar'
-  const dict = await getDictionary(lang as any)
+  const locale = lang as Locale
+  const dict = await getDictionary(locale)
 
   return (
     <div dir={isAr ? 'rtl' : 'ltr'} className="container py-24 max-w-5xl space-y-12">
       <div className="space-y-4">
         <div className="flex items-center gap-3">
           <span className="bg-primary/10 text-primary border-2 border-primary px-3 py-1 text-sm font-bold uppercase tracking-wider font-mono">
-            R4 ARCHITECTURAL PREVIEW
+            PLANNED ARCHITECTURE
           </span>
         </div>
         <h1 className="text-display-md font-bold font-cairo">
@@ -18,8 +20,8 @@ export default async function IntelligencePreviewPage({ params }: { params: Prom
         </h1>
         <p className="text-lg text-muted max-w-2xl font-medium leading-relaxed">
           {isAr
-            ? 'هذه الوحدة قيد التطوير للبنية الرابعة (R4). ستوفر قريباً تحليلات لحظية لأسعار المحاصيل، بيانات الطقس، وتحليلات العرض والطلب الاستراتيجية للسوق السوداني.'
-            : 'This module is under development for Release 4 (R4). It will soon provide real-time crop pricing analytics, weather data, and strategic supply/demand intelligence for the Sudanese market.'}
+            ? 'هذه الوحدة مخطط تطويرها مستقبلاً لتوفير بنية بيانات منظمة لأسعار المحاصيل، بيانات المناخ، وتحليلات العرض والطلب الاستراتيجية.'
+            : 'This module is planned for future development. It will provide a structured data infrastructure for crop pricing, climate data, and strategic supply/demand intelligence.'}
         </p>
       </div>
 
@@ -27,7 +29,7 @@ export default async function IntelligencePreviewPage({ params }: { params: Prom
         <div className="bg-surface-canvas border-2 border-border-strong p-8 opacity-75">
           <h3 className="font-bold text-xl font-cairo mb-3 text-muted">{isAr ? 'مؤشر أسعار المحاصيل' : 'Crop Price Index'}</h3>
           <p className="text-muted text-sm font-medium">
-            {isAr ? 'تتبع لحظي لأسعار السمسم، الذرة، الفول السوداني والصمغ العربي في أسواق القضارف والأبيض.' : 'Real-time price tracking for Sesame, Sorghum, Groundnuts, and Gum Arabic across Gedaref and El Obeid markets.'}
+            {isAr ? 'البنية التحتية المخططة لتتبع أسعار السمسم، الذرة، الفول السوداني والصمغ العربي في أسواق القضارف والأبيض.' : 'Planned infrastructure for tracking prices of Sesame, Sorghum, Groundnuts, and Gum Arabic across Gedaref and El Obeid markets.'}
           </p>
           <div className="mt-6 border-t-2 border-dashed border-border-strong pt-6">
             <div className="h-4 bg-border-strong rounded w-3/4 mb-3"></div>
