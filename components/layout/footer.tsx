@@ -1,5 +1,6 @@
 import Link from 'next/link'
-import { ZaratiLogo } from '@/components/brand/zarati-logo'
+import Image from 'next/image'
+import logoSrc from '@/brand/main.png'
 import { SudanBadge, SudanFlag } from '@/components/brand/sudan-badge'
 import type { Locale } from '@/lib/i18n/config'
 
@@ -36,8 +37,15 @@ export function Footer({ lang, nav }: FooterProps) {
 
           {/* Col 1: Brand & National Context (5 cols) */}
           <div className="md:col-span-5 space-y-4">
-            <Link href={`/${lang}`} className="inline-block">
-              <ZaratiLogo lang={lang} variant="footer" showTagline={false} />
+            <Link href={`/${lang}`} className="inline-block" aria-label="زرعتي | ZARATI">
+              <Image
+                src={logoSrc}
+                alt="زرعتي | ZARATI"
+                height={72}
+                width={108}
+                className="h-[64px] w-auto object-contain"
+                style={{ mixBlendMode: 'multiply' }}
+              />
             </Link>
 
             <p className="text-text/80 text-sm leading-relaxed max-w-sm font-sans">

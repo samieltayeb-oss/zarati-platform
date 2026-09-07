@@ -5,7 +5,8 @@ import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
-import { ZaratiLogo } from '@/components/brand/zarati-logo'
+import Image from 'next/image'
+import logoSrc from '@/brand/main.png'
 import { SudanBadge, SudanFlag } from '@/components/brand/sudan-badge'
 import type { Locale } from '@/lib/i18n/config'
 
@@ -49,22 +50,22 @@ export function Header({ lang, nav }: HeaderProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-[72px] md:h-[80px]">
 
-          {/* Logo & Sudan Sovereign Identity Badge */}
-          <div className="flex items-center gap-3 sm:gap-4 shrink-0">
-            <Link
-              href={`/${lang}`}
-              className="shrink-0 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-              aria-label="زرعتي | ZARATI Home"
-            >
-              <ZaratiLogo lang={lang} variant="header" size="md" />
-            </Link>
-
-            {/* Subtle Divider & Sudan Identity Badge on Desktop */}
-            <div className="hidden xl:block h-6 w-[1px] bg-border-strong/80" aria-hidden="true" />
-            <div className="hidden xl:flex items-center">
-              <SudanBadge lang={lang} variant="header" />
-            </div>
-          </div>
+          {/* Logo lockup: Original ZARATI Brand */}
+          <Link
+            href={`/${lang}`}
+            className="shrink-0 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            aria-label="زرعتي | ZARATI Home"
+          >
+            <Image
+              src={logoSrc}
+              alt="زرعتي | ZARATI"
+              height={68}
+              width={102}
+              className="h-[56px] md:h-[72px] w-auto object-contain"
+              style={{ mixBlendMode: 'multiply' }}
+              priority
+            />
+          </Link>
 
           {/* Desktop nav (lg: 1024px+) */}
           <nav className="hidden lg:flex items-center gap-1" aria-label="Main Navigation">
