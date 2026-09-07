@@ -1,4 +1,4 @@
-﻿export type Json =
+export type Json =
   | string
   | number
   | boolean
@@ -7,13 +7,482 @@
   | Json[]
 
 export type Database = {
-  // Allows to automatically instantiate createClient with right options
-  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
-  __InternalSupabase: {
-    PostgrestVersion: "14.5"
+  graphql_public: {
+    Tables: {
+      [_ in never]: never
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      graphql: {
+        Args: {
+          extensions?: Json
+          operationName?: string
+          query?: string
+          variables?: Json
+        }
+        Returns: Json
+      }
+    }
+    Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
   }
   public: {
     Tables: {
+      canonical_commodities: {
+        Row: {
+          botanical_name: string | null
+          code: string
+          created_at: string
+          crop_id: string
+          grade_ar: string
+          grade_en: string
+          hs_code: string | null
+          id: string
+          is_active: boolean
+          standard_unit: string
+          variety_ar: string
+          variety_en: string
+        }
+        Insert: {
+          botanical_name?: string | null
+          code: string
+          created_at?: string
+          crop_id: string
+          grade_ar?: string
+          grade_en?: string
+          hs_code?: string | null
+          id?: string
+          is_active?: boolean
+          standard_unit?: string
+          variety_ar: string
+          variety_en: string
+        }
+        Update: {
+          botanical_name?: string | null
+          code?: string
+          created_at?: string
+          crop_id?: string
+          grade_ar?: string
+          grade_en?: string
+          hs_code?: string | null
+          id?: string
+          is_active?: boolean
+          standard_unit?: string
+          variety_ar?: string
+          variety_en?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "canonical_commodities_crop_id_fkey"
+            columns: ["crop_id"]
+            isOneToOne: false
+            referencedRelation: "crops"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "canonical_commodities_crop_id_fkey"
+            columns: ["crop_id"]
+            isOneToOne: false
+            referencedRelation: "v_legacy_crop_prices_bridge"
+            referencedColumns: ["crop_id"]
+          },
+        ]
+      }
+      canonical_commodity_aliases: {
+        Row: {
+          commodity_id: string
+          created_at: string
+          default_price_type: Database["public"]["Enums"]["price_type_enum"]
+          id: string
+          source_id: string
+          source_raw_string: string
+        }
+        Insert: {
+          commodity_id: string
+          created_at?: string
+          default_price_type?: Database["public"]["Enums"]["price_type_enum"]
+          id?: string
+          source_id: string
+          source_raw_string: string
+        }
+        Update: {
+          commodity_id?: string
+          created_at?: string
+          default_price_type?: Database["public"]["Enums"]["price_type_enum"]
+          id?: string
+          source_id?: string
+          source_raw_string?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "canonical_commodity_aliases_commodity_id_fkey"
+            columns: ["commodity_id"]
+            isOneToOne: false
+            referencedRelation: "canonical_commodities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "canonical_commodity_aliases_source_id_fkey"
+            columns: ["source_id"]
+            isOneToOne: false
+            referencedRelation: "canonical_sources"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      canonical_currencies: {
+        Row: {
+          code: string
+          created_at: string
+          is_active: boolean
+          name_ar: string
+          name_en: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          is_active?: boolean
+          name_ar: string
+          name_en: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          is_active?: boolean
+          name_ar?: string
+          name_en?: string
+        }
+        Relationships: []
+      }
+      canonical_datasets: {
+        Row: {
+          created_at: string
+          dataset_identifier: string
+          description: string | null
+          download_url: string | null
+          format: string
+          id: string
+          is_active: boolean
+          name_ar: string
+          name_en: string
+          schema_definition: Json | null
+          source_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          dataset_identifier: string
+          description?: string | null
+          download_url?: string | null
+          format: string
+          id?: string
+          is_active?: boolean
+          name_ar: string
+          name_en: string
+          schema_definition?: Json | null
+          source_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          dataset_identifier?: string
+          description?: string | null
+          download_url?: string | null
+          format?: string
+          id?: string
+          is_active?: boolean
+          name_ar?: string
+          name_en?: string
+          schema_definition?: Json | null
+          source_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "canonical_datasets_source_id_fkey"
+            columns: ["source_id"]
+            isOneToOne: false
+            referencedRelation: "canonical_sources"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      canonical_localities: {
+        Row: {
+          code: string
+          created_at: string
+          id: string
+          is_active: boolean
+          name_ar: string
+          name_en: string
+          pcode: string | null
+          state_id: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name_ar: string
+          name_en: string
+          pcode?: string | null
+          state_id: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name_ar?: string
+          name_en?: string
+          pcode?: string | null
+          state_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "canonical_localities_state_id_fkey"
+            columns: ["state_id"]
+            isOneToOne: false
+            referencedRelation: "states"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      canonical_market_aliases: {
+        Row: {
+          created_at: string
+          id: string
+          market_id: string
+          source_id: string
+          source_raw_market_name: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          market_id: string
+          source_id: string
+          source_raw_market_name: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          market_id?: string
+          source_id?: string
+          source_raw_market_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "canonical_market_aliases_market_id_fkey"
+            columns: ["market_id"]
+            isOneToOne: false
+            referencedRelation: "markets"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "canonical_market_aliases_source_id_fkey"
+            columns: ["source_id"]
+            isOneToOne: false
+            referencedRelation: "canonical_sources"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      canonical_schemes: {
+        Row: {
+          area_feddans: number | null
+          code: string
+          created_at: string
+          id: string
+          is_active: boolean
+          name_ar: string
+          name_en: string
+          primary_state_id: string
+          scheme_type: string
+        }
+        Insert: {
+          area_feddans?: number | null
+          code: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name_ar: string
+          name_en: string
+          primary_state_id: string
+          scheme_type: string
+        }
+        Update: {
+          area_feddans?: number | null
+          code?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name_ar?: string
+          name_en?: string
+          primary_state_id?: string
+          scheme_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "canonical_schemes_primary_state_id_fkey"
+            columns: ["primary_state_id"]
+            isOneToOne: false
+            referencedRelation: "states"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      canonical_sources: {
+        Row: {
+          access_method: string
+          attribution_text_ar: string
+          attribution_text_en: string
+          authority: string
+          code: string
+          country: string
+          created_at: string
+          expected_latency_days: number
+          id: string
+          is_active: boolean
+          license_type: string
+          license_url: string | null
+          name_ar: string
+          name_en: string
+          notes: string | null
+          publisher: string
+          source_url: string
+          tier: Database["public"]["Enums"]["source_tier_enum"]
+          update_frequency: string
+          updated_at: string
+        }
+        Insert: {
+          access_method: string
+          attribution_text_ar: string
+          attribution_text_en: string
+          authority: string
+          code: string
+          country?: string
+          created_at?: string
+          expected_latency_days?: number
+          id?: string
+          is_active?: boolean
+          license_type: string
+          license_url?: string | null
+          name_ar: string
+          name_en: string
+          notes?: string | null
+          publisher: string
+          source_url: string
+          tier: Database["public"]["Enums"]["source_tier_enum"]
+          update_frequency: string
+          updated_at?: string
+        }
+        Update: {
+          access_method?: string
+          attribution_text_ar?: string
+          attribution_text_en?: string
+          authority?: string
+          code?: string
+          country?: string
+          created_at?: string
+          expected_latency_days?: number
+          id?: string
+          is_active?: boolean
+          license_type?: string
+          license_url?: string | null
+          name_ar?: string
+          name_en?: string
+          notes?: string | null
+          publisher?: string
+          source_url?: string
+          tier?: Database["public"]["Enums"]["source_tier_enum"]
+          update_frequency?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      canonical_units: {
+        Row: {
+          code: string
+          confidence_level: string
+          conversion_authority: string | null
+          created_at: string
+          crop_id: string | null
+          is_verified_standard: boolean
+          market_id: string | null
+          max_weight_kg: number | null
+          min_weight_kg: number | null
+          name_ar: string
+          name_en: string
+          state_id: string | null
+          weight_kg_nominal: number | null
+        }
+        Insert: {
+          code: string
+          confidence_level: string
+          conversion_authority?: string | null
+          created_at?: string
+          crop_id?: string | null
+          is_verified_standard?: boolean
+          market_id?: string | null
+          max_weight_kg?: number | null
+          min_weight_kg?: number | null
+          name_ar: string
+          name_en: string
+          state_id?: string | null
+          weight_kg_nominal?: number | null
+        }
+        Update: {
+          code?: string
+          confidence_level?: string
+          conversion_authority?: string | null
+          created_at?: string
+          crop_id?: string | null
+          is_verified_standard?: boolean
+          market_id?: string | null
+          max_weight_kg?: number | null
+          min_weight_kg?: number | null
+          name_ar?: string
+          name_en?: string
+          state_id?: string | null
+          weight_kg_nominal?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "canonical_units_crop_id_fkey"
+            columns: ["crop_id"]
+            isOneToOne: false
+            referencedRelation: "crops"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "canonical_units_crop_id_fkey"
+            columns: ["crop_id"]
+            isOneToOne: false
+            referencedRelation: "v_legacy_crop_prices_bridge"
+            referencedColumns: ["crop_id"]
+          },
+          {
+            foreignKeyName: "canonical_units_market_id_fkey"
+            columns: ["market_id"]
+            isOneToOne: false
+            referencedRelation: "markets"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "canonical_units_state_id_fkey"
+            columns: ["state_id"]
+            isOneToOne: false
+            referencedRelation: "states"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       crop_prices: {
         Row: {
           created_at: string
@@ -81,6 +550,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "crops"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crop_prices_crop_id_fkey"
+            columns: ["crop_id"]
+            isOneToOne: false
+            referencedRelation: "v_legacy_crop_prices_bridge"
+            referencedColumns: ["crop_id"]
           },
           {
             foreignKeyName: "crop_prices_market_id_fkey"
@@ -183,6 +659,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "crops"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "farm_crops_crop_id_fkey"
+            columns: ["crop_id"]
+            isOneToOne: false
+            referencedRelation: "v_legacy_crop_prices_bridge"
+            referencedColumns: ["crop_id"]
           },
           {
             foreignKeyName: "farm_crops_farm_id_fkey"
@@ -499,6 +982,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "listings_crop_id_fkey"
+            columns: ["crop_id"]
+            isOneToOne: false
+            referencedRelation: "v_legacy_crop_prices_bridge"
+            referencedColumns: ["crop_id"]
+          },
+          {
             foreignKeyName: "listings_farm_id_fkey"
             columns: ["farm_id"]
             isOneToOne: false
@@ -531,6 +1021,196 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      market_price_observations: {
+        Row: {
+          canonical_currency_code: string | null
+          commodity_id: string
+          conversion_factor_used: number | null
+          conversion_rule_applied: string | null
+          dataset_id: string | null
+          derivation_class: Database["public"]["Enums"]["derivation_class_enum"]
+          id: string
+          ingested_at: string
+          ingestion_method: Database["public"]["Enums"]["ingestion_method_enum"]
+          market_id: string
+          normalized_price_per_kg: number | null
+          normalized_price_per_mt: number | null
+          normalized_price_usd_per_mt: number | null
+          observed_at: string
+          parsed_price_numeric: number | null
+          price_type: Database["public"]["Enums"]["price_type_enum"]
+          publication_status: Database["public"]["Enums"]["publication_status_enum"]
+          published_at: string | null
+          raw_currency_text: string
+          raw_price_text: string
+          raw_snapshot_id: string | null
+          raw_unit_text: string
+          reported_at: string | null
+          retraction_rationale: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          source_id: string
+          source_provenance: Database["public"]["Enums"]["source_provenance_enum"]
+          source_record_id: string | null
+          source_record_key: string
+          source_record_raw: string | null
+          stale_after_at: string
+          temporal_class: Database["public"]["Enums"]["temporal_class_enum"]
+          temporal_precision: Database["public"]["Enums"]["temporal_precision_enum"]
+          trust_score: string | null
+          valid_from: string | null
+          valid_to: string | null
+          verification_state: Database["public"]["Enums"]["verification_state_enum"]
+          verified_at: string | null
+        }
+        Insert: {
+          canonical_currency_code?: string | null
+          commodity_id: string
+          conversion_factor_used?: number | null
+          conversion_rule_applied?: string | null
+          dataset_id?: string | null
+          derivation_class: Database["public"]["Enums"]["derivation_class_enum"]
+          id?: string
+          ingested_at?: string
+          ingestion_method: Database["public"]["Enums"]["ingestion_method_enum"]
+          market_id: string
+          normalized_price_per_kg?: number | null
+          normalized_price_per_mt?: number | null
+          normalized_price_usd_per_mt?: number | null
+          observed_at: string
+          parsed_price_numeric?: number | null
+          price_type?: Database["public"]["Enums"]["price_type_enum"]
+          publication_status?: Database["public"]["Enums"]["publication_status_enum"]
+          published_at?: string | null
+          raw_currency_text: string
+          raw_price_text: string
+          raw_snapshot_id?: string | null
+          raw_unit_text: string
+          reported_at?: string | null
+          retraction_rationale?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          source_id: string
+          source_provenance: Database["public"]["Enums"]["source_provenance_enum"]
+          source_record_id?: string | null
+          source_record_key: string
+          source_record_raw?: string | null
+          stale_after_at: string
+          temporal_class: Database["public"]["Enums"]["temporal_class_enum"]
+          temporal_precision?: Database["public"]["Enums"]["temporal_precision_enum"]
+          trust_score?: string | null
+          valid_from?: string | null
+          valid_to?: string | null
+          verification_state?: Database["public"]["Enums"]["verification_state_enum"]
+          verified_at?: string | null
+        }
+        Update: {
+          canonical_currency_code?: string | null
+          commodity_id?: string
+          conversion_factor_used?: number | null
+          conversion_rule_applied?: string | null
+          dataset_id?: string | null
+          derivation_class?: Database["public"]["Enums"]["derivation_class_enum"]
+          id?: string
+          ingested_at?: string
+          ingestion_method?: Database["public"]["Enums"]["ingestion_method_enum"]
+          market_id?: string
+          normalized_price_per_kg?: number | null
+          normalized_price_per_mt?: number | null
+          normalized_price_usd_per_mt?: number | null
+          observed_at?: string
+          parsed_price_numeric?: number | null
+          price_type?: Database["public"]["Enums"]["price_type_enum"]
+          publication_status?: Database["public"]["Enums"]["publication_status_enum"]
+          published_at?: string | null
+          raw_currency_text?: string
+          raw_price_text?: string
+          raw_snapshot_id?: string | null
+          raw_unit_text?: string
+          reported_at?: string | null
+          retraction_rationale?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          source_id?: string
+          source_provenance?: Database["public"]["Enums"]["source_provenance_enum"]
+          source_record_id?: string | null
+          source_record_key?: string
+          source_record_raw?: string | null
+          stale_after_at?: string
+          temporal_class?: Database["public"]["Enums"]["temporal_class_enum"]
+          temporal_precision?: Database["public"]["Enums"]["temporal_precision_enum"]
+          trust_score?: string | null
+          valid_from?: string | null
+          valid_to?: string | null
+          verification_state?: Database["public"]["Enums"]["verification_state_enum"]
+          verified_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_mpo_dataset_source"
+            columns: ["dataset_id", "source_id"]
+            isOneToOne: false
+            referencedRelation: "canonical_datasets"
+            referencedColumns: ["id", "source_id"]
+          },
+          {
+            foreignKeyName: "market_price_observations_canonical_currency_code_fkey"
+            columns: ["canonical_currency_code"]
+            isOneToOne: false
+            referencedRelation: "canonical_currencies"
+            referencedColumns: ["code"]
+          },
+          {
+            foreignKeyName: "market_price_observations_commodity_id_fkey"
+            columns: ["commodity_id"]
+            isOneToOne: false
+            referencedRelation: "canonical_commodities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "market_price_observations_dataset_id_fkey"
+            columns: ["dataset_id"]
+            isOneToOne: false
+            referencedRelation: "canonical_datasets"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "market_price_observations_market_id_fkey"
+            columns: ["market_id"]
+            isOneToOne: false
+            referencedRelation: "markets"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "market_price_observations_raw_snapshot_id_fkey"
+            columns: ["raw_snapshot_id"]
+            isOneToOne: false
+            referencedRelation: "raw_ingestion_snapshots"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "market_price_observations_reviewed_by_fkey"
+            columns: ["reviewed_by"]
+            isOneToOne: false
+            referencedRelation: "marketplace_seller_public"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "market_price_observations_reviewed_by_fkey"
+            columns: ["reviewed_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "market_price_observations_source_id_fkey"
+            columns: ["source_id"]
+            isOneToOne: false
+            referencedRelation: "canonical_sources"
             referencedColumns: ["id"]
           },
         ]
@@ -627,6 +1307,281 @@ export type Database = {
           },
         ]
       }
+      observation_conflict_ledger: {
+        Row: {
+          conflicting_observation_id: string
+          created_at: string
+          id: string
+          price_divergence_pct: number
+          primary_observation_id: string
+          resolution_rationale: string | null
+          resolution_status: string
+          resolved_at: string | null
+          resolved_by: string | null
+        }
+        Insert: {
+          conflicting_observation_id: string
+          created_at?: string
+          id?: string
+          price_divergence_pct: number
+          primary_observation_id: string
+          resolution_rationale?: string | null
+          resolution_status?: string
+          resolved_at?: string | null
+          resolved_by?: string | null
+        }
+        Update: {
+          conflicting_observation_id?: string
+          created_at?: string
+          id?: string
+          price_divergence_pct?: number
+          primary_observation_id?: string
+          resolution_rationale?: string | null
+          resolution_status?: string
+          resolved_at?: string | null
+          resolved_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "observation_conflict_ledger_conflicting_observation_id_fkey"
+            columns: ["conflicting_observation_id"]
+            isOneToOne: false
+            referencedRelation: "market_price_observations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "observation_conflict_ledger_conflicting_observation_id_fkey"
+            columns: ["conflicting_observation_id"]
+            isOneToOne: false
+            referencedRelation: "v_approved_market_prices"
+            referencedColumns: ["observation_id"]
+          },
+          {
+            foreignKeyName: "observation_conflict_ledger_conflicting_observation_id_fkey"
+            columns: ["conflicting_observation_id"]
+            isOneToOne: false
+            referencedRelation: "v_legacy_crop_prices_bridge"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "observation_conflict_ledger_primary_observation_id_fkey"
+            columns: ["primary_observation_id"]
+            isOneToOne: false
+            referencedRelation: "market_price_observations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "observation_conflict_ledger_primary_observation_id_fkey"
+            columns: ["primary_observation_id"]
+            isOneToOne: false
+            referencedRelation: "v_approved_market_prices"
+            referencedColumns: ["observation_id"]
+          },
+          {
+            foreignKeyName: "observation_conflict_ledger_primary_observation_id_fkey"
+            columns: ["primary_observation_id"]
+            isOneToOne: false
+            referencedRelation: "v_legacy_crop_prices_bridge"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "observation_conflict_ledger_resolved_by_fkey"
+            columns: ["resolved_by"]
+            isOneToOne: false
+            referencedRelation: "marketplace_seller_public"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "observation_conflict_ledger_resolved_by_fkey"
+            columns: ["resolved_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      observation_quality_flags: {
+        Row: {
+          created_at: string
+          details: Json | null
+          flag_code: string
+          id: string
+          observation_id: string
+          severity: string
+        }
+        Insert: {
+          created_at?: string
+          details?: Json | null
+          flag_code: string
+          id?: string
+          observation_id: string
+          severity: string
+        }
+        Update: {
+          created_at?: string
+          details?: Json | null
+          flag_code?: string
+          id?: string
+          observation_id?: string
+          severity?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "observation_quality_flags_observation_id_fkey"
+            columns: ["observation_id"]
+            isOneToOne: false
+            referencedRelation: "market_price_observations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "observation_quality_flags_observation_id_fkey"
+            columns: ["observation_id"]
+            isOneToOne: false
+            referencedRelation: "v_approved_market_prices"
+            referencedColumns: ["observation_id"]
+          },
+          {
+            foreignKeyName: "observation_quality_flags_observation_id_fkey"
+            columns: ["observation_id"]
+            isOneToOne: false
+            referencedRelation: "v_legacy_crop_prices_bridge"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      observation_transformations: {
+        Row: {
+          id: string
+          input_value: string
+          notes: string | null
+          observation_id: string
+          output_value: string
+          parameters: Json | null
+          performed_at: string
+          performed_by: string
+          rule_code: string
+          rule_version: string
+          transformation_type: string
+        }
+        Insert: {
+          id?: string
+          input_value: string
+          notes?: string | null
+          observation_id: string
+          output_value: string
+          parameters?: Json | null
+          performed_at?: string
+          performed_by: string
+          rule_code: string
+          rule_version: string
+          transformation_type: string
+        }
+        Update: {
+          id?: string
+          input_value?: string
+          notes?: string | null
+          observation_id?: string
+          output_value?: string
+          parameters?: Json | null
+          performed_at?: string
+          performed_by?: string
+          rule_code?: string
+          rule_version?: string
+          transformation_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "observation_transformations_observation_id_fkey"
+            columns: ["observation_id"]
+            isOneToOne: false
+            referencedRelation: "market_price_observations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "observation_transformations_observation_id_fkey"
+            columns: ["observation_id"]
+            isOneToOne: false
+            referencedRelation: "v_approved_market_prices"
+            referencedColumns: ["observation_id"]
+          },
+          {
+            foreignKeyName: "observation_transformations_observation_id_fkey"
+            columns: ["observation_id"]
+            isOneToOne: false
+            referencedRelation: "v_legacy_crop_prices_bridge"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      observation_verification_evidence: {
+        Row: {
+          dimension: Database["public"]["Enums"]["verification_dimension_enum"]
+          evaluated_at: string
+          evaluated_by: string | null
+          evidence_reference: string
+          id: string
+          notes: string | null
+          observation_id: string
+          status: string
+        }
+        Insert: {
+          dimension: Database["public"]["Enums"]["verification_dimension_enum"]
+          evaluated_at?: string
+          evaluated_by?: string | null
+          evidence_reference: string
+          id?: string
+          notes?: string | null
+          observation_id: string
+          status: string
+        }
+        Update: {
+          dimension?: Database["public"]["Enums"]["verification_dimension_enum"]
+          evaluated_at?: string
+          evaluated_by?: string | null
+          evidence_reference?: string
+          id?: string
+          notes?: string | null
+          observation_id?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "observation_verification_evidence_evaluated_by_fkey"
+            columns: ["evaluated_by"]
+            isOneToOne: false
+            referencedRelation: "marketplace_seller_public"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "observation_verification_evidence_evaluated_by_fkey"
+            columns: ["evaluated_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "observation_verification_evidence_observation_id_fkey"
+            columns: ["observation_id"]
+            isOneToOne: false
+            referencedRelation: "market_price_observations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "observation_verification_evidence_observation_id_fkey"
+            columns: ["observation_id"]
+            isOneToOne: false
+            referencedRelation: "v_approved_market_prices"
+            referencedColumns: ["observation_id"]
+          },
+          {
+            foreignKeyName: "observation_verification_evidence_observation_id_fkey"
+            columns: ["observation_id"]
+            isOneToOne: false
+            referencedRelation: "v_legacy_crop_prices_bridge"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -682,6 +1637,61 @@ export type Database = {
             columns: ["state_id"]
             isOneToOne: false
             referencedRelation: "states"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      raw_ingestion_snapshots: {
+        Row: {
+          dataset_id: string
+          id: string
+          ingested_at: string
+          ingested_by: string | null
+          notes: string | null
+          payload_sha256: string
+          record_count: number
+          storage_uri: string
+        }
+        Insert: {
+          dataset_id: string
+          id?: string
+          ingested_at?: string
+          ingested_by?: string | null
+          notes?: string | null
+          payload_sha256: string
+          record_count: number
+          storage_uri: string
+        }
+        Update: {
+          dataset_id?: string
+          id?: string
+          ingested_at?: string
+          ingested_by?: string | null
+          notes?: string | null
+          payload_sha256?: string
+          record_count?: number
+          storage_uri?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "raw_ingestion_snapshots_dataset_id_fkey"
+            columns: ["dataset_id"]
+            isOneToOne: false
+            referencedRelation: "canonical_datasets"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "raw_ingestion_snapshots_ingested_by_fkey"
+            columns: ["ingested_by"]
+            isOneToOne: false
+            referencedRelation: "marketplace_seller_public"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "raw_ingestion_snapshots_ingested_by_fkey"
+            columns: ["ingested_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -900,6 +1910,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "listings_crop_id_fkey"
+            columns: ["crop_id"]
+            isOneToOne: false
+            referencedRelation: "v_legacy_crop_prices_bridge"
+            referencedColumns: ["crop_id"]
+          },
+          {
             foreignKeyName: "listings_market_id_fkey"
             columns: ["market_id"]
             isOneToOne: false
@@ -942,6 +1959,79 @@ export type Database = {
           },
         ]
       }
+      v_approved_market_prices: {
+        Row: {
+          attribution_text_ar: string | null
+          attribution_text_en: string | null
+          crop_code: string | null
+          crop_name_ar: string | null
+          crop_name_en: string | null
+          currency: string | null
+          derivation_class:
+            | Database["public"]["Enums"]["derivation_class_enum"]
+            | null
+          grade_ar: string | null
+          grade_en: string | null
+          is_stale: boolean | null
+          market_code: string | null
+          market_name_ar: string | null
+          market_name_en: string | null
+          normalized_price_per_kg: number | null
+          normalized_price_per_mt: number | null
+          observation_id: string | null
+          observed_at: string | null
+          parsed_price_numeric: number | null
+          price_type: Database["public"]["Enums"]["price_type_enum"] | null
+          published_at: string | null
+          raw_price_text: string | null
+          source_code: string | null
+          source_name_en: string | null
+          source_provenance:
+            | Database["public"]["Enums"]["source_provenance_enum"]
+            | null
+          state_name_ar: string | null
+          state_name_en: string | null
+          temporal_precision:
+            | Database["public"]["Enums"]["temporal_precision_enum"]
+            | null
+          trust_score: string | null
+          unit: string | null
+          valid_from: string | null
+          valid_to: string | null
+          variety_ar: string | null
+          variety_en: string | null
+          verification_state:
+            | Database["public"]["Enums"]["verification_state_enum"]
+            | null
+        }
+        Relationships: []
+      }
+      v_legacy_crop_prices_bridge: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          crop_id: string | null
+          currency: string | null
+          id: string | null
+          is_official: boolean | null
+          market_id: string | null
+          notes: string | null
+          price_date: string | null
+          price_sdg: number | null
+          price_usd: number | null
+          source: string | null
+          unit: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "market_price_observations_market_id_fkey"
+            columns: ["market_id"]
+            isOneToOne: false
+            referencedRelation: "markets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
       current_user_role: { Args: never; Returns: string }
@@ -960,7 +2050,59 @@ export type Database = {
       show_trgm: { Args: { "": string }; Returns: string[] }
     }
     Enums: {
-      [_ in never]: never
+      derivation_class_enum:
+        | "observed_transaction"
+        | "reported_survey"
+        | "calculated_median"
+        | "model_estimated"
+      ingestion_method_enum:
+        | "automated_api"
+        | "automated_feed"
+        | "manual_bulletin_entry"
+        | "ocr_extract"
+        | "batch_import"
+      price_type_enum:
+        | "farmgate"
+        | "primary_auction"
+        | "wholesale"
+        | "retail"
+        | "export_fob"
+      publication_status_enum:
+        | "INGESTED"
+        | "QUARANTINED"
+        | "UNDER_REVIEW"
+        | "APPROVED"
+        | "PUBLISHED"
+        | "RETRACTED"
+      source_provenance_enum:
+        | "sovereign_statutory"
+        | "institutional_multilateral"
+        | "commercial_exchange"
+        | "market_reported"
+        | "field_survey"
+      source_tier_enum:
+        | "TIER_A_PRIMARY_EXCHANGE"
+        | "TIER_B_INSTITUTIONAL"
+        | "TIER_C_SOVEREIGN_STATUTORY"
+        | "TIER_D_BENCHMARK_GLOBAL"
+        | "TIER_E_SURVEY_FIELD"
+      temporal_class_enum: "current_spot" | "historical_archive" | "backfill"
+      temporal_precision_enum:
+        | "EXACT_TIMESTAMP"
+        | "CALENDAR_DAY"
+        | "CALENDAR_MONTH"
+        | "SEASONAL_RANGE"
+      verification_dimension_enum:
+        | "SOURCE_AUTHORITY"
+        | "INGESTION_INTEGRITY"
+        | "FIELD_CORROBORATION"
+        | "STATISTICAL_PLAUSIBILITY"
+      verification_state_enum:
+        | "unassessed"
+        | "partially_verified"
+        | "verified"
+        | "disputed"
+        | "rejected"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -976,12 +2118,12 @@ export type Tables<
   DefaultSchemaTableNameOrOptions extends
     | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends (DefaultSchemaTableNameOrOptions extends {
+  TableName extends DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
         DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
-    : never) = never,
+    : never = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -1005,11 +2147,11 @@ export type TablesInsert<
   DefaultSchemaTableNameOrOptions extends
     | keyof DefaultSchema["Tables"]
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends (DefaultSchemaTableNameOrOptions extends {
+  TableName extends DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
-    : never) = never,
+    : never = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -1030,11 +2172,11 @@ export type TablesUpdate<
   DefaultSchemaTableNameOrOptions extends
     | keyof DefaultSchema["Tables"]
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends (DefaultSchemaTableNameOrOptions extends {
+  TableName extends DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
-    : never) = never,
+    : never = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -1055,11 +2197,11 @@ export type Enums<
   DefaultSchemaEnumNameOrOptions extends
     | keyof DefaultSchema["Enums"]
     | { schema: keyof DatabaseWithoutInternals },
-  EnumName extends (DefaultSchemaEnumNameOrOptions extends {
+  EnumName extends DefaultSchemaEnumNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
-    : never) = never,
+    : never = never,
 > = DefaultSchemaEnumNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -1072,11 +2214,11 @@ export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
     | keyof DefaultSchema["CompositeTypes"]
     | { schema: keyof DatabaseWithoutInternals },
-  CompositeTypeName extends (PublicCompositeTypeNameOrOptions extends {
+  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
-    : never) = never,
+    : never = never,
 > = PublicCompositeTypeNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -1086,7 +2228,74 @@ export type CompositeTypes<
     : never
 
 export const Constants = {
-  public: {
+  graphql_public: {
     Enums: {},
   },
+  public: {
+    Enums: {
+      derivation_class_enum: [
+        "observed_transaction",
+        "reported_survey",
+        "calculated_median",
+        "model_estimated",
+      ],
+      ingestion_method_enum: [
+        "automated_api",
+        "automated_feed",
+        "manual_bulletin_entry",
+        "ocr_extract",
+        "batch_import",
+      ],
+      price_type_enum: [
+        "farmgate",
+        "primary_auction",
+        "wholesale",
+        "retail",
+        "export_fob",
+      ],
+      publication_status_enum: [
+        "INGESTED",
+        "QUARANTINED",
+        "UNDER_REVIEW",
+        "APPROVED",
+        "PUBLISHED",
+        "RETRACTED",
+      ],
+      source_provenance_enum: [
+        "sovereign_statutory",
+        "institutional_multilateral",
+        "commercial_exchange",
+        "market_reported",
+        "field_survey",
+      ],
+      source_tier_enum: [
+        "TIER_A_PRIMARY_EXCHANGE",
+        "TIER_B_INSTITUTIONAL",
+        "TIER_C_SOVEREIGN_STATUTORY",
+        "TIER_D_BENCHMARK_GLOBAL",
+        "TIER_E_SURVEY_FIELD",
+      ],
+      temporal_class_enum: ["current_spot", "historical_archive", "backfill"],
+      temporal_precision_enum: [
+        "EXACT_TIMESTAMP",
+        "CALENDAR_DAY",
+        "CALENDAR_MONTH",
+        "SEASONAL_RANGE",
+      ],
+      verification_dimension_enum: [
+        "SOURCE_AUTHORITY",
+        "INGESTION_INTEGRITY",
+        "FIELD_CORROBORATION",
+        "STATISTICAL_PLAUSIBILITY",
+      ],
+      verification_state_enum: [
+        "unassessed",
+        "partially_verified",
+        "verified",
+        "disputed",
+        "rejected",
+      ],
+    },
+  },
 } as const
+
