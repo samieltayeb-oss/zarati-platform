@@ -145,7 +145,7 @@
      ======================================================== */
 
   --za-font-english:    'Inter', 'Helvetica Neue', Arial, sans-serif;
-  --za-font-arabic:     'IBM Plex Arabic', 'Noto Sans Arabic', 'Arial Unicode MS', sans-serif;
+  --za-font-arabic:     var(--font-cairo, 'Cairo', 'Noto Sans Arabic', sans-serif);
   --za-font-mono:       'JetBrains Mono', 'Fira Code', Consolas, monospace;
 
   --za-text-display-xl:  72px;

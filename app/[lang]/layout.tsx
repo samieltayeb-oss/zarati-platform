@@ -33,7 +33,7 @@ export default async function LocaleLayout({ children, params }: Props) {
     <html 
       lang={locale} 
       dir={dir} 
-      className={`${cairo.variable} ${geist.variable} ${ibmPlexArabic.variable}`}
+      className={`${isAr ? cairo.className : geist.className} ${cairo.variable} ${geist.variable} ${ibmPlexArabic.variable}`}
       style={{
         '--font-arabic': cairo.style.fontFamily,
         '--font-cairo': cairo.style.fontFamily,

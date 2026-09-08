@@ -9,9 +9,9 @@ export const geist = Geist({
 
 export const cairo = Cairo({
   subsets: ['arabic', 'latin'],
-  variable: '--font-cairo-next',
+  variable: '--font-cairo',
   display: 'swap',
-  weight: ['300', '400', '500', '600', '700'],
+  weight: ['300', '400', '500', '600', '700', '800', '900'],
 })
 
 
