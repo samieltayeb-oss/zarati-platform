@@ -13,7 +13,12 @@ const MAX_IMAGES_PER_LISTING = 5
 function getImageRatelimiter() {
   const url = process.env.UPSTASH_REDIS_REST_URL
   const token = process.env.UPSTASH_REDIS_REST_TOKEN
-  if (!url || !token) return null
+  if (!url || !token) {
+    if (process.env.NODE_ENV === 'production') {
+      throw new Error('CRITICAL: Upstash Redis is not configured in production. Rate limiting failing closed.');
+    }
+    return null
+  }
   const redis = new Redis({ url, token })
   return new Ratelimit({ redis, limiter: Ratelimit.slidingWindow(20, '1 h') })
 }
@@ -115,7 +120,7 @@ export async function uploadListingMediaServerAction(formData: FormData): Promis
     .insert({
       listing_id: listingId,
       storage_path: uploadData.path,
-      media_type: 'image',
+      media_type: 'image/jpeg',
     })
 
   if (dbError) {

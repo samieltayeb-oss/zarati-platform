@@ -10,7 +10,12 @@ type ActionResult = { success: true; listingId?: string } | { success: false; er
 function getRatelimiter() {
   const url = process.env.UPSTASH_REDIS_REST_URL
   const token = process.env.UPSTASH_REDIS_REST_TOKEN
-  if (!url || !token) return null
+  if (!url || !token) {
+    if (process.env.NODE_ENV === 'production') {
+      throw new Error('CRITICAL: Upstash Redis is not configured in production. Rate limiting failing closed.');
+    }
+    return null
+  }
   const redis = new Redis({ url, token })
   return new Ratelimit({ redis, limiter: Ratelimit.slidingWindow(10, '24 h') })
 }
