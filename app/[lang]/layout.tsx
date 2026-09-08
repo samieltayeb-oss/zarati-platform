@@ -27,8 +27,19 @@ export default async function LocaleLayout({ children, params }: Props) {
   const dir = locale === 'ar' ? 'rtl' : 'ltr'
   const dict = await getDictionary(locale)
 
+  const isAr = locale === 'ar'
+
   return (
-    <html lang={locale} dir={dir} className={`${cairo.variable} ${geist.variable} ${ibmPlexArabic.variable}`}>
+    <html 
+      lang={locale} 
+      dir={dir} 
+      className={`${cairo.variable} ${geist.variable} ${ibmPlexArabic.variable}`}
+      style={{
+        '--font-arabic': cairo.style.fontFamily,
+        '--font-cairo': cairo.style.fontFamily,
+        '--font-latin': geist.style.fontFamily,
+      } as React.CSSProperties}
+    >
       <body className="flex flex-col min-h-screen font-sans overflow-x-clip">
         <Header lang={locale} nav={dict.nav} />
         <main className="flex-1">{children}</main>
