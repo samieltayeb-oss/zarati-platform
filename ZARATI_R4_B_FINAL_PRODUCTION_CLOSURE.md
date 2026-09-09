@@ -1,108 +1,78 @@
-# ZARATI R4-B.11 — partial production activation
+# R4-B.14 — recurring activation; final closure pending
 
-2026-09-09 UTC. **WFP recurring ON and verified. Weather recurring OFF, awaiting provider-use eligibility confirmation. R4-B is not fully closed.** No R4-C or Gedaref pilot activation.
+Updated 2026-09-09 UTC. **WFP ON. MET Norway ON. Open-Meteo OFF. R4-B is NOT CLOSED: the first unattended MET Norway window is still in the future.** A manual invocation cannot substitute for scheduled-run proof.
 
-## Canonical repository and production
+This replaces the B.11 partial-activation report; its historical details remain in Git. The completed B.13 canary evidence is preserved in ZARATI_R4_B_MET_NORWAY_PRODUCTION_CANARY_EVIDENCE.md.
 
-Production ledger: **001–016, 018–029**; 017 absent; 029 exactly once. Initial production and remote main SHA: `01400a8517982953725e67172f261bf18dcc5b7b`.
+## Governance and activation
 
-Activation main SHA: **`51aed334f7ee10474c994d9b24169d977d9033f1`**. Deployment **`dpl_2CEMnhpLeT4MZhKR8CyeyCz3jQmM`**, READY, production/main, URL `https://zarati-platform-qjwh442uj-samieltayeb-oss-projects.vercel.app`, owns `https://zarati-platform.vercel.app` at activation verification. A subsequent evidence-only commit containing this report and the operator query retains the exact application and cron configuration; its SHA is recorded by Git and the final deployment verification.
+Verified canonical main/application SHA at activation: **cf0986bde47f62ed8781412f8f1b720cb0c5d683**. Production matched exact main before activation. The subsequent governance-only commit containing this report is recorded by Git and retains the same application and migrations.
 
-Before activation, the R4-B production release, WFP canary/forensic, Open-Meteo canary evidence and B.10 one-use replay-admission SQL were reconciled into canonical main. Seven intended files only, including the schedule change and activation plan; normal branch push, clean isolated-main fast-forward, normal main push. No force push or unrelated work included. All production-applied migrations through 029, its repair tests and completed repair evidence are tracked. Migration 029 SHA-256 remains `97f19a64df35fca90c8e0696e66e404367ed13434d41057f9d8fadcf19f70596`; fresh production schema/ledger comparison passes. No production migration or repair was run in B.11.
+Supabase project: **nelsijiczufflyqosvzi**. Fresh preflight confirms ledger **001–016, 018–030**, 29 entries, migration 030 exactly once. Migration 030 and MET implementation/canary evidence are tracked in main. Migration 030 SHA-256 remains **199d171eaa6e52dd94a3f11183acf198587ac2ae4ed4ee9c6973929c8252f8a8**. No production/Git drift was found. Unrelated local plans and untracked files were excluded.
 
-## Local tooling restored
+Preflight: WFP **5666 physical / 5663 current valid / 102 public**, WFP ON; MET **48** rows, weather OFF; Open-Meteo **49** rows, retired cron provider; no running execution or active lease. The two prior MET executions are the B.13 canary and replay, not unattended schedule evidence.
 
-Docker Desktop was started from its verified installed path `C:/Users/mcreg/AppData/Local/Programs/DockerDesktop/Docker Desktop.exe`. Existing Zarati services recovered; database and Supabase HTTP were verified reachable on 127.0.0.1:54342 and :54341. Early startup reported the database was still starting; later health and connectivity passed.
+Production R4B_WEATHER_FEED_ENABLED became **true at 2026-09-09T18:39:58.664Z**. WFP remained true; CRON_SECRET presence was verified without printing its value. The canonical weather route already selects **MET_NORWAY**; the cron handler refuses OPEN_METEO. No application, schema, provider, coordinate, or schedule change was needed.
 
-- `npm run lint`: PASS.
-- `npx tsc --noEmit`: PASS.
-- `npm test`: **156 PASS in 11 files**, 77.90 seconds, no skipped tests.
-- Direct local migration ledger: 001–016, 018–029, matching production sequence. No fresh reset was needed after the complete real-database suite passed; this is a ledger/test verification, not a new reset claim.
+Activation deployment: **dpl_BCpsxRYyt7VVHZVZB4tFer4bnC26**, READY on exact main **cf0986bde47f62ed8781412f8f1b720cb0c5d683**, owning **https://zarati-platform.vercel.app**. URL: https://zarati-platform-mrauoa2ms-samieltayeb-oss-projects.vercel.app. A subsequent evidence-only main push retains the same code and ON settings. Gate verification at 18:49:28 UTC reports WFP true, weather true, and cron secret present.
 
-The full suite covers real local listing/RFQ authorization, immutable WFP repair/replay, weather temporal/unit/idempotency behavior, cron authentication/locking/failure behavior, rate-limit fail-closed and media MIME contracts. Tests were restricted by the repository local-target guard; none ran against production.
+No manual Run control, cron-run CLI command, authenticated weather trigger, replay admission, or WFP invocation was used in B.14.
 
-## Schedules and source characteristics
+## Schedules
 
-| Feed | Cron | UTC window on current Hobby plan | Final gate |
-|---|---|---|---|
-| WFP | `0 3 * * *` | Daily 03:00–03:59 | ON |
-| Open-Meteo | `0 5 * * *` | Daily 05:00–05:59, configured but gate blocked | OFF |
+| Feed | Cron | Meaning on current Hobby plan | Configured state |
+| --- | --- | --- | --- |
+| WFP | `0 3 * * *` | Daily, 03:00–03:59 UTC | ON |
+| MET Norway | `0 5 * * *` | Daily, 05:00–05:59 UTC | ON |
+| Open-Meteo | No independently executable route | Historical canary provider only | OFF |
 
-Existing expire remains `0 2 * * *`. Vercel UI confirmed both daily feed definitions and the pre-existing enabled global cron feature. Separate windows avoid unnecessary collisions. [Vercel Hobby limits](https://vercel.com/docs/cron-jobs/usage-and-pricing) allow daily jobs with one-hour timing uncertainty; hourly expressions are not supported on this plan. No plan upgrade was performed.
+The expiry task remains `0 2 * * *`. Vercel's read-only cron listing confirmed all three unchanged paths/schedules. The current [Vercel documentation](https://vercel.com/docs/cron-jobs/usage-and-pricing) confirms daily jobs and a one-hour timing window on Hobby. No frequency increase or plan change occurred.
 
-Fresh [HDX metadata](https://data.humdata.org/api/3/action/package_show?id=369e003b-f0af-4e48-99d7-34fc85b44635) reports `data_update_frequency: 30`, resource last_modified `2026-09-06T17:36:34.579114`, and dataset coverage `2001-01-15` through `2026-08-15`. Daily polling conservatively discovers institutional source releases without aggressive hourly requests. An unchanged response reuses the approved artifact and existing identities; changed artifacts still face the existing completeness/correction model. No completeness override was added.
+Rationale: one daily forecast refresh serves the limited current R4-B scope while minimizing provider/platform traffic. WFP remains a conservatively synchronized institutional historical dataset. Daily forecasts do not imply continuously fresh sensor observations.
 
-Daily weather is the forecast-oriented frequency available on Hobby. The two-calendar-day response provides forecast coverage across a daily refresh. Current/model estimates expire at valid time + one hour and therefore will be stale for most of a day. Forecasts expire at their provider valid time. Historical rows always remain stale. A daily job must not be described as continuously fresh current conditions. One location only remains configured: El Gedarif / Gedaref Crops Market, requested 14.04,35.38.
+**Next required unattended proof: 2026-09-10 05:00–05:59 UTC**, equivalent to **September 9, 23:00–23:59 MDT**. This event has not yet happened at the time of this report.
 
-**Weather blocker:** [Open-Meteo pricing](https://open-meteo.com/en/pricing) permits its free/open-access endpoint only for non-commercial use. The existing implementation uses that endpoint without a key. Whether this deployment is a non-commercial evaluation or has suitable commercial access has not been established. A clarification was requested and remained unanswered at this evidence capture. No weather activation, subscription purchase, credential change, or endpoint change was performed. A commercial subscription would require its appropriate endpoint/key configuration and validation; it is not assumed to authorize the unchanged free endpoint.
+## Unattended evidence — pending
 
-## First WFP execution after activation
+Actual invocation time, HTTP status, deployment, execution ID, provider/cache result, fetched/inserted/existing/rejected/quarantined counters, new identity/revision counts, completion, and post-run lease cleanup are **NOT YET AVAILABLE**. No zero counts or successful results are inferred for this future execution.
 
-WFP alone was enabled (`R4B_WFP_FEED_ENABLED=true`) while weather stayed false. Canonical-main deployment became READY before the trigger. Exactly one click on Vercel's WFP Run control invoked the intended managed production cron route; the platform supplied authentication without exposing the secret.
+A bounded local observer was started hidden, PID **58976**, status **WAITING_FOR_SCHEDULE** at 2026-09-09T18:49:18.113Z. Its ignored source is `scratch/r4b14-observe.cjs`; status is `scratch/r4b14-observer-status.json`. Syntax and read-only preconditions passed. It waits until the target window, then reads at bounded two-minute intervals, stopping after one terminal candidate or by 06:06 UTC. It cannot invoke feeds, change gates/leases, or write production. Captures go to ignored `scratch/r4b14-scheduled-*`.
 
-This is an **operator-triggered managed cron verification**, explicitly allowed by the activation brief. It is not evidence of an unattended 03:00 clock event. The next unattended window is 2026-09-10 03:00–03:59 UTC.
+The observer collects private weather artifacts, anon projection, WFP lineage, schema/cache metadata, and available Vercel logs. It checks preservation, values/units/timestamps, manifests, duplicates, new identities versus revisions, and WFP counts. Successful capture still requires schedule-origin review; it does not automatically declare closure.
 
-| Field | Actual result |
-|---|---|
-| Execution ID | `42011e62-901b-4659-9f5e-50ff5455cd29` |
-| Started UTC | 2026-09-09 15:38:05.489261 |
-| Retrieved UTC | 2026-09-09 15:38:06.354 |
-| Completed UTC | 2026-09-09 15:38:13.165612 |
-| Ledger duration | 7.676351 seconds |
-| HTTP / ledger status | 200 / succeeded |
-| Fetched | 23225 |
-| Valid / existing | 5663 / 5663 |
-| Inserted / rejected / quarantined | 0 / 0 / 0 |
-| Unmapped (existing limited coverage) | 17562 |
-| Error category | NULL |
-| New conflicts / removals | 0 / 0 |
-| Automatic publication | 0 |
-| Public WFP | 102 |
-| Batch / record receipts | 23 / 5663 |
+This observer depends on the workstation staying awake and online and authorized CLI sessions remaining usable. Vercel scheduling is independent of the workstation. No unattended-result guarantee or automatic final-report delivery is claimed.
 
-Vercel logs show one GET `/api/cron/wfp`, HTTP 200, at 15:38:04.784 UTC on the correct activation deployment. Production ledger count increased from three to four WFP executions only. Weather executions remained two (the prior B.10 canary and replay).
+After the window, inspect the capture and platform logs, establish that the invocation was a genuine scheduled event, verify provider/data/security/lease truth, and commit completed closure evidence. If the observer could not run, collect durable ledger and available logs read-only. Do not trigger weather manually to manufacture proof.
 
-Artifact `a815abed-7e8b-4087-a138-4d32cd054439`, 2,924,466 bytes, SHA-256 `3c00925b7c04192e7170dc5bce13cfaca898b0c1499e9f939540fec19f6cbee4`. A fresh database recomputation confirms the retained exact payload checksum. Manifest VALIDATED, 23,225 fetched, hash `9e1db34581a8f954cf72643509fa0c0f0c411246b1227883db771b0d6e18b70d`; existing approved full-source completeness remains intact.
+## Current provider and data truth
 
-Final WFP lease owner token and execution ID are NULL. next_allowed_at is **2026-09-09 21:38:13.166040 UTC**, normal six-hour cooldown, before the next scheduled window. No bypass or replay admission was used. No duplicate run, active lease, RUNNING residue, extra operator retry, or publication occurred.
+Source: MET Norway Locationforecast 2.0 compact, https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=14.04&lon=35.38. Server User-Agent remains `ZARATI/0.1 (https://github.com/samieltayeb-oss/zarati-platform)`. The deployed code is the previously tested implementation. No API key, paid subscription, fake contact, or partnership was introduced.
 
-## Weather remains unactivated
+Location remains **El Gedarif / Gedaref Crops Market**, canonical `MKT-GD-01 / WFP market 2580`, requested **14.04 / 35.38**. MET rows are FORECAST model output, retaining valid_time, original retrieved_at, UTC, forward precipitation intervals, and Celsius/%/mm/km/h semantics. Original wind m/s and issuance remain private provenance. Public attribution supplies Data from MET Norway, source/license links, and conversion/forecast notes.
 
-New weather executions in B.11: **0**. New weather observations: **0**. Existing observations/public rows: **49/49**. Existing duplicate revisions: **0**. Prior B.10 last success remains `d76268ca-7b06-43c3-92d8-23c63dbb663f`, completed 14:53:02.164845 UTC. No first recurring-weather run can be claimed.
+Fresh read-only verification reconfirmed all retained 48 MET values against their exact artifact, all 49 unchanged OPEN_METEO rows, zero duplicate key/revision pairs, valid manifests, and clear leases. Anon view returns **97** safe rows. Freshness was checked at database capture time: expired forecasts become stale and historical data remain stale. No raw weather, artifact IDs, leases, internal errors, validation metadata, or secrets are public. These checks do not claim anything about tomorrow's scheduled output.
 
-Fresh read-only verification reconfirmed all existing weather values/units/valid times/revision hashes against retained provider artifacts; requested coordinates are distinct from provider grid coordinates 14.024605,35.419357. Taxonomy remains 1 current model estimate, 33 forecasts, 15 historical model rows. The anon projection was queried at its own captured database timestamp and its dynamic freshness matched for every row. This is ongoing data-integrity/freshness-policy verification, not evidence of automatic refresh while the gate is OFF.
+## Security and failure safety
 
-Anon fields remain exactly: id, geographic_reference, latitude, longitude, valid_time, temperature_celsius, precipitation_mm, relative_humidity_percent, wind_speed_kmh, temporal_class, model_provenance, interval_seconds, is_stale. No raw payload, source_record_raw, artifact ID, execution errors, leases, internal validation metadata or secrets. Direct anon SELECT grants on private weather/artifact/ledger/lease/manifest tables remain false.
+| Regression | Current result and evidence |
+| --- | --- |
+| Migration 026 | PASS — fresh production security-definition equivalence |
+| Migration 028 | PASS — unchanged listing policies/functions/triggers/grants/RLS/view |
+| Migration 029 | PASS — preserved counts and verified repair lineage |
+| Migration 030 | PASS — exact tracked migration, once in ledger, private cache grants and safe view |
+| R4-A | PASS — WFP 5663 current / 102 public and preserved provenance |
+| R4-B infrastructure and MET canary | PASS — exact previously verified 180-test application and successful production canary/replay |
+| R4-B final recurring closure | PENDING — genuine unattended MET execution required |
+| RFQ security | PASS — production helper/trigger equivalence and existing real-DB tests |
+| Listing security | PASS — production policy equivalence and existing authorization tests |
+| Rate limiting / media contract | PASS — unchanged tested implementation |
 
-## Isolation, observability and security
+Failure handling retains separate provider leases, fenced execution IDs/tokens, truthful failed/partial status, bounded cleanup retries, expired lease recovery, and publication of successful receipts only. A weather failure cannot mark WFP failed. Last successful weather stays queryable with dynamic freshness. Existing tests cover parsing failure, work/cleanup deadlines, finalization, and recovery. No production fault was intentionally induced.
 
-Feed locks are separate rows keyed by feed_type; running uniqueness is per feed, execution IDs/tokens are separate, and finish targets the exact execution and owner token. Passing local tests include same-feed concurrent contention, independent other-feed acquisition, token fencing, cooldown, and failure finalization. Production WFP activation left weather data and execution history unchanged. Feed isolation: PASS.
+## Product truth and boundary
 
-`ops/r4b-feed-status.sql` is a verified, read-only **private operator** query exposing last execution, last success, source version/artifact, counters, error status, running count and safe lease status without owner tokens or raw payloads. Weather output includes evaluated_at, latest valid time, fresh current/forecast counts and stale rows. It was executed successfully against production. Vercel logs provide HTTP request diagnostics. Failed/partial history is retained, including the original resolved WFP partial run, rather than hidden. No new public operational endpoint was added. Alert delivery/24-hour attended monitoring was not implemented or tested.
+WFP: **automatically synchronized public-source historical market observations**, with actual source/observation dates. After unattended verification, weather may be described as **automatically refreshed forecast data from MET Norway**. Until then: daily refresh enabled, production canary verified, first unattended execution pending.
 
-| Regression | Result and basis |
-|---|---|
-| Migration 026 | PASS — fresh production definition equivalence and local security suite |
-| Migration 028 | PASS — unchanged listing policies/functions/triggers/grants/RLS/view and real local authorization tests |
-| Migration 029 | PASS — exact ledger/schema evidence, immutable lineage and local repair tests |
-| R4-A | PASS — physical 5666/current 5663/public 102, no publication or lineage change |
-| RFQ privacy | PASS — current local RPC tests plus unchanged production helper/trigger definitions |
-| Listing moderation | PASS — real local matrix plus production policy equivalence |
-| Rate limiting | PASS — current local tests, unchanged deployed implementation; no live outage test |
-| Media | PASS — current local MIME contract tests and unchanged deployed implementation |
-| R4-B technical foundation/WFP | PASS |
-| R4-B full activation/closure | NOT CLOSED — recurring weather eligibility and first run unresolved |
+No real-time Sudan market price, WFP/MET Norway/government partnership, physical station network, live-sensor, or satellite-intelligence claim. FAO FPMA: **DEFERRED**. R4-C: **NOT STARTED**. Gedaref pilot: **NOT ACTIVATED**.
 
-No production destructive security tests were run. All three repaired WFP audit links, original source truth, preserved counterpart rows and conflict evidence match the preflight. WFP corrections remain three historical records, removals zero, current duplicate keys zero.
-
-## Product truth and remaining work
-
-WFP may be described as **automatically synchronized historical/public-source market observations**, with actual observation/source dates. Do not call it real-time prices, today's market prices, government prices or a WFP partnership. No marketing-copy claims were changed.
-
-Weather is still prior canary data and must not yet be described as automatically refreshed production weather. No government meteorological partnership, station observations or satellite intelligence is implied. Once eligibility is resolved, activate weather second, respect its normal cooldown, and verify a separate managed run before declaring full closure. Daily current-estimate freshness limitations remain even after activation.
-
-FAO FPMA: **DEFERRED/BLOCKED** pending a suitable approved official automated source. R4-C: NOT STARTED. Gedaref pilot: NOT ACTIVATED.
-
-Supporting ignored captures: `scratch/r4b11-preflight.json`, `scratch/r4b11-source-metadata.json`, `scratch/r4b11-wfp-run.json`, `scratch/r4b11-wfp-detail.json`, `scratch/r4b11-security.json`, `scratch/r4b11-weather.json`, `scratch/r4b11-anon.json`, `scratch/r4b11-operator-status.json`. Durable production artifact/manifest/execution records remain private. No secrets appear in this report.
-
-**Final activation state: WFP ON. Weather OFF. Partial activation; do not declare R4-B closed.**
+**R4-B ACTIVATION INCOMPLETE — awaiting the future unattended schedule window. Both approved feeds are enabled; no failure has been observed, and closure is not claimed.**
