@@ -3,6 +3,14 @@
     {
       "path": "/api/cron/expire",
       "schedule": "0 2 * * *"
+    },
+    {
+      "path": "/api/cron/wfp",
+      "schedule": "0 3 * * 1"
+    },
+    {
+      "path": "/api/cron/weather",
+      "schedule": "0 */6 * * *"
     }
   ]
 }

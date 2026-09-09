@@ -1,4 +1,4 @@
-export type Json =
+﻿export type Json =
   | string
   | number
   | boolean
@@ -600,6 +600,66 @@ export type Database = {
           name_en?: string
           sort_order?: number
           standard_unit?: string
+        }
+        Relationships: []
+      }
+      external_feed_executions: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          dataset_identifier: string | null
+          error_category: string | null
+          error_summary: string | null
+          feed_type: Database["public"]["Enums"]["feed_type"]
+          id: string
+          records_existing: number | null
+          records_fetched: number | null
+          records_inserted: number | null
+          records_quarantined: number | null
+          records_rejected: number | null
+          records_valid: number | null
+          scheduled_for: string | null
+          source_version: string | null
+          started_at: string | null
+          status: Database["public"]["Enums"]["feed_status"]
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          dataset_identifier?: string | null
+          error_category?: string | null
+          error_summary?: string | null
+          feed_type: Database["public"]["Enums"]["feed_type"]
+          id?: string
+          records_existing?: number | null
+          records_fetched?: number | null
+          records_inserted?: number | null
+          records_quarantined?: number | null
+          records_rejected?: number | null
+          records_valid?: number | null
+          scheduled_for?: string | null
+          source_version?: string | null
+          started_at?: string | null
+          status?: Database["public"]["Enums"]["feed_status"]
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          dataset_identifier?: string | null
+          error_category?: string | null
+          error_summary?: string | null
+          feed_type?: Database["public"]["Enums"]["feed_type"]
+          id?: string
+          records_existing?: number | null
+          records_fetched?: number | null
+          records_inserted?: number | null
+          records_quarantined?: number | null
+          records_rejected?: number | null
+          records_valid?: number | null
+          scheduled_for?: string | null
+          source_version?: string | null
+          started_at?: string | null
+          status?: Database["public"]["Enums"]["feed_status"]
         }
         Relationships: []
       }
@@ -1822,6 +1882,66 @@ export type Database = {
         }
         Relationships: []
       }
+      weather_observations: {
+        Row: {
+          created_at: string
+          geographic_reference: string | null
+          id: string
+          latitude: number
+          longitude: number
+          precipitation_mm: number | null
+          provider: string
+          provider_observation_time: string
+          relative_humidity_percent: number | null
+          retrieved_at: string
+          source_record_key: string
+          source_record_raw: Json | null
+          stale_after_at: string | null
+          temperature_celsius: number | null
+          temporal_class: string
+          weather_classification: string | null
+          wind_speed_kmh: number | null
+        }
+        Insert: {
+          created_at?: string
+          geographic_reference?: string | null
+          id?: string
+          latitude: number
+          longitude: number
+          precipitation_mm?: number | null
+          provider: string
+          provider_observation_time: string
+          relative_humidity_percent?: number | null
+          retrieved_at?: string
+          source_record_key: string
+          source_record_raw?: Json | null
+          stale_after_at?: string | null
+          temperature_celsius?: number | null
+          temporal_class: string
+          weather_classification?: string | null
+          wind_speed_kmh?: number | null
+        }
+        Update: {
+          created_at?: string
+          geographic_reference?: string | null
+          id?: string
+          latitude?: number
+          longitude?: number
+          precipitation_mm?: number | null
+          provider?: string
+          provider_observation_time?: string
+          relative_humidity_percent?: number | null
+          retrieved_at?: string
+          source_record_key?: string
+          source_record_raw?: Json | null
+          stale_after_at?: string | null
+          temperature_celsius?: number | null
+          temporal_class?: string
+          weather_classification?: string | null
+          wind_speed_kmh?: number | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       marketplace_seller_public: {
@@ -2055,6 +2175,14 @@ export type Database = {
         | "reported_survey"
         | "calculated_median"
         | "model_estimated"
+      feed_status:
+        | "scheduled"
+        | "running"
+        | "succeeded"
+        | "partial"
+        | "failed"
+        | "quarantined"
+      feed_type: "WFP" | "OPEN_METEO"
       ingestion_method_enum:
         | "automated_api"
         | "automated_feed"
@@ -2239,6 +2367,15 @@ export const Constants = {
         "calculated_median",
         "model_estimated",
       ],
+      feed_status: [
+        "scheduled",
+        "running",
+        "succeeded",
+        "partial",
+        "failed",
+        "quarantined",
+      ],
+      feed_type: ["WFP", "OPEN_METEO"],
       ingestion_method_enum: [
         "automated_api",
         "automated_feed",
