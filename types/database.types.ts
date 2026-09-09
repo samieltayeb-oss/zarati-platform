@@ -1,4 +1,4 @@
-﻿export type Json =
+export type Json =
   | string
   | number
   | boolean
@@ -1359,6 +1359,7 @@ export type Database = {
           source_record_key: string
           source_record_raw: string | null
           stale_after_at: string
+          superseded_by: string | null
           temporal_class: Database["public"]["Enums"]["temporal_class_enum"]
           temporal_precision: Database["public"]["Enums"]["temporal_precision_enum"]
           trust_score: string | null
@@ -1400,6 +1401,7 @@ export type Database = {
           source_record_key: string
           source_record_raw?: string | null
           stale_after_at: string
+          superseded_by?: string | null
           temporal_class: Database["public"]["Enums"]["temporal_class_enum"]
           temporal_precision?: Database["public"]["Enums"]["temporal_precision_enum"]
           trust_score?: string | null
@@ -1441,6 +1443,7 @@ export type Database = {
           source_record_key?: string
           source_record_raw?: string | null
           stale_after_at?: string
+          superseded_by?: string | null
           temporal_class?: Database["public"]["Enums"]["temporal_class_enum"]
           temporal_precision?: Database["public"]["Enums"]["temporal_precision_enum"]
           trust_score?: string | null
@@ -1511,6 +1514,27 @@ export type Database = {
             columns: ["source_id"]
             isOneToOne: false
             referencedRelation: "canonical_sources"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "market_price_observations_superseded_by_fkey"
+            columns: ["superseded_by"]
+            isOneToOne: false
+            referencedRelation: "market_price_observations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "market_price_observations_superseded_by_fkey"
+            columns: ["superseded_by"]
+            isOneToOne: false
+            referencedRelation: "v_approved_market_prices"
+            referencedColumns: ["observation_id"]
+          },
+          {
+            foreignKeyName: "market_price_observations_superseded_by_fkey"
+            columns: ["superseded_by"]
+            isOneToOne: false
+            referencedRelation: "v_legacy_crop_prices_bridge"
             referencedColumns: ["id"]
           },
         ]
@@ -1744,6 +1768,126 @@ export type Database = {
             foreignKeyName: "observation_quality_flags_observation_id_fkey"
             columns: ["observation_id"]
             isOneToOne: false
+            referencedRelation: "v_legacy_crop_prices_bridge"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      observation_supersessions: {
+        Row: {
+          artifact_id: string
+          conflict_id: string
+          old_observation_id: string
+          old_truth: Json
+          provenance_observation_id: string
+          provenance_truth: Json
+          reason: string
+          repair_version: string
+          repaired_at: string
+          repaired_by: unknown
+          replacement_observation_id: string
+        }
+        Insert: {
+          artifact_id: string
+          conflict_id: string
+          old_observation_id: string
+          old_truth: Json
+          provenance_observation_id: string
+          provenance_truth: Json
+          reason: string
+          repair_version: string
+          repaired_at?: string
+          repaired_by?: unknown
+          replacement_observation_id: string
+        }
+        Update: {
+          artifact_id?: string
+          conflict_id?: string
+          old_observation_id?: string
+          old_truth?: Json
+          provenance_observation_id?: string
+          provenance_truth?: Json
+          reason?: string
+          repair_version?: string
+          repaired_at?: string
+          repaired_by?: unknown
+          replacement_observation_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "observation_supersessions_artifact_id_fkey"
+            columns: ["artifact_id"]
+            isOneToOne: false
+            referencedRelation: "feed_artifacts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "observation_supersessions_conflict_id_fkey"
+            columns: ["conflict_id"]
+            isOneToOne: true
+            referencedRelation: "feed_source_changes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "observation_supersessions_old_observation_id_fkey"
+            columns: ["old_observation_id"]
+            isOneToOne: true
+            referencedRelation: "market_price_observations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "observation_supersessions_old_observation_id_fkey"
+            columns: ["old_observation_id"]
+            isOneToOne: true
+            referencedRelation: "v_approved_market_prices"
+            referencedColumns: ["observation_id"]
+          },
+          {
+            foreignKeyName: "observation_supersessions_old_observation_id_fkey"
+            columns: ["old_observation_id"]
+            isOneToOne: true
+            referencedRelation: "v_legacy_crop_prices_bridge"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "observation_supersessions_provenance_observation_id_fkey"
+            columns: ["provenance_observation_id"]
+            isOneToOne: false
+            referencedRelation: "market_price_observations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "observation_supersessions_provenance_observation_id_fkey"
+            columns: ["provenance_observation_id"]
+            isOneToOne: false
+            referencedRelation: "v_approved_market_prices"
+            referencedColumns: ["observation_id"]
+          },
+          {
+            foreignKeyName: "observation_supersessions_provenance_observation_id_fkey"
+            columns: ["provenance_observation_id"]
+            isOneToOne: false
+            referencedRelation: "v_legacy_crop_prices_bridge"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "observation_supersessions_replacement_observation_id_fkey"
+            columns: ["replacement_observation_id"]
+            isOneToOne: true
+            referencedRelation: "market_price_observations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "observation_supersessions_replacement_observation_id_fkey"
+            columns: ["replacement_observation_id"]
+            isOneToOne: true
+            referencedRelation: "v_approved_market_prices"
+            referencedColumns: ["observation_id"]
+          },
+          {
+            foreignKeyName: "observation_supersessions_replacement_observation_id_fkey"
+            columns: ["replacement_observation_id"]
+            isOneToOne: true
             referencedRelation: "v_legacy_crop_prices_bridge"
             referencedColumns: ["id"]
           },
