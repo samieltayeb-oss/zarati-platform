@@ -60,4 +60,61 @@ Created only after local PASS from the verified linked production project. Each 
 | `scratch/r4b9-pre-repair-data.sql` | 7465385 | `aab07cf034f5f4c6f9aa5d44ac0b67e66cb50eeb859a5294d8478662c7b06d01` |
 | `scratch/r4b9-pre-repair-roles.sql` | 370 | `168a95a9c745af5ed4679751f90419ac9dc434240a213b03e32a06d5664c2308` |
 
-Production dry run lists only Migration 029. Canonical listing policies match the reconciled four-policy set; migrations 026/028 remain intact. Production repair and the two controlled executions are pending at this artifact revision. Both feeds remain OFF.
+Production dry run listed only Migration 029. Canonical listing policies matched the reconciled four-policy set; migrations 026/028 remained intact. The initial evidence revision was committed before production mutation; execution results follow.
+
+## Production execution and lineage
+
+Implementation/artifact commit: `f2976145bcc1b36cbab3c3978e9580686d82ab62`. Pushed normally to the R4-B branch and fast-forwarded into canonical main before the repair. Seven intentional files only; backups, credentials, scratch, unrelated plans and governance documents were excluded.
+
+Migration 029 was applied once. The CLI reported its known nonfatal pg-delta catalog-cache certificate-path warning; direct production inspection then proved the migration ledger and SQL statements match local. No migration was retried. Final ledger: **001–016, 018–029**, 017 absent, 029 count **1**. Production function definitions, enabled triggers, constraints, indexes, RLS and effective audit grants match the local tested database. Audit SELECT/INSERT/UPDATE/DELETE are denied to anon/authenticated; service role has only SELECT on the new audit table.
+
+The exact repair transaction committed on 2026-09-09 at approximately 08:46:50 UTC. Actor: postgres, through the approved tracked SQL, with all immutable triggers active. It changed exactly the three old records' lifecycle/supersession fields, created the three explicitly listed commodity-65 replacement records, and appended three audit links. Source fields on all three old records are unchanged. All other observations, including all three commodity-249 counterparts and all published observations, are unchanged. No source truth was physically deleted.
+
+| Old observation | Preserved original conflict | Audit timestamp UTC |
+|---|---|---|
+| 5ac20cfc-4ced-4a27-8edf-0733c1b89e4c | 0bf15a6e-fd31-4caf-bd27-f8935a0007a7 | 08:46:49.906302 |
+| e61a4f16-0ee5-4888-8d0d-f5ed91ea8dca | 9293715a-a92f-4a78-9e2a-c8dd1f2c1b58 | 08:46:50.037672 |
+| 6a21aef2-c247-4c83-b425-5a8e6682e214 | 1fb46e3c-ce07-44dc-a919-383cee328371 | 08:46:50.131250 |
+
+Resolution is associated through immutable `observation_supersessions.conflict_id`; original conflict records are neither deleted nor rewritten. Old snapshot links and all old verification/transformation/publication fields remain traceable through original IDs and full before-images. Replacement rows use the verified full-artifact snapshot and are INGESTED/unassessed, never published.
+
+## Exactly two controlled production executions
+
+The existing server-only WFP gate was temporarily true in deployment `dpl_J83BrmFn4fc7ZfCxHk9rm4EH6cEb` at the exact implementation commit. Weather remained absent/default-OFF throughout. The saved project WFP environment was reset to false before the first trigger, after the temporary deployment had captured its environment. Managed Vercel WFP Run was clicked exactly twice; the platform supplied CRON_SECRET, whose value was never read or printed. The weather Run control and global scheduler switch were not touched.
+
+The canary window was Wednesday 2026-09-09, outside the existing Monday WFP schedule. No recurring schedule was activated or changed.
+
+| Metric | Post-repair canary | Single idempotency replay |
+|---|---|---|
+| Execution ID | aaff368c-0a72-445e-acc8-6bbc0b6e2918 | 289a9379-cadb-4769-abf5-e305283f5646 |
+| Started UTC | 08:49:36.974477 | 08:55:29.521339 |
+| Completed UTC | 08:49:44.481001 | 08:55:36.895113 |
+| Duration seconds | 7.506524 | 7.373774 |
+| HTTP / ledger | 200 / SUCCEEDED | 200 / SUCCEEDED |
+| Fetched / mapped | 23225 / 5663 | 23225 / 5663 |
+| Existing / inserted | 5663 / 0 | 5663 / 0 |
+| Quarantined / rejected | 0 / 0 | 0 / 0 |
+| New corrections / removals | 0 / 0 | 0 / 0 |
+| Automatic publication | 0 | 0 |
+| Public WFP | 102 | 102 |
+| Error category | NULL | NULL |
+
+Both executions reused exact SHA-256 `3c00925b7c04192e7170dc5bce13cfaca898b0c1499e9f939540fec19f6cbee4`, artifact `a815abed-7e8b-4087-a138-4d32cd054439`, and VALIDATED 5663-key manifest hash `9e1db34581a8f954cf72643509fa0c0f0c411246b1227883db771b0d6e18b70d`. Current upstream bytes remain the same accepted full source artifact.
+
+Manual cooldown admissions, recorded from the versioned SQL result:
+
+- Canary: previous next-allowed 13:18:30.245706 UTC → admitted 08:48:37.831426 UTC.
+- Replay: previous next-allowed 14:49:44.481461 UTC → admitted 08:55:21.801038 UTC.
+- Final normal finish restored the six-hour cooldown: next-allowed 14:55:36.895595 UTC. Lease owner token and execution ID are NULL. No execution remains RUNNING. Total WFP executions are three: the original historical PARTIAL plus the two authorized clean runs. The admission script now refuses a third post-repair execution.
+
+## Final OFF state and regression
+
+Final feeds-OFF deployment `dpl_7Nt74fQ9gP2JDmCyD8r5StUt6QU1`, URL `https://zarati-platform-n8pyaxeka-samieltayeb-oss-projects.vercel.app`, became READY and owns `https://zarati-platform.vercel.app/` at implementation commit `f2976145bcc1b36cbab3c3978e9580686d82ab62`. The temporary enabled deployment was safely removed after the OFF deployment owned the alias. Saved production WFP flag is false; weather flag is absent and defaults OFF. CRON_SECRET remains present. A subsequent evidence-only main commit may deploy the same application code with these OFF settings.
+
+Read-only production proof after both runs: physical WFP **5666**, current source identities **5663**, current duplicate keys **0**, superseded history **3**, unchanged commodity-249 counterparts **3**, preserved old conflicts **3**, total corrections **3**, removals **0**, published/public **102**, weather observations **0**. All three new replacements retain INGESTED/unassessed status. Unrelated/published observation modifications: **0**.
+
+Migration 026/028 policy, function, trigger, grant, view and listing-count definitions match the production preflight exactly. Mutation regression proof was confined to the real isolated local database. Production HTTP smoke passed all 18 English/Arabic paths (including legitimate login redirects for private dashboards) and 20 JS/CSS assets; no matching application/database error bodies appeared. This is HTTP/asset smoke, not a claim of exhaustive interactive browser testing.
+
+Supporting ignored captures: `scratch/r4b9-preflight-lineage.json`, `scratch/r4b9-post-migration.json`, `scratch/r4b9-post-repair.json`, `scratch/r4b9-final-proof.json`, `scratch/r4b9-canary-result.json`, `scratch/r4b9-replay-result.json`, `scratch/r4b9-final-security.json`, `scratch/r4b9-production-smoke.json`. These are supplementary captures; runtime and clean-checkout tests require none of them. Durable repair lineage is in the private production audit table and the exact committed SQL artifacts.
+
+**PASS — historical provenance repaired, production replay clean. WFP recurring automation OFF; weather OFF; R4-C not started. No recurring activation is authorized by this evidence.**
