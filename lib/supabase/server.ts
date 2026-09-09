@@ -30,7 +30,7 @@ export async function createServerClient() {
   )
 }
 
-export function createAdminClient() {
+export function createAdminClient(fetcher?: typeof fetch) {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY
   if (!url || !key) {
@@ -38,5 +38,6 @@ export function createAdminClient() {
   }
   return createClient<Database>(url, key, {
     auth: { persistSession: false },
+    ...(fetcher ? { global: { fetch: fetcher } } : {}),
   })
 }

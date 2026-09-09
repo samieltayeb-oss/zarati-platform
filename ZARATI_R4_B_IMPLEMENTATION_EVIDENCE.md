@@ -1,3 +1,5 @@
+> Superseded for current release decisions by [R4-B.2 verified remediation evidence](ZARATI_R4_B_2_REMEDIATION_EVIDENCE.md). This original report is retained as historical evidence.
+
 # ZARATI R4-B IMPLEMENTATION EVIDENCE
 
 **Execution Date:** 2026-09-08

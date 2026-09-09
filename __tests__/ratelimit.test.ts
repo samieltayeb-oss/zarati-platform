@@ -62,6 +62,13 @@ describe('submitRFQ Rate Limiting', () => {
     process.env.UPSTASH_REDIS_REST_TOKEN = 'test'
   })
 
+  it('fails closed when production rate-limit configuration is absent', async () => {
+    const previous=process.env.NODE_ENV;
+    Object.assign(process.env,{NODE_ENV:'production'});
+    delete process.env.UPSTASH_REDIS_REST_URL; delete process.env.UPSTASH_REDIS_REST_TOKEN;
+    try {await expect(submitRFQ({listing_id:'123e4567-e89b-12d3-a456-426614174000',message:'test'})).rejects.toThrow('failing closed');}
+    finally {Object.assign(process.env,{NODE_ENV:previous});}
+  })
   it('allows 5 requests and blocks the 6th', async () => {
     const payload = {
       listing_id: '123e4567-e89b-12d3-a456-426614174000',

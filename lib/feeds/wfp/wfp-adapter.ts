@@ -1,200 +1,153 @@
-import { ExternalFeedAdapter, FeedExecutionResult } from '../ExternalFeedAdapter';
-import { createAdminClient } from '@/lib/supabase/server';
-import crypto from 'crypto';
-
-interface WFPRecord {
-  date: string;
-  market: string;
-  market_id: string;
-  commodity: string;
-  commodity_id: string;
-  unit: string;
-  pricetype: string;
-  price: number;
-  currency: string;
-  rawRow: string;
-  cropCode: string;
-  dbMarket: string;
-}
-
-const commodityMap: Record<string, string> = {
-  'Sorghum (white)': 'sorghum',
-  'Sorghum': 'sorghum',
-  'Sorghum (food aid)': 'sorghum',
-  'Millet': 'millet',
-  'Wheat': 'wheat',
-  'Sesame': 'sesame',
-  'Groundnuts (shelled)': 'groundnuts'
-};
-
-const marketMap: Record<string, string> = {
-  'Damazin': 'Ad-Damazin Crops Market',
-  'El Gedarif': 'Gedaref Crops Market',
-  'Khartoum': 'Khartoum Central Market',
-  'El Obeid': 'El Obeid Crops Exchange',
-  'Nyala': 'Nyala Crops Market',
-  'Sennar': 'Sennar Agricultural Market',
-  'Kassala': 'Kassala Central Market',
-  'Wad Madani': 'Wad Madani Wholesale Market',
-  'Kosti': 'Kosti Crops Market',
-  'Port Sudan': 'Port Sudan Terminal Market'
-};
-
-export class WFPAdapter extends ExternalFeedAdapter<WFPRecord> {
-  
-  protected async fetch(): Promise<unknown> {
-    const url = 'https://data.humdata.org/dataset/cb496eb6-bd27-4623-ac4e-0a5dc47c7c1a/resource/11a511c9-6cbf-4ba8-af82-5ceb7e641ca0/download/wfp_food_prices_sdn.csv';
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch WFP data: ${response.statusText}`);
+import 'server-only';
+import { parse } from 'csv-parse/sync';
+import { ExternalFeedAdapter, FeedError, fetchPayload, LIMITS, type FeedRow } from '../ExternalFeedAdapter';
+export const WFP_URL = 'https://data.humdata.org/dataset/369e003b-f0af-4e48-99d7-34fc85b44635/resource/8fea18b2-615f-4af5-9bd5-85cc31a25ffd/download/wfp_food_prices_sdn.csv';
+// Frozen raw IDs verified against the pinned R4-A artifact. Label changes require review.
+const commoditiesById: Record<string, {
+    label: string;
+    crop: string;
+}> = {
+    "65": {
+        "label": "Sorghum",
+        "crop": "sorghum"
+    },
+    "73": {
+        "label": "Millet",
+        "crop": "millet"
+    },
+    "84": {
+        "label": "Wheat",
+        "crop": "wheat"
+    },
+    "135": {
+        "label": "Sorghum (white)",
+        "crop": "sorghum"
+    },
+    "249": {
+        "label": "Sorghum (food aid)",
+        "crop": "sorghum"
     }
-    return await response.text();
-  }
-
-  protected deriveSourceVersion(rawData: any): string {
-    return crypto.createHash('sha256').update(rawData as string).digest('hex');
-  }
-
-  private parseCSVRow(row: string) {
-    const result = [];
-    let inQuotes = false;
-    let currentVal = "";
-    for (let i = 0; i < row.length; i++) {
-      const char = row[i];
-      if (char === '"') {
-        inQuotes = !inQuotes;
-      } else if (char === ',' && !inQuotes) {
-        result.push(currentVal);
-        currentVal = "";
-      } else {
-        currentVal += char;
-      }
+};
+const marketsById: Record<string, {
+    label: string;
+    market: string;
+}> = {
+    "1026": {
+        "label": "Damazin",
+        "market": "Ad-Damazin Crops Market"
+    },
+    "1029": {
+        "label": "El Obeid",
+        "market": "El Obeid Crops Exchange"
+    },
+    "1031": {
+        "label": "Kassala",
+        "market": "Kassala Central Market"
+    },
+    "1032": {
+        "label": "Kosti",
+        "market": "Kosti Crops Market"
+    },
+    "1034": {
+        "label": "Port Sudan",
+        "market": "Port Sudan Terminal Market"
+    },
+    "2580": {
+        "label": "El Gedarif",
+        "market": "Gedaref Crops Market"
+    },
+    "2588": {
+        "label": "Khartoum",
+        "market": "Khartoum Central Market"
     }
-    result.push(currentVal);
-    return result;
-  }
-
-  protected async parse(rawData: any): Promise<WFPRecord[]> {
-    const lines = rawData.split('\n');
+};
+const HEADERS = 'date,admin1,admin2,market,market_id,latitude,longitude,category,commodity,commodity_id,unit,priceflag,pricetype,currency,price,usdprice'.split(',');
+export type WFPRecord = Record<string, string> & {
+    cropCode: string;
+    dbMarket: string;
+    rawRow: string;
+};
+export function wfpIdentity(r: Record<string, string>): string { return ['WFP_SDN_V2', r.date, r.market_id, r.commodity_id, r.pricetype, r.unit].join('_'); }
+export function parseWFP(raw: string, rowCap = LIMITS.rows): {
+    fetched: number;
+    records: WFPRecord[];
+} {
+    if (Buffer.byteLength(raw) > LIMITS.bytes)
+        throw new FeedError('PAYLOAD_CAP');
+    if (!raw.endsWith('\n'))
+        throw new FeedError('TRUNCATED_CSV');
+    let rows: {
+        record: Record<string, string>;
+        raw: string;
+    }[];
+    try {
+        rows = parse(raw, { bom: true, columns: (header: string[]) => { if (header.join(',') !== HEADERS.join(','))
+                throw new Error('schema'); return header; }, raw: true, skip_empty_lines: false, max_record_size: 8192 });
+    }
+    catch {
+        throw new FeedError('CSV_SCHEMA');
+    }
+    if (!rows.length || rows.length > rowCap)
+        throw new FeedError('ROW_CAP');
     const records: WFPRecord[] = [];
-    for (let i = 1; i < lines.length; i++) {
-      const line = lines[i].trim();
-      if (!line) continue;
-      
-      const parts = this.parseCSVRow(line);
-      const date = parts[0];
-      const market = parts[3];
-      const market_id = parts[4];
-      const commodity = parts[8];
-      const commodity_id = parts[9];
-      const unit = parts[10];
-      const pricetype = parts[12];
-      const currency = parts[13];
-      const price = parseFloat(parts[14]);
-
-      if (!price || isNaN(price)) continue;
-      
-      const cropCode = commodityMap[commodity];
-      const dbMarket = marketMap[market];
-      
-      if (!cropCode || !dbMarket) continue;
-
-      records.push({
-        date, market, market_id, commodity, commodity_id, unit, pricetype, price, currency, rawRow: line, cropCode, dbMarket
-      });
+    const keys = new Set<string>();
+    for (const { record: r, raw: line } of rows) {
+        const date = new Date(r.date + 'T00:00:00Z');
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(r.date) || !Number.isFinite(date.getTime()) || date.toISOString().slice(0, 10) !== r.date || date.getUTCFullYear() < 1900 || date.getTime() > Date.now() + 86400000)
+            throw new FeedError('INVALID_DATE');
+        if (!/^\d+(\.\d+)?$/.test(r.price) || !Number.isFinite(Number(r.price)) || Number(r.price) <= 0)
+            throw new FeedError('INVALID_PRICE');
+        if (!['SDG', 'USD', 'SSP'].includes(r.currency))
+            throw new FeedError('INVALID_CURRENCY');
+        if (!/^\d+$/.test(r.market_id) || !/^\d+$/.test(r.commodity_id) || !r.market || !r.commodity || !['90 KG', '3.5 KG', '3 KG', 'KG', 'L', 'USD/LCU'].includes(r.unit) || !['Retail', 'Wholesale'].includes(r.pricetype) || r.priceflag !== 'actual')
+            throw new FeedError('INVALID_IDENTITY');
+        if (!r.latitude || !r.longitude || !Number.isFinite(Number(r.latitude)) || Math.abs(Number(r.latitude)) > 90 || !Number.isFinite(Number(r.longitude)) || Math.abs(Number(r.longitude)) > 180)
+            throw new FeedError('INVALID_COORDINATES');
+        const cropCode = commoditiesById[r.commodity_id]?.crop, dbMarket = marketsById[r.market_id]?.market;
+        if (!cropCode || !dbMarket)
+            continue;
+        const key = wfpIdentity(r);
+        if (keys.has(key))
+            throw new FeedError('SEMANTIC_COLLISION');
+        keys.add(key);
+        records.push({ ...r, cropCode, dbMarket, rawRow: line.trimEnd() });
     }
-    return records;
-  }
-
-  protected async validate(record: WFPRecord): Promise<boolean> {
-    return !!(record.date && record.market_id && record.commodity_id && record.pricetype && record.unit && record.price);
-  }
-
-  protected deriveSourceIdentity(record: WFPRecord): string {
-    return `WFP_SDN_V2_${record.date}_${record.market_id}_${record.commodity_id}_${record.pricetype}_${record.unit}`;
-  }
-
-  protected async stage(record: WFPRecord, identity: string): Promise<{ isDuplicate: boolean; isQuarantined: boolean }> {
-    const supabase = createAdminClient();
-
-    // Reconcile snapshot, source, dataset, market, commodity IDs
-    const { data: source } = await supabase.from('canonical_sources').select('id').eq('code', 'SRC_WFP_VAM').single();
-    const { data: dataset } = await supabase.from('canonical_datasets').select('id').eq('dataset_identifier', 'DS_WFP_SUDAN_FOOD_PRICES').single();
-    const { data: marketData } = await supabase.from('markets').select('id').eq('name_en', record.dbMarket).single();
-    const { data: cropData } = await supabase.from('crops').select('id, code').eq('code', record.cropCode).single();
-    
-    if (!source || !dataset || !marketData || !cropData) {
-      return { isDuplicate: false, isQuarantined: true };
-    }
-
-    const { data: ccData } = await supabase.from('canonical_commodities')
-        .select('id')
-        .eq('crop_id', cropData.id)
-        .eq('code', `${record.cropCode}_standard`).single();
-        
-    if (!ccData) {
-        return { isDuplicate: false, isQuarantined: true };
-    }
-
-    // Since we need snapshot id (assume we just take latest for this dataset)
-    const { data: snapshot } = await supabase.from('raw_ingestion_snapshots')
-        .select('id')
-        .eq('dataset_id', dataset.id)
-        .order('ingested_at', { ascending: false })
-        .limit(1)
-        .single();
-        
-    const snapshotId = snapshot ? snapshot.id : null;
-
-    const observationDate = new Date(record.date);
-    const staleDate = new Date(observationDate);
-    staleDate.setDate(staleDate.getDate() + 30); // Stale after 30 days
-
-    // check if exists
-    const { data: existing } = await supabase.from('market_price_observations')
-        .select('id, parsed_price_numeric')
-        .eq('source_id', source.id)
-        .eq('source_record_key', identity)
-        .single();
-
-    if (existing) {
-        // if existing has different price, we quarantine/flag
-        if (Number(existing.parsed_price_numeric) !== record.price) {
-            return { isDuplicate: false, isQuarantined: true };
+    if (!records.length)
+        throw new FeedError('EMPTY_MAPPED_ARTIFACT');
+    return { fetched: rows.length, records };
+}
+export class WFPAdapter extends ExternalFeedAdapter {
+    async run() { const raw = await fetchPayload(WFP_URL, 'csv', this.signal); await this.ingest(raw, new Date().toISOString()); }
+    async ingest(raw: string, retrieved: string) {
+        try {
+            await this.ingestValidated(raw, retrieved);
         }
-        return { isDuplicate: true, isQuarantined: false };
+        catch (error) {
+            const dataset = await this.db.from('canonical_datasets').select('id').eq('dataset_identifier', 'DS_WFP_SUDAN_FOOD_PRICES').single();
+            if (!dataset.error && dataset.data)
+                await this.rejectedArtifact(raw, WFP_URL, retrieved, dataset.data.id);
+            throw error;
+        }
     }
-
-    const { error } = await supabase.from('market_price_observations').insert({
-        raw_snapshot_id: snapshotId,
-        source_id: source.id,
-        dataset_id: dataset.id,
-        commodity_id: ccData.id,
-        market_id: marketData.id,
-        source_provenance: 'market_reported',
-        source_record_key: identity,
-        raw_price_text: record.price.toString(),
-        parsed_price_numeric: record.price,
-        raw_currency_text: record.currency,
-        canonical_currency_code: 'SDG',
-        raw_unit_text: record.unit,
-        price_type: record.pricetype.toLowerCase() as any,
-        observed_at: record.date,
-        temporal_precision: 'CALENDAR_DAY',
-        verification_state: 'unassessed',
-        publication_status: 'INGESTED',
-        stale_after_at: staleDate.toISOString(),
-        source_record_raw: { row: record.rawRow } as any,
-        ingestion_method: 'batch_import',
-        temporal_class: 'historical_archive',
-        derivation_class: 'reported_survey'
-    });
-
-    if (error) {
-        console.error('WFP stage error:', error);
-        return { isDuplicate: false, isQuarantined: true };
+    private async ingestValidated(raw: string, retrieved: string) {
+        const parsed = parseWFP(raw);
+        const [source, dataset, markets, crops, commodities, currencies] = await Promise.all([
+            this.db.from('canonical_sources').select('id').eq('code', 'SRC_WFP_VAM').single(),
+            this.db.from('canonical_datasets').select('id,source_id').eq('dataset_identifier', 'DS_WFP_SUDAN_FOOD_PRICES').single(),
+            this.db.from('markets').select('id,name_en'), this.db.from('crops').select('id,code'),
+            this.db.from('canonical_commodities').select('id,crop_id,code'), this.db.from('canonical_currencies').select('code')
+        ]);
+        if ([source, dataset, markets, crops, commodities, currencies].some(r => r.error) || !source.data || !dataset.data || dataset.data.source_id !== source.data.id)
+            throw new FeedError('REFERENCE_DATA');
+        const rows: FeedRow[] = parsed.records.map(r => {
+            const market = markets.data?.find(m => m.name_en === r.dbMarket), crop = crops.data?.find(c => c.code === r.cropCode);
+            const commodity = commodities.data?.find(c => c.crop_id === crop?.id && c.code === r.cropCode + '_standard');
+            if (!market || !commodity || !currencies.data?.some(c => c.code === r.currency))
+                throw new FeedError('REFERENCE_MAPPING');
+            return { source_record_key: wfpIdentity(r), mapping_review: commoditiesById[r.commodity_id].label !== r.commodity || marketsById[r.market_id].label !== r.market, source_id: source.data!.id, dataset_id: dataset.data!.id, market_id: market.id, commodity_id: commodity.id,
+                source_record_raw: JSON.stringify({ row: r.rawRow }), raw_price_text: r.price, parsed_price_numeric: Number(r.price), raw_currency_text: r.currency, raw_unit_text: r.unit,
+                price_type: r.pricetype.toLowerCase(), observed_at: r.date + 'T00:00:00Z', stale_after_at: new Date(Date.parse(r.date + 'T00:00:00Z') + 30 * 86400000).toISOString() };
+        });
+        await this.stage(raw, WFP_URL, retrieved, parsed.fetched, rows, dataset.data.id);
     }
-
-    return { isDuplicate: false, isQuarantined: false };
-  }
 }

@@ -605,63 +605,68 @@ export type Database = {
       }
       external_feed_executions: {
         Row: {
+          artifact_id: string | null
           completed_at: string | null
-          created_at: string
-          dataset_identifier: string | null
           error_category: string | null
-          error_summary: string | null
           feed_type: Database["public"]["Enums"]["feed_type"]
           id: string
-          records_existing: number | null
-          records_fetched: number | null
-          records_inserted: number | null
-          records_quarantined: number | null
-          records_rejected: number | null
-          records_valid: number | null
-          scheduled_for: string | null
+          records_existing: number
+          records_fetched: number
+          records_inserted: number
+          records_quarantined: number
+          records_rejected: number
+          records_unmapped: number
+          records_valid: number
+          retrieved_at: string | null
           source_version: string | null
-          started_at: string | null
+          started_at: string
           status: Database["public"]["Enums"]["feed_status"]
         }
         Insert: {
+          artifact_id?: string | null
           completed_at?: string | null
-          created_at?: string
-          dataset_identifier?: string | null
           error_category?: string | null
-          error_summary?: string | null
           feed_type: Database["public"]["Enums"]["feed_type"]
           id?: string
-          records_existing?: number | null
-          records_fetched?: number | null
-          records_inserted?: number | null
-          records_quarantined?: number | null
-          records_rejected?: number | null
-          records_valid?: number | null
-          scheduled_for?: string | null
+          records_existing?: number
+          records_fetched?: number
+          records_inserted?: number
+          records_quarantined?: number
+          records_rejected?: number
+          records_unmapped?: number
+          records_valid?: number
+          retrieved_at?: string | null
           source_version?: string | null
-          started_at?: string | null
+          started_at?: string
           status?: Database["public"]["Enums"]["feed_status"]
         }
         Update: {
+          artifact_id?: string | null
           completed_at?: string | null
-          created_at?: string
-          dataset_identifier?: string | null
           error_category?: string | null
-          error_summary?: string | null
           feed_type?: Database["public"]["Enums"]["feed_type"]
           id?: string
-          records_existing?: number | null
-          records_fetched?: number | null
-          records_inserted?: number | null
-          records_quarantined?: number | null
-          records_rejected?: number | null
-          records_valid?: number | null
-          scheduled_for?: string | null
+          records_existing?: number
+          records_fetched?: number
+          records_inserted?: number
+          records_quarantined?: number
+          records_rejected?: number
+          records_unmapped?: number
+          records_valid?: number
+          retrieved_at?: string | null
           source_version?: string | null
-          started_at?: string | null
+          started_at?: string
           status?: Database["public"]["Enums"]["feed_status"]
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "external_feed_executions_artifact_id_fkey"
+            columns: ["artifact_id"]
+            isOneToOne: false
+            referencedRelation: "feed_artifacts"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       farm_crops: {
         Row: {
@@ -811,6 +816,241 @@ export type Database = {
             columns: ["state_id"]
             isOneToOne: false
             referencedRelation: "states"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      feed_artifacts: {
+        Row: {
+          content_sha256: string
+          feed_type: Database["public"]["Enums"]["feed_type"]
+          id: string
+          payload: string
+          resource_identity: string
+          retrieved_at: string
+          snapshot_id: string | null
+        }
+        Insert: {
+          content_sha256: string
+          feed_type: Database["public"]["Enums"]["feed_type"]
+          id?: string
+          payload: string
+          resource_identity: string
+          retrieved_at: string
+          snapshot_id?: string | null
+        }
+        Update: {
+          content_sha256?: string
+          feed_type?: Database["public"]["Enums"]["feed_type"]
+          id?: string
+          payload?: string
+          resource_identity?: string
+          retrieved_at?: string
+          snapshot_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "feed_artifacts_snapshot_id_fkey"
+            columns: ["snapshot_id"]
+            isOneToOne: false
+            referencedRelation: "raw_ingestion_snapshots"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      feed_batch_receipts: {
+        Row: {
+          batch: number
+          execution_id: string
+          payload_hash: string
+        }
+        Insert: {
+          batch: number
+          execution_id: string
+          payload_hash: string
+        }
+        Update: {
+          batch?: number
+          execution_id?: string
+          payload_hash?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "feed_batch_receipts_execution_id_fkey"
+            columns: ["execution_id"]
+            isOneToOne: false
+            referencedRelation: "external_feed_executions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      feed_completeness_approvals: {
+        Row: {
+          content_sha256: string
+          created_at: string
+          evidence: string
+          manifest_sha256: string
+          records_fetched: number
+        }
+        Insert: {
+          content_sha256: string
+          created_at?: string
+          evidence: string
+          manifest_sha256: string
+          records_fetched: number
+        }
+        Update: {
+          content_sha256?: string
+          created_at?: string
+          evidence?: string
+          manifest_sha256?: string
+          records_fetched?: number
+        }
+        Relationships: []
+      }
+      feed_leases: {
+        Row: {
+          acquired_at: string | null
+          execution_id: string | null
+          expires_at: string | null
+          feed_type: Database["public"]["Enums"]["feed_type"]
+          next_allowed_at: string
+          owner_token: string | null
+        }
+        Insert: {
+          acquired_at?: string | null
+          execution_id?: string | null
+          expires_at?: string | null
+          feed_type: Database["public"]["Enums"]["feed_type"]
+          next_allowed_at?: string
+          owner_token?: string | null
+        }
+        Update: {
+          acquired_at?: string | null
+          execution_id?: string | null
+          expires_at?: string | null
+          feed_type?: Database["public"]["Enums"]["feed_type"]
+          next_allowed_at?: string
+          owner_token?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "feed_leases_execution_id_fkey"
+            columns: ["execution_id"]
+            isOneToOne: false
+            referencedRelation: "external_feed_executions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      feed_record_receipts: {
+        Row: {
+          execution_id: string
+          revision_hash: string | null
+          source_record_key: string
+        }
+        Insert: {
+          execution_id: string
+          revision_hash?: string | null
+          source_record_key: string
+        }
+        Update: {
+          execution_id?: string
+          revision_hash?: string | null
+          source_record_key?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "feed_record_receipts_execution_id_fkey"
+            columns: ["execution_id"]
+            isOneToOne: false
+            referencedRelation: "external_feed_executions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      feed_source_changes: {
+        Row: {
+          artifact_id: string
+          created_at: string
+          id: string
+          incoming_truth: Json | null
+          kind: string
+          previous_truth: Json
+          source_record_key: string
+        }
+        Insert: {
+          artifact_id: string
+          created_at?: string
+          id?: string
+          incoming_truth?: Json | null
+          kind: string
+          previous_truth: Json
+          source_record_key: string
+        }
+        Update: {
+          artifact_id?: string
+          created_at?: string
+          id?: string
+          incoming_truth?: Json | null
+          kind?: string
+          previous_truth?: Json
+          source_record_key?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "feed_source_changes_artifact_id_fkey"
+            columns: ["artifact_id"]
+            isOneToOne: false
+            referencedRelation: "feed_artifacts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      feed_validation_manifests: {
+        Row: {
+          artifact_id: string
+          created_at: string
+          error_category: string | null
+          execution_id: string
+          manifest_sha256: string
+          record_keys: Json
+          records_fetched: number
+          status: string
+        }
+        Insert: {
+          artifact_id: string
+          created_at?: string
+          error_category?: string | null
+          execution_id: string
+          manifest_sha256: string
+          record_keys: Json
+          records_fetched: number
+          status: string
+        }
+        Update: {
+          artifact_id?: string
+          created_at?: string
+          error_category?: string | null
+          execution_id?: string
+          manifest_sha256?: string
+          record_keys?: Json
+          records_fetched?: number
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "feed_validation_manifests_artifact_id_fkey"
+            columns: ["artifact_id"]
+            isOneToOne: false
+            referencedRelation: "feed_artifacts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "feed_validation_manifests_execution_id_fkey"
+            columns: ["execution_id"]
+            isOneToOne: true
+            referencedRelation: "external_feed_executions"
             referencedColumns: ["id"]
           },
         ]
@@ -1884,63 +2124,89 @@ export type Database = {
       }
       weather_observations: {
         Row: {
-          created_at: string
-          geographic_reference: string | null
+          artifact_id: string
+          forecast_horizon_seconds: number
+          geographic_reference: string
           id: string
+          interval_seconds: number
           latitude: number
           longitude: number
-          precipitation_mm: number | null
+          model_provenance: string
+          precipitation_mm: number
           provider: string
           provider_observation_time: string
-          relative_humidity_percent: number | null
+          relative_humidity_percent: number
+          requested_latitude: number
+          requested_longitude: number
           retrieved_at: string
+          revision_hash: string
           source_record_key: string
-          source_record_raw: Json | null
-          stale_after_at: string | null
-          temperature_celsius: number | null
+          source_record_raw: Json
+          stale_after_at: string
+          temperature_celsius: number
           temporal_class: string
-          weather_classification: string | null
-          wind_speed_kmh: number | null
+          timezone: string
+          wind_speed_kmh: number
         }
         Insert: {
-          created_at?: string
-          geographic_reference?: string | null
+          artifact_id: string
+          forecast_horizon_seconds: number
+          geographic_reference: string
           id?: string
+          interval_seconds: number
           latitude: number
           longitude: number
-          precipitation_mm?: number | null
+          model_provenance: string
+          precipitation_mm: number
           provider: string
           provider_observation_time: string
-          relative_humidity_percent?: number | null
-          retrieved_at?: string
+          relative_humidity_percent: number
+          requested_latitude: number
+          requested_longitude: number
+          retrieved_at: string
+          revision_hash: string
           source_record_key: string
-          source_record_raw?: Json | null
-          stale_after_at?: string | null
-          temperature_celsius?: number | null
+          source_record_raw: Json
+          stale_after_at: string
+          temperature_celsius: number
           temporal_class: string
-          weather_classification?: string | null
-          wind_speed_kmh?: number | null
+          timezone: string
+          wind_speed_kmh: number
         }
         Update: {
-          created_at?: string
-          geographic_reference?: string | null
+          artifact_id?: string
+          forecast_horizon_seconds?: number
+          geographic_reference?: string
           id?: string
+          interval_seconds?: number
           latitude?: number
           longitude?: number
-          precipitation_mm?: number | null
+          model_provenance?: string
+          precipitation_mm?: number
           provider?: string
           provider_observation_time?: string
-          relative_humidity_percent?: number | null
+          relative_humidity_percent?: number
+          requested_latitude?: number
+          requested_longitude?: number
           retrieved_at?: string
+          revision_hash?: string
           source_record_key?: string
-          source_record_raw?: Json | null
-          stale_after_at?: string | null
-          temperature_celsius?: number | null
+          source_record_raw?: Json
+          stale_after_at?: string
+          temperature_celsius?: number
           temporal_class?: string
-          weather_classification?: string | null
-          wind_speed_kmh?: number | null
+          timezone?: string
+          wind_speed_kmh?: number
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "weather_observations_artifact_id_fkey"
+            columns: ["artifact_id"]
+            isOneToOne: false
+            referencedRelation: "feed_artifacts"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
@@ -2152,9 +2418,85 @@ export type Database = {
           },
         ]
       }
+      v_public_weather: {
+        Row: {
+          geographic_reference: string | null
+          id: string | null
+          interval_seconds: number | null
+          is_stale: boolean | null
+          latitude: number | null
+          longitude: number | null
+          model_provenance: string | null
+          precipitation_mm: number | null
+          relative_humidity_percent: number | null
+          temperature_celsius: number | null
+          temporal_class: string | null
+          valid_time: string | null
+          wind_speed_kmh: number | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
+      acquire_feed: {
+        Args: { p_feed: Database["public"]["Enums"]["feed_type"] }
+        Returns: Json
+      }
+      assert_feed_lease: {
+        Args: { p_id: string; p_token: string }
+        Returns: {
+          artifact_id: string | null
+          completed_at: string | null
+          error_category: string | null
+          feed_type: Database["public"]["Enums"]["feed_type"]
+          id: string
+          records_existing: number
+          records_fetched: number
+          records_inserted: number
+          records_quarantined: number
+          records_rejected: number
+          records_unmapped: number
+          records_valid: number
+          retrieved_at: string | null
+          source_version: string | null
+          started_at: string
+          status: Database["public"]["Enums"]["feed_status"]
+        }
+        SetofOptions: {
+          from: "*"
+          to: "external_feed_executions"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       current_user_role: { Args: never; Returns: string }
+      finish_feed: {
+        Args: { p_error?: string; p_id: string; p_token: string }
+        Returns: {
+          artifact_id: string | null
+          completed_at: string | null
+          error_category: string | null
+          feed_type: Database["public"]["Enums"]["feed_type"]
+          id: string
+          records_existing: number
+          records_fetched: number
+          records_inserted: number
+          records_quarantined: number
+          records_rejected: number
+          records_unmapped: number
+          records_valid: number
+          retrieved_at: string | null
+          source_version: string | null
+          started_at: string
+          status: Database["public"]["Enums"]["feed_status"]
+        }
+        SetofOptions: {
+          from: "*"
+          to: "external_feed_executions"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       get_rfq_contact_details: {
         Args: { p_inquiry_id: string }
         Returns: {
@@ -2166,8 +2508,25 @@ export type Database = {
       }
       is_active_user: { Args: never; Returns: boolean }
       is_admin: { Args: never; Returns: boolean }
+      prepare_feed_artifact: {
+        Args: {
+          p_dataset?: string
+          p_fetched: number
+          p_id: string
+          p_keys: Json
+          p_payload: string
+          p_resource: string
+          p_retrieved: string
+          p_token: string
+        }
+        Returns: string
+      }
       show_limit: { Args: never; Returns: number }
       show_trgm: { Args: { "": string }; Returns: string[] }
+      stage_feed_batch: {
+        Args: { p_batch: number; p_id: string; p_rows: Json; p_token: string }
+        Returns: undefined
+      }
     }
     Enums: {
       derivation_class_enum:
@@ -2176,7 +2535,6 @@ export type Database = {
         | "calculated_median"
         | "model_estimated"
       feed_status:
-        | "scheduled"
         | "running"
         | "succeeded"
         | "partial"
@@ -2367,14 +2725,7 @@ export const Constants = {
         "calculated_median",
         "model_estimated",
       ],
-      feed_status: [
-        "scheduled",
-        "running",
-        "succeeded",
-        "partial",
-        "failed",
-        "quarantined",
-      ],
+      feed_status: ["running", "succeeded", "partial", "failed", "quarantined"],
       feed_type: ["WFP", "OPEN_METEO"],
       ingestion_method_enum: [
         "automated_api",

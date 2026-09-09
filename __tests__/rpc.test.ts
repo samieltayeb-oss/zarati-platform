@@ -1,6 +1,7 @@
+import { guardTestEnvironment } from './local-target'
+guardTestEnvironment()
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable prefer-const */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { describe, it, expect, beforeAll, afterAll } from 'vitest'
 import { createClient } from '@supabase/supabase-js'
 
@@ -66,6 +67,24 @@ describe('RFQ RPC Privacy Matrix', () => {
 
   afterAll(async () => {
     for (const u of createdUsers) await adminClient.auth.admin.deleteUser(u.id)
+  })
+
+  it('Denies buyer self-accept, listing self-moderation, ownership and profile verification escalation', async () => {
+    expect((await clients[traderA.email].from('inquiries').update({status:'accepted'}).eq('id',rfqId)).error).not.toBeNull();
+    expect((await clients[farmer.email].from('listings').update({moderation_status:'rejected'}).eq('id',listingId)).error).not.toBeNull();
+    expect((await clients[farmer.email].from('listings').update({user_id:traderA.id}).eq('id',listingId)).error).not.toBeNull();
+    expect((await clients[farmer.email].from('profiles').update({is_verified:true}).eq('id',farmer.id)).error).not.toBeNull();
+    expect((await clients[farmer.email].from('profiles').update({role:'admin'}).eq('id',farmer.id)).error).not.toBeNull();
+  })
+
+  it('Denies privileged initial RFQ and listing states through direct authenticated inserts', async () => {
+    const inserted=await clients[traderB.email].from('inquiries').insert({listing_id:listingId,buyer_id:traderB.id,seller_id:farmer.id,status:'accepted',message:'test'});
+    expect(inserted.error?.message).toContain('Initial inquiry state');
+  })
+  it('Denies direct self-approved listing creation', async()=>{
+    const {data:state}=await adminClient.from('states').select('id').limit(1).single();
+    const listing=await clients[farmer.email].from('listings').insert({user_id:farmer.id,state_id:state!.id,category:'crops',title_en:'T',title_ar:'T',quantity:1,unit:'T',currency:'SDG',status:'active',moderation_status:'approved'});
+    expect(listing.error?.message).toContain('Initial listing state');
   })
 
   it('Denies pending RFQ reveal', async () => {
