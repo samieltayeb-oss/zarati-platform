@@ -1,0 +1,14 @@
+{
+  "url": "https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=14.04&lon=35.38",
+  "retrieved_at": "2026-09-09T16:08:13.958Z",
+  "sha256": "e3a8ebd625c4fe55c0b1d086bbebe787cc374f6c5b2bc562518717af5bbbfa37",
+  "bytes": 40039,
+  "headers": {
+    "expires": "Wed, 09 Sep 2026 16:40:01 GMT",
+    "last-modified": "Wed, 09 Sep 2026 16:08:15 GMT",
+    "content-type": "application/json"
+  },
+  "attribution": "Data from MET Norway",
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "modified": false
+}

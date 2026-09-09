@@ -2,7 +2,7 @@ import 'server-only';
 import { timingSafeEqual } from 'node:crypto';
 import { createAdminClient } from '@/lib/supabase/server';
 import { WFPAdapter } from './wfp/wfp-adapter';
-import { OpenMeteoAdapter } from './weather/open-meteo-adapter';
+import { MetNorwayAdapter } from './weather/met-norway-adapter';
 import { FeedError, LIMITS, type FeedDB, type Lease } from './ExternalFeedAdapter';
 export function authorizeCron(request: Request, secret = process.env.CRON_SECRET): boolean {
     if (!secret || !secret.trim())
@@ -13,7 +13,7 @@ export function authorizeCron(request: Request, secret = process.env.CRON_SECRET
     const expected = Buffer.from('Bearer ' + secret), received = Buffer.from(actual);
     return expected.length === received.length && timingSafeEqual(expected, received);
 }
-export async function handleFeedCron(request: Request, feed: 'WFP' | 'OPEN_METEO', dependencies?: {
+export async function handleFeedCron(request: Request, feed: 'WFP' | 'OPEN_METEO' | 'MET_NORWAY', dependencies?: {
     db: (fetcher?: typeof fetch) => FeedDB;
     workMs?: number;
     cleanupMs?: number;
@@ -21,7 +21,8 @@ export async function handleFeedCron(request: Request, feed: 'WFP' | 'OPEN_METEO
 }) {
     if (!authorizeCron(request))
         return Response.json({ error: 'Unauthorized' }, { status: 401 });
-    const enabled = process.env[feed === 'WFP' ? 'R4B_WFP_FEED_ENABLED' : 'R4B_WEATHER_FEED_ENABLED'] === 'true';
+    // OPEN_METEO is retained as evidence only; no production route can reactivate it.
+    const enabled = feed !== 'OPEN_METEO' && process.env[feed === 'WFP' ? 'R4B_WFP_FEED_ENABLED' : 'R4B_WEATHER_FEED_ENABLED'] === 'true';
     if (!enabled)
         return Response.json({ status: 'disabled' }, { status: 503 });
     const signal = AbortSignal.timeout(Math.min(dependencies?.workMs ?? LIMITS.runMs, LIMITS.runMs));
@@ -59,7 +60,7 @@ export async function handleFeedCron(request: Request, feed: 'WFP' | 'OPEN_METEO
             signal.addEventListener('abort', onAbort, { once: true });
         });
         const work = dependencies?.run ? dependencies.run(lease, signal)
-            : (feed === 'WFP' ? new WFPAdapter(db, lease, signal) : new OpenMeteoAdapter(db, lease, signal)).run();
+            : (feed === 'WFP' ? new WFPAdapter(db, lease, signal) : new MetNorwayAdapter(db, lease, signal)).run();
         await Promise.race([work, deadline]);
     }
     catch (error) {

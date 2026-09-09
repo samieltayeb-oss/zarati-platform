@@ -1586,6 +1586,36 @@ export type Database = {
           },
         ]
       }
+      met_norway_http_cache: {
+        Row: {
+          checked_at: string
+          expires_at: string
+          fetched_at: string | null
+          last_modified: string | null
+          next_request_at: string
+          payload: string | null
+          resource: string
+        }
+        Insert: {
+          checked_at: string
+          expires_at: string
+          fetched_at?: string | null
+          last_modified?: string | null
+          next_request_at: string
+          payload?: string | null
+          resource: string
+        }
+        Update: {
+          checked_at?: string
+          expires_at?: string
+          fetched_at?: string | null
+          last_modified?: string | null
+          next_request_at?: string
+          payload?: string | null
+          resource?: string
+        }
+        Relationships: []
+      }
       moderation_events: {
         Row: {
           action: string
@@ -2564,17 +2594,29 @@ export type Database = {
       }
       v_public_weather: {
         Row: {
+          attribution: string | null
+          forecast_horizon_seconds: number | null
           geographic_reference: string | null
           id: string | null
           interval_seconds: number | null
           is_stale: boolean | null
           latitude: number | null
+          license_url: string | null
           longitude: number | null
           model_provenance: string | null
           precipitation_mm: number | null
+          precipitation_period_end: string | null
+          precipitation_period_start: string | null
+          processing_note: string | null
+          provider: string | null
           relative_humidity_percent: number | null
+          requested_latitude: number | null
+          requested_longitude: number | null
+          retrieved_at: string | null
+          source_url: string | null
           temperature_celsius: number | null
           temporal_class: string | null
+          timezone: string | null
           valid_time: string | null
           wind_speed_kmh: number | null
         }
@@ -2684,7 +2726,7 @@ export type Database = {
         | "partial"
         | "failed"
         | "quarantined"
-      feed_type: "WFP" | "OPEN_METEO"
+      feed_type: "WFP" | "OPEN_METEO" | "MET_NORWAY"
       ingestion_method_enum:
         | "automated_api"
         | "automated_feed"
@@ -2870,7 +2912,7 @@ export const Constants = {
         "model_estimated",
       ],
       feed_status: ["running", "succeeded", "partial", "failed", "quarantined"],
-      feed_type: ["WFP", "OPEN_METEO"],
+      feed_type: ["WFP", "OPEN_METEO", "MET_NORWAY"],
       ingestion_method_enum: [
         "automated_api",
         "automated_feed",
