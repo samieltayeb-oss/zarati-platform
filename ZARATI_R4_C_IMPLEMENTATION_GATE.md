@@ -1,41 +1,39 @@
 # ZARATI R4-C IMPLEMENTATION GATE
 
-**Status:** ARCHITECTURE DESIGN COMPLETE. READY FOR FOUNDER IMPLEMENTATION AUTHORIZATION.
+**Status:** ARCHITECTURE DESIGN & SOURCE HARDENING COMPLETE. READY FOR FOUNDER IMPLEMENTATION AUTHORIZATION.
 **Phase:** R4-C
 
 ## Pre-Requisites Validated
-1. **R4-A Closed**: Yes.
-2. **R4-B Closed**: Yes.
-3. **WFP Current Valid Source Identities**: 5663 verified.
-4. **Public WFP**: 102 verified.
-5. **No Production Mutation**: Confirmed.
+1. **R4-A / R4-B Closed**: Yes.
+2. **WFP Automated Feed**: LIVE.
+3. **No Production Mutation**: Confirmed.
+
+## Source Hardening Results
+- **FX Classes**: Strictly separated into `OFFICIAL`, `PARALLEL_MARKET`, `INSTITUTIONAL_REFERENCE`. Silent fallback is explicitly banned.
+- **FX Sources**:
+  - `ExchangeRate-API`: VERIFIED (`OFFICIAL`, Automatable)
+  - `WFP HDX RTP`: VERIFIED (`PARALLEL_MARKET`, Manual/Batch)
+  - `CBOS`: MANUAL/BATCH (`OFFICIAL`)
+- **Unit Conversions**: 
+  - Ardeb (Sorghum/Wheat/Millet = 190kg) is VERIFIED.
+  - Qintar (Sesame/Groundnuts = 45kg) is VERIFIED.
+  - Explicit 90kg Sack is VERIFIED.
+  - Ambiguous "Sack" or "Bag" is BLOCKED (no normalization will occur).
+- **Temporal FX Selection Law**: Exact observation date match, falling back to nearest preceding rate up to 7 days, else NULL.
 
 ## Implementation Plan Overview
-Upon authorization, the following implementation steps will occur:
+Upon authorization, the following will occur:
 
 1. **Schema Migration (031)**:
-   - Create tables: `canonical_fx_sources`, `fx_rate_observations`, `unit_conversion_rules`, `normalized_market_values`, `normalization_runs`.
-   - Create public view: `v_public_normalized_market_prices`.
-   - Apply strict service_role RLS and append-only triggers.
+   - Create required tables and views.
 
 2. **Data Seeding**:
-   - Seed `canonical_fx_sources` with WFP HDX and CBOS.
-   - Seed `unit_conversion_rules` with researched baseline metrics:
-     - Sorghum Ardeb -> 190 kg
-     - Wheat/Millet Ardeb -> 150-190 kg (will exact specify per crop)
-     - Sesame/Groundnuts Qintar -> 45 kg
-     - Standard Sack -> 90 kg or 50 kg (crop dependent)
+   - Seed `unit_conversion_rules` with the explicitly verified Ardeb/Qintar/Sack values for specific commodities.
+   - Seed `canonical_fx_sources` with ExchangeRate-API and WFP HDX RTP.
 
 3. **Application Logic**:
-   - Implement `NormalizationEngine` service.
-   - Service will resolve observation date, fetch nearest preceding FX rate (up to 3-day staleness).
-   - Resolve correct unit conversion rule via commodity/region lookup.
-   - Calculate derived metrics safely.
-   - Insert immutable record into `normalized_market_values`.
-
-4. **Testing Strategy**:
-   - Provide adversarial inputs (missing FX, unknown unit, negative price).
-   - Assert normalization engine handles gracefully (inserts null derived metrics, tags appropriate error flags).
-   - Verify historical prices are NOT distorted by current FX rates.
+   - Build Normalization Service.
+   - Enforce Normalization Failure Law (missing FX = NULL, ambiguous unit = NULL, blocked rule = NULL).
+   - Ensure public view only exposes derived values backed by `VERIFIED` rules.
 
 **DO NOT IMPLEMENT OR RUN SQL UNTIL AUTHORIZED.**
