@@ -10,13 +10,15 @@ export async function getFXRate(
 ): Promise<{ id: string; rate: number; observed_date: string } | null> {
   const supabase = createAdminClient();
   
+  const dateString = observationDate.split('T')[0];
+  
   const { data: exactMatches, error: exactErr } = await supabase
     .from('fx_rate_observations')
     .select('id, rate, observed_date')
     .eq('base_currency', baseCurrency)
     .eq('quote_currency', quoteCurrency)
     .eq('rate_class', rateClass)
-    .eq('observed_date', observationDate)
+    .eq('observed_date', dateString)
     .eq('verification_status', 'VERIFIED');
 
   if (exactErr) throw new Error(exactErr.message);
@@ -28,7 +30,7 @@ export async function getFXRate(
     throw new Error('FX_RATE_CONFLICT');
   }
 
-  const matchDate = observationDate.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  const matchDate = dateString.match(/^(\d{4})-(\d{2})-(\d{2})$/);
   if (!matchDate) throw new Error('Invalid date format');
   const d = new Date(Date.UTC(parseInt(matchDate[1]), parseInt(matchDate[2]) - 1, parseInt(matchDate[3])));
   d.setUTCDate(d.getUTCDate() - 7);
@@ -41,7 +43,7 @@ export async function getFXRate(
     .eq('quote_currency', quoteCurrency)
     .eq('rate_class', rateClass)
     .eq('verification_status', 'VERIFIED')
-    .lt('observed_date', observationDate)
+    .lt('observed_date', dateString)
     .gte('observed_date', sevenDaysAgo)
     .order('observed_date', { ascending: false });
 

@@ -1,4 +1,4 @@
-﻿/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { getFXRate, RateClass } from './fx';
 import { getUnitConversionRule } from './units';
 import { createAdminClient } from '@/lib/supabase/server';
@@ -14,6 +14,9 @@ export interface NormalizationResult {
   fx_rate_id: string | null;
   unit_rule_id: string | null;
   fx_fallback_days: number | null;
+  unit_resolution_method: string | null;
+  source_explicit_quantity: number | null;
+  source_canonical_unit: string | null;
   success: boolean;
 }
 
@@ -39,13 +42,25 @@ export async function normalizeObservation(
     // On conflict, quarantine/reject
   }
   
-  let unitRuleId = null;
-  let sdgPerKg = null;
-  let sdgPerMt = null;
+  let unitRuleId: string | null = null;
+  let sdgPerKg: number | null = null;
+  let sdgPerMt: number | null = null;
+  
+  let unit_resolution_method: string | null = null;
+  let source_explicit_quantity: number | null = null;
+  let source_canonical_unit: string | null = null;
 
   // Assuming raw_currency_text is 'SDG'. Future-proofing would check raw.canonical_currency_code.
   if (unitRule) {
-    unitRuleId = unitRule.id;
+    if (unitRule.type === 'CUSTOMARY_RULE') {
+      unitRuleId = unitRule.id;
+      unit_resolution_method = 'CUSTOMARY_RULE';
+    } else {
+      unit_resolution_method = 'SOURCE_EXPLICIT_METRIC';
+      source_explicit_quantity = unitRule.conversion_factor_kg;
+      source_canonical_unit = unitRule.canonical_unit;
+    }
+    
     // raw_price is price per raw_unit.
     // So SDG per kg = raw_price / conversion_factor_kg
     const price = new Decimal(raw.parsed_price_numeric as number);
@@ -91,6 +106,9 @@ export async function normalizeObservation(
     fx_rate_id: fxRateId,
     unit_rule_id: unitRuleId,
     fx_fallback_days: fallbackDays,
+    unit_resolution_method,
+    source_explicit_quantity,
+    source_canonical_unit,
     success: sdgPerKg !== null
   };
 }
