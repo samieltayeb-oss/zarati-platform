@@ -10,41 +10,54 @@ export async function getFXRate(
 ): Promise<{ id: string; rate: number; observed_date: string } | null> {
   const supabase = createAdminClient();
   
-  // 1. Exact match
-  const { data: exactMatch } = await supabase
+  const { data: exactMatches, error: exactErr } = await supabase
     .from('fx_rate_observations')
     .select('id, rate, observed_date')
     .eq('base_currency', baseCurrency)
     .eq('quote_currency', quoteCurrency)
     .eq('rate_class', rateClass)
     .eq('observed_date', observationDate)
-    .single();
+    .eq('verification_status', 'VERIFIED');
 
-  if (exactMatch) {
-    return exactMatch;
+  if (exactErr) throw new Error(exactErr.message);
+
+  if (exactMatches && exactMatches.length === 1) {
+    return exactMatches[0];
+  }
+  if (exactMatches && exactMatches.length > 1) {
+    throw new Error('FX_RATE_CONFLICT');
   }
 
-  // 2. Nearest preceding match within 7 days
-  const dateObj = new Date(observationDate);
-  const sevenDaysAgo = new Date(dateObj);
-  sevenDaysAgo.setDate(dateObj.getDate() - 7);
+  const matchDate = observationDate.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (!matchDate) throw new Error('Invalid date format');
+  const d = new Date(Date.UTC(parseInt(matchDate[1]), parseInt(matchDate[2]) - 1, parseInt(matchDate[3])));
+  d.setUTCDate(d.getUTCDate() - 7);
+  const sevenDaysAgo = d.toISOString().split('T')[0];
 
-  const { data: precedingMatch } = await supabase
+  const { data: precedingCandidates, error: precErr } = await supabase
     .from('fx_rate_observations')
     .select('id, rate, observed_date')
     .eq('base_currency', baseCurrency)
     .eq('quote_currency', quoteCurrency)
     .eq('rate_class', rateClass)
-    .lte('observed_date', observationDate)
-    .gte('observed_date', sevenDaysAgo.toISOString().split('T')[0])
-    .order('observed_date', { ascending: false })
-    .limit(1)
-    .single();
+    .eq('verification_status', 'VERIFIED')
+    .lt('observed_date', observationDate)
+    .gte('observed_date', sevenDaysAgo)
+    .order('observed_date', { ascending: false });
 
-  if (precedingMatch) {
-    return precedingMatch;
+  if (precErr) throw new Error(precErr.message);
+
+  if (precedingCandidates && precedingCandidates.length > 0) {
+    const nearestDate = precedingCandidates[0].observed_date;
+    const sameDateMatches = precedingCandidates.filter(c => c.observed_date === nearestDate);
+    
+    if (sameDateMatches.length === 1) {
+      return sameDateMatches[0];
+    }
+    if (sameDateMatches.length > 1) {
+      throw new Error('FX_RATE_CONFLICT');
+    }
   }
 
-  // 3. Otherwise unavailable
   return null;
 }

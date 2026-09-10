@@ -1,3 +1,4 @@
+﻿/* eslint-disable @typescript-eslint/no-explicit-any */
 import { getFXRate, RateClass } from './fx';
 import { getUnitConversionRule } from './units';
 import { createAdminClient } from '@/lib/supabase/server';
@@ -30,7 +31,13 @@ export async function normalizeObservation(
     
   if (!raw) throw new Error('Observation not found');
 
-  const unitRule = await getUnitConversionRule(raw.raw_unit_text, raw.commodity_id, raw.observed_at);
+  let unitRule = null;
+  try {
+    unitRule = await getUnitConversionRule(raw.raw_unit_text, raw.commodity_id, raw.observed_at);
+  } catch (err: any) {
+    if (err.message !== 'UNIT_RULE_CONFLICT') throw err;
+    // On conflict, quarantine/reject
+  }
   
   let unitRuleId = null;
   let sdgPerKg = null;
@@ -56,7 +63,14 @@ export async function normalizeObservation(
 
   if (sdgPerKg !== null) {
     // Need SDG to USD conversion
-    const fx = await getFXRate('USD', 'SDG', raw.observed_at, rateClass);
+    let fx = null;
+    try {
+      fx = await getFXRate('USD', 'SDG', raw.observed_at, rateClass);
+    } catch (err: any) {
+      if (err.message !== 'FX_RATE_CONFLICT') throw err;
+      // On conflict, quarantine/reject USD conversion
+    }
+    
     if (fx) {
       fxRateId = fx.id;
       const obsDate = new Date(raw.observed_at);
@@ -80,3 +94,4 @@ export async function normalizeObservation(
     success: sdgPerKg !== null
   };
 }
+

@@ -2,28 +2,21 @@
 
 This document establishes the architecture and execution plan for the R4-B Master Implementation Gate (Basic Weather + Automated External Feeds).
 
-## User Review Required
+## Branch Strategy
+- The verified production baseline has been successfully reconciled into `main`.
+- R4-B implementation will occur exclusively on `phase/r4-b-automated-feeds`.
 
-> [!WARNING]
-> **Branch Divergence Alert**: 
-> The repository working branch `phase/r3-5-sovereign-experience` contains commits absent from `main` (specifically: migrations 025 and 026, R4-A repair artifacts, and the Cairo typography changes). 
-> **Are you comfortable with me continuing development on this branch, or do you want to merge it to `main` first before I begin R4-B implementation?**
-
-> [!CAUTION]
-> **FAO FPMA Source Revalidation Failed**:
-> Our research has confirmed that there is **no publicly documented, open-access API developer portal** for the FAO Food Price Monitoring and Analysis (FPMA) database. While they use internal API services for their own apps, these are not exposed for public developer integration without a formal partnership.
-> **Decision**: FAO automated ingestion is **BLOCKED/DEFERRED**. We will not fake it. I will document this in the evidence file.
-
-## Open Questions
-
-1. Should I continue on `phase/r3-5-sovereign-experience`, or create a new branch `phase/r4-b-automated-feeds` diverging from here?
-2. Do you have a preferred cron scheduling tool for Vercel (e.g. standard `@vercel/cron` via `vercel.json` and edge functions)? I plan to use standard Vercel Cron.
+## Cron Design
+- **Standard Vercel Cron** via `vercel.json` and standard Next.js API Route Handlers.
+- Protected by `CRON_SECRET` validation.
+- Endpoints will feature execution locking, concurrency prevention, timeout handling, and failure isolation.
+- Cron will **NOT** be activated in production during this local implementation gate.
 
 ## Source Revalidation
 
-- **WFP Market Monitor**: YES. Public HDX CSV download. No API key required for public dataset access. V2 identity contract (`WFP_SDN_V2_{date}_{market}_{commodity}_{price_type}_{unit}`) will be strictly enforced.
+- **WFP Market Monitor**: YES. Public HDX CSV download. No API key required for public dataset access. V2 identity contract (`WFP_SDN_V2_{date}_{market_id}_{commodity_id}_{pricetype}_{unit}`) will be strictly enforced using the raw source IDs, not derived cropCodes.
 - **Open-Meteo**: YES. Free public API without API key. Confirmed JSON response for temperature, humidity, precipitation, wind.
-- **FAO FPMA**: NO. Lacks public developer API. Blocked.
+- **FAO FPMA**: NO. Lacks public developer API. Blocked/Deferred. We will NOT scrape undocumented endpoints or claim fake partnerships.
 
 ## Proposed Changes
 

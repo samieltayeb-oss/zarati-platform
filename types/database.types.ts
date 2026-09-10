@@ -1,4 +1,4 @@
-export type Json =
+﻿export type Json =
   | string
   | number
   | boolean
@@ -212,6 +212,36 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      canonical_fx_sources: {
+        Row: {
+          automation_mode: Database["public"]["Enums"]["automation_status"]
+          code: string
+          created_at: string
+          id: string
+          is_active: boolean
+          name: string
+          url: string | null
+        }
+        Insert: {
+          automation_mode?: Database["public"]["Enums"]["automation_status"]
+          code: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name: string
+          url?: string | null
+        }
+        Update: {
+          automation_mode?: Database["public"]["Enums"]["automation_status"]
+          code?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name?: string
+          url?: string | null
+        }
+        Relationships: []
       }
       canonical_localities: {
         Row: {
@@ -1055,6 +1085,56 @@ export type Database = {
           },
         ]
       }
+      fx_rate_observations: {
+        Row: {
+          base_currency: string
+          id: string
+          ingested_at: string
+          observed_date: string
+          published_at: string | null
+          quote_currency: string
+          rate: number
+          rate_class: Database["public"]["Enums"]["fx_rate_class"]
+          source_id: string
+          source_reference: string | null
+          verification_status: Database["public"]["Enums"]["confidence_status"]
+        }
+        Insert: {
+          base_currency: string
+          id?: string
+          ingested_at?: string
+          observed_date: string
+          published_at?: string | null
+          quote_currency: string
+          rate: number
+          rate_class: Database["public"]["Enums"]["fx_rate_class"]
+          source_id: string
+          source_reference?: string | null
+          verification_status?: Database["public"]["Enums"]["confidence_status"]
+        }
+        Update: {
+          base_currency?: string
+          id?: string
+          ingested_at?: string
+          observed_date?: string
+          published_at?: string | null
+          quote_currency?: string
+          rate?: number
+          rate_class?: Database["public"]["Enums"]["fx_rate_class"]
+          source_id?: string
+          source_reference?: string | null
+          verification_status?: Database["public"]["Enums"]["confidence_status"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fx_rate_observations_source_id_fkey"
+            columns: ["source_id"]
+            isOneToOne: false
+            referencedRelation: "canonical_fx_sources"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       inquiries: {
         Row: {
           buyer_id: string
@@ -1537,6 +1617,13 @@ export type Database = {
             referencedRelation: "v_legacy_crop_prices_bridge"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "market_price_observations_superseded_by_fkey"
+            columns: ["superseded_by"]
+            isOneToOne: false
+            referencedRelation: "v_public_normalized_market_prices"
+            referencedColumns: ["source_observation_id"]
+          },
         ]
       }
       markets: {
@@ -1661,6 +1748,137 @@ export type Database = {
           },
         ]
       }
+      normalization_runs: {
+        Row: {
+          algorithm_version: string
+          completed_at: string | null
+          id: string
+          records_failed: number | null
+          records_normalized: number | null
+          records_processed: number | null
+          records_quarantined: number | null
+          started_at: string
+        }
+        Insert: {
+          algorithm_version: string
+          completed_at?: string | null
+          id?: string
+          records_failed?: number | null
+          records_normalized?: number | null
+          records_processed?: number | null
+          records_quarantined?: number | null
+          started_at?: string
+        }
+        Update: {
+          algorithm_version?: string
+          completed_at?: string | null
+          id?: string
+          records_failed?: number | null
+          records_normalized?: number | null
+          records_processed?: number | null
+          records_quarantined?: number | null
+          started_at?: string
+        }
+        Relationships: []
+      }
+      normalized_market_values: {
+        Row: {
+          calculated_at: string
+          calculation_version: string
+          fx_fallback_days: number | null
+          fx_rate_id: string | null
+          id: string
+          is_latest: boolean
+          normalization_run_id: string | null
+          normalized_sdg_per_kg: number | null
+          normalized_sdg_per_mt: number | null
+          normalized_usd_per_kg: number | null
+          normalized_usd_per_mt: number | null
+          raw_observation_id: string
+          unit_rule_id: string | null
+        }
+        Insert: {
+          calculated_at?: string
+          calculation_version: string
+          fx_fallback_days?: number | null
+          fx_rate_id?: string | null
+          id?: string
+          is_latest?: boolean
+          normalization_run_id?: string | null
+          normalized_sdg_per_kg?: number | null
+          normalized_sdg_per_mt?: number | null
+          normalized_usd_per_kg?: number | null
+          normalized_usd_per_mt?: number | null
+          raw_observation_id: string
+          unit_rule_id?: string | null
+        }
+        Update: {
+          calculated_at?: string
+          calculation_version?: string
+          fx_fallback_days?: number | null
+          fx_rate_id?: string | null
+          id?: string
+          is_latest?: boolean
+          normalization_run_id?: string | null
+          normalized_sdg_per_kg?: number | null
+          normalized_sdg_per_mt?: number | null
+          normalized_usd_per_kg?: number | null
+          normalized_usd_per_mt?: number | null
+          raw_observation_id?: string
+          unit_rule_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "normalized_market_values_fx_rate_id_fkey"
+            columns: ["fx_rate_id"]
+            isOneToOne: false
+            referencedRelation: "fx_rate_observations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "normalized_market_values_normalization_run_id_fkey"
+            columns: ["normalization_run_id"]
+            isOneToOne: false
+            referencedRelation: "normalization_runs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "normalized_market_values_raw_observation_id_fkey"
+            columns: ["raw_observation_id"]
+            isOneToOne: false
+            referencedRelation: "market_price_observations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "normalized_market_values_raw_observation_id_fkey"
+            columns: ["raw_observation_id"]
+            isOneToOne: false
+            referencedRelation: "v_approved_market_prices"
+            referencedColumns: ["observation_id"]
+          },
+          {
+            foreignKeyName: "normalized_market_values_raw_observation_id_fkey"
+            columns: ["raw_observation_id"]
+            isOneToOne: false
+            referencedRelation: "v_legacy_crop_prices_bridge"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "normalized_market_values_raw_observation_id_fkey"
+            columns: ["raw_observation_id"]
+            isOneToOne: false
+            referencedRelation: "v_public_normalized_market_prices"
+            referencedColumns: ["source_observation_id"]
+          },
+          {
+            foreignKeyName: "normalized_market_values_unit_rule_id_fkey"
+            columns: ["unit_rule_id"]
+            isOneToOne: false
+            referencedRelation: "unit_conversion_rules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       observation_conflict_ledger: {
         Row: {
           conflicting_observation_id: string
@@ -1718,6 +1936,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "observation_conflict_ledger_conflicting_observation_id_fkey"
+            columns: ["conflicting_observation_id"]
+            isOneToOne: false
+            referencedRelation: "v_public_normalized_market_prices"
+            referencedColumns: ["source_observation_id"]
+          },
+          {
             foreignKeyName: "observation_conflict_ledger_primary_observation_id_fkey"
             columns: ["primary_observation_id"]
             isOneToOne: false
@@ -1737,6 +1962,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "v_legacy_crop_prices_bridge"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "observation_conflict_ledger_primary_observation_id_fkey"
+            columns: ["primary_observation_id"]
+            isOneToOne: false
+            referencedRelation: "v_public_normalized_market_prices"
+            referencedColumns: ["source_observation_id"]
           },
           {
             foreignKeyName: "observation_conflict_ledger_resolved_by_fkey"
@@ -1800,6 +2032,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "v_legacy_crop_prices_bridge"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "observation_quality_flags_observation_id_fkey"
+            columns: ["observation_id"]
+            isOneToOne: false
+            referencedRelation: "v_public_normalized_market_prices"
+            referencedColumns: ["source_observation_id"]
           },
         ]
       }
@@ -1880,6 +2119,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "observation_supersessions_old_observation_id_fkey"
+            columns: ["old_observation_id"]
+            isOneToOne: true
+            referencedRelation: "v_public_normalized_market_prices"
+            referencedColumns: ["source_observation_id"]
+          },
+          {
             foreignKeyName: "observation_supersessions_provenance_observation_id_fkey"
             columns: ["provenance_observation_id"]
             isOneToOne: false
@@ -1901,6 +2147,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "observation_supersessions_provenance_observation_id_fkey"
+            columns: ["provenance_observation_id"]
+            isOneToOne: false
+            referencedRelation: "v_public_normalized_market_prices"
+            referencedColumns: ["source_observation_id"]
+          },
+          {
             foreignKeyName: "observation_supersessions_replacement_observation_id_fkey"
             columns: ["replacement_observation_id"]
             isOneToOne: true
@@ -1920,6 +2173,13 @@ export type Database = {
             isOneToOne: true
             referencedRelation: "v_legacy_crop_prices_bridge"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "observation_supersessions_replacement_observation_id_fkey"
+            columns: ["replacement_observation_id"]
+            isOneToOne: true
+            referencedRelation: "v_public_normalized_market_prices"
+            referencedColumns: ["source_observation_id"]
           },
         ]
       }
@@ -1984,6 +2244,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "v_legacy_crop_prices_bridge"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "observation_transformations_observation_id_fkey"
+            columns: ["observation_id"]
+            isOneToOne: false
+            referencedRelation: "v_public_normalized_market_prices"
+            referencedColumns: ["source_observation_id"]
           },
         ]
       }
@@ -2053,6 +2320,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "v_legacy_crop_prices_bridge"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "observation_verification_evidence_observation_id_fkey"
+            columns: ["observation_id"]
+            isOneToOne: false
+            referencedRelation: "v_public_normalized_market_prices"
+            referencedColumns: ["source_observation_id"]
           },
         ]
       }
@@ -2265,6 +2539,60 @@ export type Database = {
             columns: ["id"]
             isOneToOne: true
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      unit_conversion_rules: {
+        Row: {
+          authority_reference: string | null
+          commodity_id: string | null
+          confidence_status: Database["public"]["Enums"]["confidence_status"]
+          conversion_factor_kg: number
+          created_at: string
+          id: string
+          region_id: string | null
+          source_unit_alias: string
+          valid_from_date: string
+          valid_to_date: string | null
+        }
+        Insert: {
+          authority_reference?: string | null
+          commodity_id?: string | null
+          confidence_status?: Database["public"]["Enums"]["confidence_status"]
+          conversion_factor_kg: number
+          created_at?: string
+          id?: string
+          region_id?: string | null
+          source_unit_alias: string
+          valid_from_date: string
+          valid_to_date?: string | null
+        }
+        Update: {
+          authority_reference?: string | null
+          commodity_id?: string | null
+          confidence_status?: Database["public"]["Enums"]["confidence_status"]
+          conversion_factor_kg?: number
+          created_at?: string
+          id?: string
+          region_id?: string | null
+          source_unit_alias?: string
+          valid_from_date?: string
+          valid_to_date?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "unit_conversion_rules_commodity_id_fkey"
+            columns: ["commodity_id"]
+            isOneToOne: false
+            referencedRelation: "canonical_commodities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "unit_conversion_rules_region_id_fkey"
+            columns: ["region_id"]
+            isOneToOne: false
+            referencedRelation: "states"
             referencedColumns: ["id"]
           },
         ]
@@ -2592,6 +2920,30 @@ export type Database = {
           },
         ]
       }
+      v_public_normalized_market_prices: {
+        Row: {
+          calculation_version: string | null
+          commodity_code: string | null
+          crop_name_en: string | null
+          fx_observed_date: string | null
+          fx_rate_class: Database["public"]["Enums"]["fx_rate_class"] | null
+          market_name_en: string | null
+          normalized_id: string | null
+          normalized_sdg_per_kg: number | null
+          normalized_sdg_per_mt: number | null
+          normalized_usd_per_kg: number | null
+          normalized_usd_per_mt: number | null
+          raw_currency_text: string | null
+          raw_price_text: string | null
+          raw_unit_text: string | null
+          source_observation_date: string | null
+          source_observation_id: string | null
+          unit_confidence_status:
+            | Database["public"]["Enums"]["confidence_status"]
+            | null
+        }
+        Relationships: []
+      }
       v_public_weather: {
         Row: {
           attribution: string | null
@@ -2715,6 +3067,8 @@ export type Database = {
       }
     }
     Enums: {
+      automation_status: "automatable" | "manual_batch" | "blocked"
+      confidence_status: "VERIFIED" | "PROVISIONAL" | "BLOCKED"
       derivation_class_enum:
         | "observed_transaction"
         | "reported_survey"
@@ -2727,6 +3081,11 @@ export type Database = {
         | "failed"
         | "quarantined"
       feed_type: "WFP" | "OPEN_METEO" | "MET_NORWAY"
+      fx_rate_class:
+        | "OFFICIAL"
+        | "PARALLEL_MARKET"
+        | "INSTITUTIONAL_REFERENCE"
+        | "OTHER_APPROVED_REFERENCE"
       ingestion_method_enum:
         | "automated_api"
         | "automated_feed"
@@ -2905,6 +3264,8 @@ export const Constants = {
   },
   public: {
     Enums: {
+      automation_status: ["automatable", "manual_batch", "blocked"],
+      confidence_status: ["VERIFIED", "PROVISIONAL", "BLOCKED"],
       derivation_class_enum: [
         "observed_transaction",
         "reported_survey",
@@ -2913,6 +3274,12 @@ export const Constants = {
       ],
       feed_status: ["running", "succeeded", "partial", "failed", "quarantined"],
       feed_type: ["WFP", "OPEN_METEO", "MET_NORWAY"],
+      fx_rate_class: [
+        "OFFICIAL",
+        "PARALLEL_MARKET",
+        "INSTITUTIONAL_REFERENCE",
+        "OTHER_APPROVED_REFERENCE",
+      ],
       ingestion_method_enum: [
         "automated_api",
         "automated_feed",

@@ -1,3 +1,4 @@
+﻿/* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { createAdminClient } from '@/lib/supabase/server';
 import { normalizeObservation } from '@/lib/normalization/engine';
@@ -67,7 +68,7 @@ describe('R4-C Normalization Engine', () => {
     it('exact-day rate -> PASS', async () => {
       await supabase.from('fx_rate_observations').insert({
         source_id: sourceId,
-        rate_class: 'PARALLEL_MARKET',
+        rate_class: 'PARALLEL_MARKET', verification_status: 'VERIFIED',
         base_currency: 'USD',
         quote_currency: 'SDG',
         rate: 2000,
@@ -81,7 +82,7 @@ describe('R4-C Normalization Engine', () => {
     it('previous-day verified within 7 days -> PASS', async () => {
       await supabase.from('fx_rate_observations').insert({
         source_id: sourceId,
-        rate_class: 'PARALLEL_MARKET',
+        rate_class: 'PARALLEL_MARKET', verification_status: 'VERIFIED',
         base_currency: 'USD',
         quote_currency: 'SDG',
         rate: 2100,
@@ -95,7 +96,7 @@ describe('R4-C Normalization Engine', () => {
     it('8-day gap -> NULL', async () => {
       await supabase.from('fx_rate_observations').insert({
         source_id: sourceId,
-        rate_class: 'PARALLEL_MARKET',
+        rate_class: 'PARALLEL_MARKET', verification_status: 'VERIFIED',
         base_currency: 'USD',
         quote_currency: 'SDG',
         rate: 2200,
@@ -108,7 +109,7 @@ describe('R4-C Normalization Engine', () => {
     it('future rate only -> NULL', async () => {
       await supabase.from('fx_rate_observations').insert({
         source_id: sourceId,
-        rate_class: 'PARALLEL_MARKET',
+        rate_class: 'PARALLEL_MARKET', verification_status: 'VERIFIED',
         base_currency: 'USD',
         quote_currency: 'SDG',
         rate: 2300,
@@ -176,12 +177,12 @@ describe('R4-C Normalization Engine', () => {
         parsed_price_numeric: 380000,
         observed_at: '2024-05-10',
         publication_status: 'PUBLISHED'
-      });
+      } as any);
 
       // Insert matching FX for 2024-05-10
       await supabase.from('fx_rate_observations').insert({
         source_id: sourceId,
-        rate_class: 'PARALLEL_MARKET',
+        rate_class: 'PARALLEL_MARKET', verification_status: 'VERIFIED',
         base_currency: 'USD',
         quote_currency: 'SDG',
         rate: 2000,
@@ -213,7 +214,7 @@ describe('R4-C Normalization Engine', () => {
         parsed_price_numeric: 380000,
         observed_at: '2022-01-01', // no FX for this date
         publication_status: 'PUBLISHED'
-      });
+      } as any);
 
       const res = await normalizeObservation(obsId, 'PARALLEL_MARKET');
       expect(res.success).toBe(true); // sdg success
@@ -238,7 +239,7 @@ describe('R4-C Normalization Engine', () => {
         parsed_price_numeric: 380000,
         observed_at: '2024-05-10',
         publication_status: 'PUBLISHED'
-      });
+      } as any);
 
       const res = await normalizeObservation(obsId, 'PARALLEL_MARKET');
       expect(res.success).toBe(false);
@@ -247,3 +248,4 @@ describe('R4-C Normalization Engine', () => {
     });
   });
 });
+
