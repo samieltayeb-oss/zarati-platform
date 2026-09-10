@@ -15,6 +15,10 @@ describe('R4-C Adversarial Audit Fixes', () => {
   let commodityId: string;
   
   beforeAll(async () => {
+    // Aggressive cleanup before tests to prevent state bleed
+    await supabase.from('fx_rate_observations').delete().like('source_reference', 'test%');
+    await supabase.from('unit_conversion_rules').delete().like('source_unit_alias', 'overlap_unit');
+    
     sourceId = uuidv4();
     sourceId2 = uuidv4();
     await supabase.from('canonical_fx_sources').insert([
@@ -23,7 +27,14 @@ describe('R4-C Adversarial Audit Fixes', () => {
     ]);
     const { data: crops } = await supabase.from('crops').select('id').limit(1);
     commodityId = uuidv4();
-    await supabase.from('canonical_commodities').insert({ id: commodityId, code: 'TEST_COMM_' + commodityId, crop_id: crops?.[0]?.id, grade_en: 'T', grade_ar: 'T' });
+    await supabase.from('canonical_commodities').insert({ id: commodityId, code: 'TEST_COMM_' + commodityId, crop_id: crops?.[0]?.id as string, variety_en: 'T', variety_ar: 'T', grade_en: 'T', grade_ar: 'T' });
+  });
+
+  afterAll(async () => {
+    await supabase.from('unit_conversion_rules').delete().eq('commodity_id', commodityId);
+    await supabase.from('fx_rate_observations').delete().in('source_id', [sourceId, sourceId2]);
+    await supabase.from('canonical_commodities').delete().eq('id', commodityId);
+    await supabase.from('canonical_fx_sources').delete().in('id', [sourceId, sourceId2]);
   });
 
   it('PROVISIONAL and BLOCKED exact-day FX => ignored', async () => {

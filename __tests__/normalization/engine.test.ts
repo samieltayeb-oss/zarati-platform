@@ -1,4 +1,4 @@
-﻿/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { createAdminClient } from '@/lib/supabase/server';
 import { normalizeObservation } from '@/lib/normalization/engine';
@@ -12,6 +12,13 @@ describe('R4-C Normalization Engine', () => {
   let commodityId: string;
   
   beforeAll(async () => {
+    // Aggressive cleanup before tests
+    await supabase.from('market_price_observations').update({ publication_status: 'RETRACTED' }).in('raw_unit_text', ['ardeb', 'qintar', 'sack', '90 kg sack']);
+    await supabase.from('unit_conversion_rules').delete().in('source_unit_alias', ['ardeb', 'qintar', 'sack', '90 kg sack', '90 KG', '3.5 kg']);
+    await supabase.from('canonical_commodities').delete().like('code', 'TEST_COMM_%');
+    await supabase.from('canonical_fx_sources').delete().like('code', 'TEST_SRC_%');
+    await supabase.from('fx_rate_observations').delete().in('observed_date', ['2024-01-10', '2024-01-05', '2024-02-01', '2024-03-15', '2024-04-10', '2024-05-10', '2022-01-01']);
+
     // 1. Create canonical source
     sourceId = uuidv4();
     await supabase.from('canonical_fx_sources').insert({
@@ -23,12 +30,14 @@ describe('R4-C Normalization Engine', () => {
 
     // 2. Setup commodities for tests
     const { data: crops } = await supabase.from('crops').select('id').limit(1);
-    const cropId = crops?.[0]?.id;
+    const cropId = crops?.[0]?.id as string;
     commodityId = uuidv4();
     await supabase.from('canonical_commodities').insert({
       id: commodityId,
       code: 'TEST_COMM_' + commodityId,
       crop_id: cropId,
+      variety_en: 'T',
+      variety_ar: 'T',
       grade_en: 'Test',
       grade_ar: 'Test'
     });
@@ -62,6 +71,15 @@ describe('R4-C Normalization Engine', () => {
         confidence_status: 'BLOCKED' // ambiguous
       }
     ]);
+  });
+
+  afterAll(async () => {
+    // cascade deletion isn't fully guaranteed via these specific tables, but they are root objects or we can delete them
+    await supabase.from('unit_conversion_rules').delete().eq('commodity_id', commodityId);
+    await supabase.from('fx_rate_observations').delete().eq('source_id', sourceId);
+    await supabase.from('market_price_observations').update({ publication_status: 'RETRACTED' }).eq('commodity_id', commodityId);
+    await supabase.from('canonical_commodities').delete().eq('id', commodityId);
+    await supabase.from('canonical_fx_sources').delete().eq('id', sourceId);
   });
 
   describe('FX Engine', () => {
@@ -139,6 +157,18 @@ describe('R4-C Normalization Engine', () => {
       expect(u?.conversion_factor_kg).toBe(190);
     });
 
+    it('explicit 90 KG -> 90kg', async () => {
+      const u = await getUnitConversionRule('90 KG', commodityId, '2024-01-01');
+      expect(u?.conversion_factor_kg).toBe(90);
+      expect(u?.type).toBe('EXPLICIT_METRIC');
+    });
+
+    it('explicit 3.5 kg -> 3.5kg', async () => {
+      const u = await getUnitConversionRule('3.5 kg', commodityId, '2024-01-01');
+      expect(u?.conversion_factor_kg).toBe(3.5);
+      expect(u?.type).toBe('EXPLICIT_METRIC');
+    });
+
     it('sesame Qintar -> 45kg', async () => {
       const u = await getUnitConversionRule('qintar', commodityId, '2024-01-01');
       expect(u?.conversion_factor_kg).toBe(45);
@@ -159,16 +189,18 @@ describe('R4-C Normalization Engine', () => {
     it('SDG/kg and USD/kg calculated deterministically', async () => {
       // Need an observation
       const obsId = uuidv4();
-      const datasetId = uuidv4();
-      const sourceObjId = uuidv4();
-      const marketId = uuidv4();
-      
-      await supabase.from('canonical_datasets').insert({ id: datasetId, source_id: sourceObjId, name: 'T' });
-      await supabase.from('markets').insert({ id: marketId, name_en: 'T', name_ar: 'T' });
+      const dataset = (await supabase.from('canonical_datasets').select('id, source_id').limit(1)).data![0];
+      const marketId = (await supabase.from('markets').select('id').limit(1)).data![0].id;
 
       await supabase.from('market_price_observations').insert({
         id: obsId,
-        dataset_id: datasetId,
+        dataset_id: dataset.id,
+        source_id: dataset.source_id,
+        source_record_key: 'TEST_REC_' + obsId,
+        source_provenance: 'market_reported',
+        ingestion_method: 'automated_feed',
+        temporal_class: 'historical_archive',
+        derivation_class: 'reported_survey',
         commodity_id: commodityId,
         market_id: marketId,
         raw_price_text: '380000', // 380,000 for 1 Ardeb
@@ -176,12 +208,13 @@ describe('R4-C Normalization Engine', () => {
         raw_unit_text: 'ardeb',
         parsed_price_numeric: 380000,
         observed_at: '2024-05-10',
+        stale_after_at: '2024-05-17',
         publication_status: 'PUBLISHED'
       } as any);
 
       // Insert matching FX for 2024-05-10
       await supabase.from('fx_rate_observations').insert({
-        source_id: sourceId,
+        source_id: sourceId, // keep using FX sourceId here
         rate_class: 'PARALLEL_MARKET', verification_status: 'VERIFIED',
         base_currency: 'USD',
         quote_currency: 'SDG',
@@ -200,12 +233,18 @@ describe('R4-C Normalization Engine', () => {
 
     it('missing FX returns USD=NULL', async () => {
       const obsId = uuidv4();
-      const datasetId = (await supabase.from('canonical_datasets').select('id').limit(1)).data![0].id;
+      const dataset = (await supabase.from('canonical_datasets').select('id, source_id').limit(1)).data![0];
       const marketId = (await supabase.from('markets').select('id').limit(1)).data![0].id;
 
       await supabase.from('market_price_observations').insert({
         id: obsId,
-        dataset_id: datasetId,
+        dataset_id: dataset.id,
+        source_id: dataset.source_id,
+        source_record_key: 'TEST_REC_' + obsId,
+        source_provenance: 'market_reported',
+        ingestion_method: 'automated_feed',
+        temporal_class: 'historical_archive',
+        derivation_class: 'reported_survey',
         commodity_id: commodityId,
         market_id: marketId,
         raw_price_text: '380000',
@@ -213,6 +252,7 @@ describe('R4-C Normalization Engine', () => {
         raw_unit_text: 'ardeb',
         parsed_price_numeric: 380000,
         observed_at: '2022-01-01', // no FX for this date
+        stale_after_at: '2022-01-08',
         publication_status: 'PUBLISHED'
       } as any);
 
@@ -225,12 +265,18 @@ describe('R4-C Normalization Engine', () => {
 
     it('missing unit returns NULL', async () => {
       const obsId = uuidv4();
-      const datasetId = (await supabase.from('canonical_datasets').select('id').limit(1)).data![0].id;
+      const dataset = (await supabase.from('canonical_datasets').select('id, source_id').limit(1)).data![0];
       const marketId = (await supabase.from('markets').select('id').limit(1)).data![0].id;
 
       await supabase.from('market_price_observations').insert({
         id: obsId,
-        dataset_id: datasetId,
+        dataset_id: dataset.id,
+        source_id: dataset.source_id,
+        source_record_key: 'TEST_REC_' + obsId,
+        source_provenance: 'market_reported',
+        ingestion_method: 'automated_feed',
+        temporal_class: 'historical_archive',
+        derivation_class: 'reported_survey',
         commodity_id: commodityId,
         market_id: marketId,
         raw_price_text: '380000',
@@ -238,6 +284,7 @@ describe('R4-C Normalization Engine', () => {
         raw_unit_text: 'sack', // blocked
         parsed_price_numeric: 380000,
         observed_at: '2024-05-10',
+        stale_after_at: '2024-05-17',
         publication_status: 'PUBLISHED'
       } as any);
 

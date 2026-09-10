@@ -1,0 +1,54 @@
+import { createAdminClient } from '../lib/supabase/server';
+import { normalizeObservation } from '../lib/normalization/engine';
+
+async function dryRun() {
+  const supabase = createAdminClient();
+  const allObs: {id: string}[] = [];
+  let page = 0;
+  while(true) {
+    const { data } = await supabase.from('market_price_observations')
+      .select('id')
+      .neq('publication_status', 'RETRACTED')
+      .range(page * 1000, (page + 1) * 1000 - 1);
+    if (!data || data.length === 0) break;
+    allObs.push(...data);
+    page++;
+  }
+
+  console.log(`CURRENT VALID WFP: ${allObs.length}`);
+  
+  let explicitMetricEligible = 0;
+  let customaryEligible = 0;
+  let blocked = 0;
+  let conflict = 0;
+
+  for (let i = 0; i < allObs.length; i++) {
+    const o = allObs[i];
+    try {
+      const res = await normalizeObservation(o.id, 'PARALLEL_MARKET');
+      if (res.unit_resolution_method !== null) {
+        if (res.unit_resolution_method === 'SOURCE_EXPLICIT_METRIC') {
+          explicitMetricEligible++;
+        } else {
+          customaryEligible++;
+        }
+      } else {
+        blocked++;
+      }
+    } catch (err) {
+      if ((err as Error).message === 'UNIT_RULE_CONFLICT') {
+        conflict++;
+      } else {
+        blocked++;
+      }
+    }
+  }
+
+  console.log(`EXPLICIT METRIC ELIGIBLE: ${explicitMetricEligible}`);
+  console.log(`CUSTOMARY RULE ELIGIBLE: ${customaryEligible}`);
+  console.log(`BLOCKED: ${blocked}`);
+  console.log(`CONFLICT: ${conflict}`);
+  console.log(`RECONCILED: ${explicitMetricEligible + customaryEligible + blocked + conflict === allObs.length}`);
+}
+
+dryRun().catch(console.error);

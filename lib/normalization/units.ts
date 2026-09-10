@@ -1,20 +1,48 @@
 import { createAdminClient } from '@/lib/supabase/server';
 
+export type UnitResolution = 
+  | { type: 'CUSTOMARY_RULE'; id: string; conversion_factor_kg: number }
+  | { type: 'EXPLICIT_METRIC'; conversion_factor_kg: number; canonical_unit: string };
+
+export function parseExplicitMetric(sourceText: string): number | null {
+  const normalized = sourceText.trim();
+  // Match exact patterns like "90 KG", "3.5 kg", "3 kilograms"
+  // Reject things like "-1 kg", "3 kg sack", "0 kg"
+  const metricRegex = /^([+]?(?:[1-9]\d*|0)?(?:\.\d+)?)\s*(kg|kilogram|kilograms)$/i;
+  
+  const match = normalized.match(metricRegex);
+  if (!match) return null;
+  
+  const quantity = parseFloat(match[1]);
+  if (isNaN(quantity) || quantity <= 0) return null;
+  
+  return quantity;
+}
+
 export async function getUnitConversionRule(
   sourceUnitAlias: string,
   commodityId: string,
   observationDate: string
-): Promise<{ id: string; conversion_factor_kg: number } | null> {
+): Promise<UnitResolution | null> {
   const supabase = createAdminClient();
-  
-  // Ambiguous cases blocked explicitly in DB by not seeding them as 'VERIFIED'
-  // Or handled here:
   const normalizedAlias = sourceUnitAlias.toLowerCase().trim();
-  if (['bag', 'sack'].includes(normalizedAlias)) {
-    return null; // Ambiguous bag/sack is explicitly blocked
+  
+  // 1. Try Explicit Metric parsing first
+  const metricFactor = parseExplicitMetric(sourceUnitAlias);
+  if (metricFactor !== null) {
+    return {
+      type: 'EXPLICIT_METRIC',
+      conversion_factor_kg: metricFactor,
+      canonical_unit: 'KG'
+    };
   }
 
-  // Exact rule lookup (commodity specific)
+  // 2. Ambiguous cases blocked
+  if (['bag', 'sack'].includes(normalizedAlias)) {
+    return null;
+  }
+
+  // 3. Exact rule lookup (commodity specific)
   const { data: specificRules, error: specificErr } = await supabase
     .from('unit_conversion_rules')
     .select('id, conversion_factor_kg, confidence_status')
@@ -27,13 +55,13 @@ export async function getUnitConversionRule(
   if (specificErr) throw new Error(specificErr.message);
 
   if (specificRules && specificRules.length === 1) {
-    return specificRules[0];
+    return { type: 'CUSTOMARY_RULE', id: specificRules[0].id, conversion_factor_kg: specificRules[0].conversion_factor_kg };
   }
   if (specificRules && specificRules.length > 1) {
     throw new Error('UNIT_RULE_CONFLICT');
   }
 
-  // Generic rule fallback (no commodity specified)
+  // 4. Generic rule fallback
   const { data: genericRules, error: genericErr } = await supabase
     .from('unit_conversion_rules')
     .select('id, conversion_factor_kg, confidence_status')
@@ -46,7 +74,7 @@ export async function getUnitConversionRule(
   if (genericErr) throw new Error(genericErr.message);
   
   if (genericRules && genericRules.length === 1) {
-    return genericRules[0];
+    return { type: 'CUSTOMARY_RULE', id: genericRules[0].id, conversion_factor_kg: genericRules[0].conversion_factor_kg };
   }
   if (genericRules && genericRules.length > 1) {
     throw new Error('UNIT_RULE_CONFLICT');
