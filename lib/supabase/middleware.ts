@@ -12,7 +12,7 @@ export async function updateSession(request: NextRequest) {
 
   if (!url || !key) {
     console.error('Missing Supabase environment variables in middleware. Bypassing auth.');
-    return NextResponse.next({ request });
+    return { supabaseResponse, user: null, profile: null, supabase: null as any };
   }
 
   const supabase = createServerClient<Database>(
