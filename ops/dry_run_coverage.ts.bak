@@ -34,12 +34,14 @@ async function dryRun() {
         }
       } else {
         blocked++;
+        console.log("Blocked without error:", o.id);
       }
     } catch (err) {
       if ((err as Error).message === 'UNIT_RULE_CONFLICT') {
         conflict++;
       } else {
         blocked++;
+        console.log("Blocked by error:", o.id, (err as Error).message);
       }
     }
   }

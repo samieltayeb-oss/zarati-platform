@@ -1,66 +1,46 @@
-# R4-B MASTER IMPLEMENTATION GATE
+# ZARATI Intelligence Experience V1 Implementation Plan
 
-This document establishes the architecture and execution plan for the R4-B Master Implementation Gate (Basic Weather + Automated External Feeds).
-
-## Branch Strategy
-- The verified production baseline has been successfully reconciled into `main`.
-- R4-B implementation will occur exclusively on `phase/r4-b-automated-feeds`.
-
-## Cron Design
-- **Standard Vercel Cron** via `vercel.json` and standard Next.js API Route Handlers.
-- Protected by `CRON_SECRET` validation.
-- Endpoints will feature execution locking, concurrency prevention, timeout handling, and failure isolation.
-- Cron will **NOT** be activated in production during this local implementation gate.
-
-## Source Revalidation
-
-- **WFP Market Monitor**: YES. Public HDX CSV download. No API key required for public dataset access. V2 identity contract (`WFP_SDN_V2_{date}_{market_id}_{commodity_id}_{pricetype}_{unit}`) will be strictly enforced using the raw source IDs, not derived cropCodes.
-- **Open-Meteo**: YES. Free public API without API key. Confirmed JSON response for temperature, humidity, precipitation, wind.
-- **FAO FPMA**: NO. Lacks public developer API. Blocked/Deferred. We will NOT scrape undocumented endpoints or claim fake partnerships.
+## Goal
+Replace the placeholder `/intelligence` page with a real, production-data-driven Intelligence Experience. This will expose R4-C normalized market prices and MET Norway weather data while adhering strictly to ZARATI's "No Mock Data" sovereign tenets.
 
 ## Proposed Changes
 
-### Database Migration (027_r4_b_infrastructure.sql)
+### `lib/services/intelligence.ts`
+[NEW] Create a secure Next.js server-side service to fetch:
+- Overview stats (Commodities, Markets, States, Dates)
+- Public market observations from `v_public_normalized_market_prices`
+- MET Norway weather from `weather_observations` (provider='MET_NORWAY')
+- Historical chart data
 
-#### [NEW] supabase/migrations/20260908000027_027_r4_b_infrastructure.sql
-This migration will introduce:
-- `external_feed_executions` table: To track feed state (`scheduled`, `running`, `succeeded`, `partial`, `failed`, `quarantined`). Tracks `records_fetched`, `records_valid`, `records_inserted`, `records_existing`, `records_rejected`, `records_quarantined`.
-- `weather_observations` table: For basic weather telemetry (temperature, precipitation, humidity, wind) linked to geographic coordinates/markets.
-- Enums for feed status and feed types (`WFP`, `OPEN_METEO`).
-- Immutability and RLS policies for telemetry.
+### `app/[lang]/intelligence/page.tsx`
+[MODIFY] Overhaul the entire page to remove placeholders and serve as the main dashboard entry point.
 
-### Source Adapter Architecture
+### `app/[lang]/intelligence/components/IntelligenceOverview.tsx`
+[NEW] High-level metrics component showing verified counts, freshness, and geographic coverage.
 
-#### [NEW] lib/feeds/ExternalFeedAdapter.ts
-Abstract base class defining the contract:
-- `fetch()`
-- `validate()`
-- `parse()`
-- `deriveSourceIdentity()`
-- `stage()`
-- `verify()`
+### `app/[lang]/intelligence/components/MarketExplorer.tsx`
+[NEW] Tabular market data with filters for Commodity, State, and Date Range. Includes USD unavailable states (since verified historical FX is not yet populated) and strictly formatted SDG metric values.
 
-#### [NEW] lib/feeds/wfp/wfp-adapter.ts
-Implementation of WFP CSV ingestion using strict V2 deterministic identity logic.
+### `app/[lang]/intelligence/components/HistoricalCharts.tsx`
+[NEW] Line charts plotting `normalized_sdg_per_kg` and `normalized_sdg_per_mt` over time, handling sparse data without misleading connections.
 
-#### [NEW] lib/feeds/weather/open-meteo-adapter.ts
-Implementation of Open-Meteo API fetching.
+### `app/[lang]/intelligence/components/WeatherIntelligence.tsx`
+[NEW] Elegant forecast presentation specifically restricted to MET Norway data for Gedaref. Includes a premium "Unavailable" state when the cron has not yet populated production feeds.
 
-### Automation & Security
+### `app/[lang]/page.tsx` (Homepage)
+[MODIFY] Add a tasteful "Real Intelligence Preview" section linking to `/intelligence`, displaying a live statistic (e.g. number of published observations) to establish immediate credibility.
 
-#### [NEW] app/api/cron/wfp/route.ts
-#### [NEW] app/api/cron/weather/route.ts
-Vercel cron job endpoints protected by Authorization header checks (e.g. `CRON_SECRET`). Will handle execution locking to prevent concurrent runs.
+### Internationalization & RTL
+All new components will fully support English and Arabic (using the existing `isAr` and `dir="rtl"` patterns), relying on the Cairo font.
 
 ## Verification Plan
+### Manual Verification
+- Ensure the `/intelligence` page correctly loads and displays `102` public observations.
+- Confirm USD equivalents display as "Unavailable (Verified FX Required)".
+- Verify Weather shows a premium "Data Unavailable" state due to missing MET Norway production data.
+- Check RTL alignment and Arabic typography (Cairo font).
+- Validate mobile responsiveness on 390px viewports.
 
 ### Automated Tests
-I will create a testing suite (e.g. `tests/feeds/wfp-replay.test.ts`) that verifies:
-- WFP Historical Replay maps exactly 5663 identities with 0 semantic collisions.
-- Duplicate replay creates 0 duplicates.
-- Feed failure isolation correctly traps errors without crashing the system.
-- Scheduler endpoint returns 401 Unauthorized without the correct secret.
-
-### Manual Verification
-- Output the required final response matrix upon successful local implementation.
-- DO NOT perform production ingestion, nor deploy to Vercel, nor enable cron in production.
+- Ensure `npm run build`, `npm run lint`, and `npm run test` pass.
+- Write a basic frontend render test for `/intelligence` ensuring no placeholders remain.

@@ -1,0 +1,63 @@
+import { createAdminClient } from '../lib/supabase/server';
+import { canonicalNormalizeObservation } from '../lib/normalization/worker';
+import * as fs from 'fs';
+
+async function run() {
+  const supabase = createAdminClient();
+  
+  // Exclude observations already processed by the previous canary
+  const previousCanaryIds = [
+    'b9ea40c7-4c23-4f6b-af4f-661816400a57', // 90 KG
+    '57d429f6-2931-45e6-9e3d-4021fcf0d874', // 3 KG
+    '02ec1449-71dc-48b6-89e7-a50536d5091a'  // 3.5 KG
+  ];
+  
+  // Pick ONE real current-valid WFP observation (Prefer 90 KG)
+  const { data: target } = await supabase.from('market_price_observations')
+    .select('*')
+    .neq('publication_status', 'RETRACTED')
+    .not('id', 'in', `(${previousCanaryIds.join(',')})`)
+    .eq('raw_unit_text', '90 KG')
+    .limit(1)
+    .single();
+    
+  if (!target) {
+    console.log("No valid target found");
+    return;
+  }
+  
+  console.log(`Target selected: ${target.id} (${target.raw_unit_text})`);
+  
+  const publicBeforeCount = await supabase.from('v_public_normalized_market_prices').select('normalized_id', { count: 'exact' });
+  const publicBefore = publicBeforeCount.count || 0;
+  
+  // Mission 4: Run ONE True End-to-End Production Canary using Canonical Path
+  const result1 = await canonicalNormalizeObservation(target.id);
+  console.log('Run 1:', result1);
+  
+  // Mission 6: Replay (Idempotency)
+  const result2 = await canonicalNormalizeObservation(target.id);
+  console.log('Run 2:', result2);
+  
+  // Mission 5: Independent Formula Check
+  const derived = await supabase.from('normalized_market_values').select('*').eq('raw_observation_id', target.id).eq('is_latest', true).single();
+  
+  // Check publication isolation
+  const publicAfterCount = await supabase.from('v_public_normalized_market_prices').select('normalized_id', { count: 'exact' });
+  const publicAfter = publicAfterCount.count || 0;
+  
+  const finalState = {
+    target: target.id,
+    raw_unit: target.raw_unit_text,
+    raw_price: target.parsed_price_numeric,
+    derived: derived.data,
+    publicBefore,
+    publicAfter,
+    replayDuplicates: result2.duplicates
+  };
+  
+  fs.writeFileSync('true_canary_results.json', JSON.stringify(finalState, null, 2));
+  console.log('True Canary complete');
+}
+
+run().catch(console.error);

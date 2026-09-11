@@ -1,0 +1,15 @@
+{
+  "totalValid": 5663,
+  "attempted": 0,
+  "successful": 0,
+  "failed": 0,
+  "blocked": 0,
+  "conflicts": 0,
+  "duplicateDerived": 0,
+  "rawModified": 0,
+  "usdNormalized": 0,
+  "usdNull": 5663,
+  "activeDerived": 5663,
+  "lineageComplete": 5663,
+  "publicCount": 102
+}

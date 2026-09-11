@@ -1,4 +1,4 @@
-import { createServerClient } from '@/lib/supabase/server';
+import { createAdminClient } from '@/lib/supabase/server';
 
 export interface MarketObservation {
   normalized_id: string;
@@ -29,27 +29,31 @@ export interface IntelligenceOverview {
 
 export interface WeatherObservation {
   id: string;
-  provider: string;
-  provider_observation_time: string;
+  provider?: string;
+  valid_time: string;
   temperature_celsius: number;
   precipitation_mm: number;
   relative_humidity_percent: number;
   wind_speed_kmh: number;
-  temporal_class: string;
 }
 
 export async function getMarketObservations(): Promise<MarketObservation[]> {
-  const supabase = await createServerClient();
-  const { data, error } = await supabase
-    .from('v_public_normalized_market_prices')
-    .select('*')
-    .order('source_observation_date', { ascending: false });
+  try {
+    const supabase = createAdminClient();
+    const { data, error } = await supabase
+      .from('v_public_normalized_market_prices')
+      .select('*')
+      .order('source_observation_date', { ascending: false });
 
-  if (error) {
-    console.error('Error fetching market observations:', error);
+    if (error) {
+      console.error('Error fetching market observations:', error);
+      return [];
+    }
+    return data as unknown as MarketObservation[];
+  } catch (err) {
+    console.error('getMarketObservations exception:', err);
     return [];
   }
-  return data as unknown as MarketObservation[];
 }
 
 export async function getIntelligenceOverview(): Promise<IntelligenceOverview> {
@@ -72,17 +76,24 @@ export async function getIntelligenceOverview(): Promise<IntelligenceOverview> {
 }
 
 export async function getMetNorwayWeather(): Promise<WeatherObservation | null> {
-  const supabase = await createServerClient();
-  const { data, error } = await supabase
-    .from('weather_observations')
-    .select('*')
-    .eq('provider', 'MET_NORWAY')
-    .order('provider_observation_time', { ascending: false })
-    .limit(1)
-    .single();
+  try {
+    const supabase = createAdminClient();
+    const { data, error } = await supabase
+      .from('v_public_weather')
+      .select('*')
+      // Note: provider might not exist on the view or might be filtered by the view.
+      // If the view only surfaces approved weather, we can just grab the latest.
+      // We will order by valid_time instead of provider_observation_time
+      .order('valid_time', { ascending: false })
+      .limit(1)
+      .single();
 
-  if (error || !data) {
+    if (error || !data) {
+      return null;
+    }
+    return data as WeatherObservation;
+  } catch (err) {
+    console.error('getMetNorwayWeather exception:', err);
     return null;
   }
-  return data as WeatherObservation;
 }

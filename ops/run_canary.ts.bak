@@ -1,0 +1,100 @@
+import { createAdminClient } from '../lib/supabase/server';
+import { normalizeObservation } from '../lib/normalization/engine';
+import * as fs from 'fs';
+
+async function run() {
+  const supabase = createAdminClient();
+  
+  // Pick exactly 3 rows
+  const units = ['90 KG', '3 KG', '3.5 KG'];
+  const targets = [];
+  
+  for (const unit of units) {
+    const { data } = await supabase.from('market_price_observations')
+      .select('*')
+      .neq('publication_status', 'RETRACTED')
+      .eq('raw_unit_text', unit)
+      .limit(1);
+    if (data && data.length > 0) targets.push(data[0]);
+  }
+  
+  console.log(`Found ${targets.length} targets`);
+  
+  const results = [];
+  let publicBefore = 0;
+  
+  for (const obs of targets) {
+    console.log(`Normalizing ${obs.id} (${obs.raw_unit_text})`);
+    
+    // public count before
+    const pubB = await supabase.from('v_public_normalized_market_prices').select('normalized_id', { count: 'exact' });
+    if (pubB.count) publicBefore = pubB.count;
+    
+    const beforeRaw = { ...obs };
+    
+    const res = await normalizeObservation(obs.id, 'PARALLEL_MARKET');
+    
+    // Insert into normalized_market_values
+    if (res.success) {
+      await supabase.from('normalized_market_values').insert({
+        raw_observation_id: obs.id,
+        normalized_usd_per_kg: res.normalized_usd_per_kg,
+        normalized_usd_per_mt: res.normalized_usd_per_mt,
+        normalized_sdg_per_kg: res.normalized_sdg_per_kg,
+        normalized_sdg_per_mt: res.normalized_sdg_per_mt,
+        fx_rate_id: res.fx_rate_id,
+        unit_rule_id: res.unit_rule_id,
+        fx_fallback_days: res.fx_fallback_days,
+        unit_resolution_method: res.unit_resolution_method,
+        source_explicit_quantity: res.source_explicit_quantity,
+        source_canonical_unit: res.source_canonical_unit,
+        calculation_version: 'v1.0.0',
+        is_latest: true
+      });
+    }
+    
+    // Fetch derived row
+    const derived = await supabase.from('normalized_market_values').select('*').eq('raw_observation_id', obs.id).eq('is_latest', true).single();
+    
+    // Fetch after raw
+    const afterRaw = await supabase.from('market_price_observations').select('*').eq('id', obs.id).single();
+    
+    // Fetch FX
+    let fxRate = null;
+    if (derived.data?.fx_rate_id) {
+      const fx = await supabase.from('fx_rate_observations').select('rate').eq('id', derived.data.fx_rate_id).single();
+      fxRate = fx.data?.rate;
+    }
+    
+    results.push({
+      obsId: obs.id,
+      unit: obs.raw_unit_text,
+      res,
+      derived: derived.data,
+      beforeRaw,
+      afterRaw: afterRaw.data,
+      fxRate
+    });
+  }
+  
+  // Idempotency replay
+  let duplicates = 0;
+  for (const obs of targets) {
+    const res2 = await normalizeObservation(obs.id, 'PARALLEL_MARKET');
+    const allDerived = await supabase.from('normalized_market_values').select('id, is_latest').eq('raw_observation_id', obs.id);
+    if (allDerived.data && allDerived.data.length > 1) {
+       // active revisions
+       const active = allDerived.data.filter((d: any) => d.is_latest);
+       if (active.length > 1) duplicates++;
+    }
+  }
+  
+  // public count after
+  const pubA = await supabase.from('v_public_normalized_market_prices').select('normalized_id', { count: 'exact' });
+  const publicAfter = pubA.count || 0;
+  
+  fs.writeFileSync('canary_results.json', JSON.stringify({ results, publicBefore, publicAfter, duplicates }, null, 2));
+  console.log('Canary complete');
+}
+
+run().catch(console.error);
