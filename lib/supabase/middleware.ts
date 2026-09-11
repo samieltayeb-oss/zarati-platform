@@ -11,7 +11,8 @@ export async function updateSession(request: NextRequest) {
   const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY;
 
   if (!url || !key) {
-    throw new Error('Missing Supabase environment variables in middleware.');
+    console.error('Missing Supabase environment variables in middleware. Bypassing auth.');
+    return NextResponse.next({ request });
   }
 
   const supabase = createServerClient<Database>(
