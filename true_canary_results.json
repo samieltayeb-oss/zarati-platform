@@ -1,0 +1,26 @@
+{
+  "target": "afce913c-1e25-4d1c-a989-ff7f15f2b652",
+  "raw_unit": "90 KG",
+  "raw_price": 29.19,
+  "derived": {
+    "id": "82c8f70f-af5b-4a61-9c97-e637d104293f",
+    "raw_observation_id": "afce913c-1e25-4d1c-a989-ff7f15f2b652",
+    "fx_rate_id": null,
+    "unit_rule_id": null,
+    "normalization_run_id": null,
+    "calculation_version": "v1.0.0",
+    "normalized_usd_per_kg": null,
+    "normalized_usd_per_mt": null,
+    "normalized_sdg_per_kg": 0.3243333333333333,
+    "normalized_sdg_per_mt": 324.3333333333333,
+    "fx_fallback_days": null,
+    "is_latest": true,
+    "calculated_at": "2026-09-10T20:53:44.496591+00:00",
+    "unit_resolution_method": "SOURCE_EXPLICIT_METRIC",
+    "source_explicit_quantity": 90,
+    "source_canonical_unit": "KG"
+  },
+  "publicBefore": 0,
+  "publicAfter": 0,
+  "replayDuplicates": 1
+}

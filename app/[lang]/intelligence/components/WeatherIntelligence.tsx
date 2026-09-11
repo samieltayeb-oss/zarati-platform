@@ -30,7 +30,7 @@ export function WeatherIntelligence({ t, weather, isAr }: { t: Record<string, st
             <div className="space-y-1">
               <div className="text-sm font-semibold text-text uppercase tracking-wider">{t.forecast}</div>
               <div className="text-xs text-muted">
-                {t.updated}: {new Date(weather.provider_observation_time).toLocaleString(isAr ? 'ar-EG' : 'en-US')}
+                {t.updated}: {new Date(weather.valid_time).toLocaleString(isAr ? 'ar-EG' : 'en-US')}
               </div>
             </div>
           </div>
