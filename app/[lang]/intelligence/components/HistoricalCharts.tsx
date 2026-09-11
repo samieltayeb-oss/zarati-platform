@@ -3,6 +3,21 @@ import { useMemo } from 'react';
 import { MarketObservation } from '@/lib/services/intelligence';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Scatter, ComposedChart } from 'recharts';
 
+const CustomTooltip = ({ active, payload, label, t }: any) => {
+  if (active && payload && payload.length) {
+    if (payload[0].payload.isGap) return null;
+    return (
+      <div className="bg-surface-elevated border border-border-strong p-3 shadow-lg rounded-xl z-50">
+        <p className="text-muted text-xs mb-1 font-bold">{label}</p>
+        <p className="text-primary font-mono font-bold text-lg">
+          {Number(payload[0].value).toLocaleString()} <span className="text-xs text-muted font-sans font-normal">{t.sdgMt}</span>
+        </p>
+      </div>
+    );
+  }
+  return null;
+};
+
 export function HistoricalCharts({ t, data, isAr }: { t: Record<string, string>, data: MarketObservation[], isAr: boolean }) {
   const chartData = useMemo(() => {
     if (!data || data.length === 0) return [];
@@ -70,21 +85,6 @@ export function HistoricalCharts({ t, data, isAr }: { t: Record<string, string>,
   const max = Math.max(...values);
   const padding = (max - min) * 0.1;
 
-  const CustomTooltip = ({ active, payload, label }: any) => {
-    if (active && payload && payload.length) {
-      if (payload[0].payload.isGap) return null;
-      return (
-        <div className="bg-surface-elevated border border-border-strong p-3 shadow-lg rounded-xl z-50">
-          <p className="text-muted text-xs mb-1 font-bold">{label}</p>
-          <p className="text-primary font-mono font-bold text-lg">
-            {Number(payload[0].value).toLocaleString()} <span className="text-xs text-muted font-sans font-normal">{t.sdgMt}</span>
-          </p>
-        </div>
-      );
-    }
-    return null;
-  };
-
   return (
     <div className="h-72 w-full" dir="ltr">
       <ResponsiveContainer width="100%" height="100%">
@@ -112,7 +112,7 @@ export function HistoricalCharts({ t, data, isAr }: { t: Record<string, string>,
             domain={[Math.max(0, min - padding), max + padding]}
             width={60}
           />
-          <Tooltip content={<CustomTooltip />} />
+          <Tooltip content={<CustomTooltip t={t} />} />
           <Line 
             type="monotone" 
             dataKey="value" 

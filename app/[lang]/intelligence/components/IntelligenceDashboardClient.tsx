@@ -24,6 +24,7 @@ export function IntelligenceDashboardClient({
   const markets = useMemo(() => Array.from(new Set(observations.map(o => o.market_name_en))), [observations]);
 
   const filtered = useMemo(() => {
+    const now = Date.now();
     return observations.filter(o => {
       const commMatch = selectedComm === 'ALL' || o.crop_name_en === selectedComm;
       const marketMatch = selectedMarket === 'ALL' || o.market_name_en === selectedMarket;
@@ -31,7 +32,6 @@ export function IntelligenceDashboardClient({
       let dateMatch = true;
       if (dateRange !== 'ALL') {
         const obsDate = new Date(o.source_observation_date).getTime();
-        const now = Date.now();
         const yearMs = 365.25 * 24 * 60 * 60 * 1000;
         if (dateRange === '1Y') dateMatch = now - obsDate <= yearMs;
         if (dateRange === '3Y') dateMatch = now - obsDate <= 3 * yearMs;
