@@ -48,3 +48,6 @@ supabase_backup.sql
 /scratch/
 /.test-cache/
 /supabase/backups/
+
+.vercel
+.env*
