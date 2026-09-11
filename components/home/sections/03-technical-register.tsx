@@ -44,24 +44,30 @@ export function TechnicalRegister({ locale }: { locale: Locale; dict?: unknown }
               <div className="text-sm text-white/60">{isAr ? 'العروض التجارية والإفصاح الثنائي.' : 'Commercial listings and bilateral reveal.'}</div>
             </div>
 
+            <div className="bg-white/5 border border-white/10 p-6 rounded-md hover:bg-white/10 transition-colors">
+              <div className="text-white/50 font-mono text-[10px] mb-2">R4</div>
+              <div className="font-bold text-lg mb-2">{isAr ? 'استخبارات السوق' : 'Market Intelligence'}</div>
+              <div className="text-sm text-white/60">{isAr ? 'استيعاب البيانات وتطبيع الأسعار.' : 'Historical data ingestion and metric normalization.'}</div>
+            </div>
+
             <div className="bg-white/5 border border-success/30 p-6 rounded-md hover:bg-white/10 transition-colors border-l-2 border-l-success">
               <div className="text-success font-mono text-[10px] mb-2 font-bold flex items-center justify-between">
-                <span>R4</span>
+                <span>R5</span>
                 <span className="px-2 py-0.5 bg-success/10 text-success rounded-full text-[9px]">COMPLETED</span>
               </div>
-              <div className="font-bold text-lg mb-4 text-white">{isAr ? 'استخبارات السوق' : 'Market Intelligence'}</div>
+              <div className="font-bold text-lg mb-4 text-white">{isAr ? 'العمليات والتحقق' : 'Operations & Verification'}</div>
               <ul className="text-sm text-white/70 space-y-2 mb-2 font-mono text-xs">
                 <li className="flex items-start gap-2">
                   <span className="text-success mt-0.5">✓</span>
-                  <span>5,663 {isAr ? 'رصد موحد' : 'normalized observations'}</span>
+                  <span>{isAr ? 'تتبع تنفيذ التغذية المكتمل' : 'Feed execution tracking'}</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-success mt-0.5">✓</span>
-                  <span>{isAr ? 'مراقبات الطقس والأسواق العامة' : 'Public market & weather feeds'}</span>
+                  <span>{isAr ? 'وحدة تحكم عزل البيانات' : 'Data quarantine console'}</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-success mt-0.5">✓</span>
-                  <span>{isAr ? 'الاستخبارات الحية' : 'Intelligence Experience LIVE'}</span>
+                  <span>{isAr ? 'سجل عمليات المراقبة' : 'Observation lineage ledger'}</span>
                 </li>
               </ul>
             </div>
@@ -69,22 +75,10 @@ export function TechnicalRegister({ locale }: { locale: Locale; dict?: unknown }
 
           <div className="space-y-6 relative md:before:absolute md:before:-left-4 md:before:top-0 md:before:bottom-0 md:before:w-px md:before:bg-warning/30 md:pl-4">
             <h3 className="font-mono text-xs tracking-widest text-warning flex items-center gap-2 mb-8">
-              <span className="w-1.5 h-1.5 bg-warning animate-pulse"></span>
-              {isAr ? 'قيد التنفيذ / مخطط' : 'ACTIVE / PLANNED'}
+              <span className="w-1.5 h-1.5 bg-warning"></span>
+              {isAr ? 'مخطط' : 'PLANNED'}
             </h3>
             
-            <div className="bg-white/5 border border-warning/30 p-6 rounded-md border-l-2 border-l-warning">
-              <div className="text-warning font-mono text-[10px] mb-2 font-bold flex items-center justify-between">
-                <span>R5</span>
-                <span className="px-2 py-0.5 bg-warning/10 text-warning rounded-full text-[9px]">ACTIVE</span>
-              </div>
-              <div className="font-bold text-lg mb-2">{isAr ? 'العمليات والتحقق' : 'Operations & Verification'}</div>
-              <div className="text-xs text-white/60 font-mono">
-                {isAr ? 'اكتملت بنية السجلات (R4-B).' : 'Ledger infrastructure completed (R4-B).'} <br/>
-                {isAr ? 'قيد الانتظار: وحدات تحكم المشغلين.' : 'Pending: Operator consoles & manual QA workflows.'}
-              </div>
-            </div>
-
             <div className="border border-white/10 p-6 rounded-md border-dashed opacity-80">
               <div className="text-white/50 font-mono text-[10px] mb-2">R6 / R7</div>
               <div className="font-bold text-lg">{isAr ? 'الاستخبارات المؤسسية' : 'Institutional Intelligence'}</div>
