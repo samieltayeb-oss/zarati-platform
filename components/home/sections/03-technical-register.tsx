@@ -50,39 +50,32 @@ export function TechnicalRegister({ locale }: { locale: Locale; dict?: unknown }
               <div className="text-sm text-white/60">{isAr ? 'استيعاب البيانات وتطبيع الأسعار.' : 'Historical data ingestion and metric normalization.'}</div>
             </div>
 
+            <div className="bg-white/5 border border-white/10 p-6 rounded-md hover:bg-white/10 transition-colors">
+              <div className="text-white/50 font-mono text-[10px] mb-2">R5</div>
+              <div className="font-bold text-lg mb-2">{isAr ? 'العمليات والتحقق' : 'Operations & Verification'}</div>
+              <div className="text-sm text-white/60">{isAr ? 'سجلات المراقبة، التغذية، العزل.' : 'Observation ledgers, feeds, and quarantine.'}</div>
+            </div>
+
             <div className="bg-white/5 border border-success/30 p-6 rounded-md hover:bg-white/10 transition-colors border-l-2 border-l-success">
               <div className="text-success font-mono text-[10px] mb-2 font-bold flex items-center justify-between">
-                <span>R5</span>
+                <span>R6 / R7</span>
                 <span className="px-2 py-0.5 bg-success/10 text-success rounded-full text-[9px]">COMPLETED</span>
               </div>
-              <div className="font-bold text-lg mb-4 text-white">{isAr ? 'العمليات والتحقق' : 'Operations & Verification'}</div>
+              <div className="font-bold text-lg mb-4 text-white">{isAr ? 'الاستخبارات المؤسسية' : 'Institutional Intelligence'}</div>
               <ul className="text-sm text-white/70 space-y-2 mb-2 font-mono text-xs">
                 <li className="flex items-start gap-2">
                   <span className="text-success mt-0.5">✓</span>
-                  <span>{isAr ? 'تتبع تنفيذ التغذية المكتمل' : 'Feed execution tracking'}</span>
+                  <span>{isAr ? 'لوحة القيادة التنفيذية' : 'Executive Dashboard'}</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-success mt-0.5">✓</span>
-                  <span>{isAr ? 'وحدة تحكم عزل البيانات' : 'Data quarantine console'}</span>
+                  <span>{isAr ? 'تصدير البيانات الموثوقة' : 'Public-Safe Data Export'}</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-success mt-0.5">✓</span>
-                  <span>{isAr ? 'سجل عمليات المراقبة' : 'Observation lineage ledger'}</span>
+                  <span>{isAr ? 'وضع العرض الوزاري' : 'Ministerial Presentation Mode'}</span>
                 </li>
               </ul>
-            </div>
-          </div>
-
-          <div className="space-y-6 relative md:before:absolute md:before:-left-4 md:before:top-0 md:before:bottom-0 md:before:w-px md:before:bg-warning/30 md:pl-4">
-            <h3 className="font-mono text-xs tracking-widest text-warning flex items-center gap-2 mb-8">
-              <span className="w-1.5 h-1.5 bg-warning"></span>
-              {isAr ? 'مخطط' : 'PLANNED'}
-            </h3>
-            
-            <div className="border border-white/10 p-6 rounded-md border-dashed opacity-80">
-              <div className="text-white/50 font-mono text-[10px] mb-2">R6 / R7</div>
-              <div className="font-bold text-lg">{isAr ? 'الاستخبارات المؤسسية' : 'Institutional Intelligence'}</div>
-              <div className="text-xs text-white/50 mt-2">{isAr ? 'التقارير التنفيذية والبيانات المجمعة' : 'Executive reporting & aggregated analytics.'}</div>
             </div>
           </div>
 
