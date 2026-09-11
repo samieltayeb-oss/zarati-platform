@@ -1,0 +1,39 @@
+import { createAdminClient } from '@/lib/supabase/server';
+import { canonicalNormalizeObservation } from '@/lib/normalization/worker';
+
+async function fastScaleUp() {
+  const supabase = createAdminClient();
+  console.log("Fetching PUBLISHED observations...");
+  
+  const { data: published, error } = await supabase
+    .from('market_price_observations')
+    .select('id, publication_status')
+    .eq('publication_status', 'PUBLISHED')
+    ;
+    
+  if (error) {
+    console.error("Error fetching", error);
+    return;
+  }
+    
+  const { data: existing } = await supabase
+    .from('normalized_market_values')
+    .select('raw_observation_id');
+    
+  const existingSet = new Set(existing?.map(e => e.raw_observation_id) || []);
+  
+  const toProcess = published?.filter(o => !existingSet.has(o.id)) || [];
+  
+  console.log(`Published Pending: ${toProcess.length}`);
+  
+  for (const p of toProcess) {
+    await canonicalNormalizeObservation(p.id);
+  }
+  
+  console.log("\nScale-up Complete");
+}
+
+fastScaleUp().catch(err => {
+  console.error("Scale-up Script Error:", err);
+  process.exit(1);
+});

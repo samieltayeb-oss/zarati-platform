@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server';
+import { createServerClient } from '@/lib/supabase/server';
 
 export interface MarketObservation {
   normalized_id: string;
@@ -39,7 +39,7 @@ export interface WeatherObservation {
 
 export async function getMarketObservations(): Promise<MarketObservation[]> {
   try {
-    const supabase = createClient();
+    const supabase = await createServerClient();
     const { data, error } = await supabase
       .from('v_public_normalized_market_prices')
       .select('*')
@@ -77,7 +77,7 @@ export async function getIntelligenceOverview(): Promise<IntelligenceOverview> {
 
 export async function getMetNorwayWeather(): Promise<WeatherObservation | null> {
   try {
-    const supabase = createAdminClient();
+    const supabase = await createServerClient();
     const { data, error } = await supabase
       .from('v_public_weather')
       .select('*')

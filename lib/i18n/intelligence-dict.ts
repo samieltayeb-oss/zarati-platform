@@ -37,7 +37,16 @@ export const dict = {
     wind: 'Wind',
     exploreIntel: 'Explore Intelligence',
     noDataSelected: 'No data for selected range',
-    originalPrice: 'Original Price'
+    originalPrice: 'Source Price',
+    normalizedPrice: 'Normalized Price',
+    dataTrust: 'Data Trust',
+    sourceVsDerived: 'Source vs Derived',
+    wfp: 'WFP',
+    metNorway: 'MET Norway',
+    zaratiEngine: 'ZARATI Engine',
+    millet: 'Millet',
+    sorghum: 'Sorghum',
+    wheat: 'Wheat'
   },
   ar: {
     intelligence: 'الاستخبارات',
@@ -77,6 +86,15 @@ export const dict = {
     wind: 'الرياح',
     exploreIntel: 'استكشاف الاستخبارات',
     noDataSelected: 'لا توجد بيانات للنطاق المحدد',
-    originalPrice: 'السعر الأصلي'
+    originalPrice: 'السعر من المصدر',
+    normalizedPrice: 'السعر الموحد',
+    dataTrust: 'موثوقية البيانات',
+    sourceVsDerived: 'المصدر مقابل المشتق',
+    wfp: 'برنامج الأغذية العالمي',
+    metNorway: 'المعهد النرويجي للأرصاد الجوية',
+    zaratiEngine: 'محرك زراعتي',
+    millet: 'الدخن',
+    sorghum: 'الذرة الرفيعة',
+    wheat: 'القمح'
   }
 }
