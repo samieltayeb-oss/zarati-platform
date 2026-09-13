@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { render } from '@testing-library/react'
 import FounderLayout from '@/app/[lang]/founder/layout'
 import { redirect, notFound } from 'next/navigation'
 
@@ -30,7 +30,7 @@ describe('FounderLayout Authentication', () => {
     // Call the async Server Component
     await FounderLayout({ children: <div>Test</div>, params: Promise.resolve({ lang: 'en' }) })
     
-    expect(redirect).toHaveBeenCalledWith('/en/login')
+    expect(redirect).toHaveBeenCalledWith('/en/login?next=/en/founder')
   })
 
   it('returns notFound if authenticated user is not the founder', async () => {

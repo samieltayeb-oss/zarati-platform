@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function LoginForm({ dict }: { dict: any }) {
+export function LoginForm({ dict, lang = 'en', next }: { dict: any; lang?: string; next?: string }) {
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const router = useRouter()
@@ -21,7 +21,13 @@ export function LoginForm({ dict }: { dict: any }) {
       setError(result.error)
       setLoading(false)
     } else {
-      router.push('/dashboard')
+      if (result.isFounder) {
+        router.push(next || `/${lang}/founder`)
+      } else if (next) {
+        router.push(next)
+      } else {
+        router.push('/dashboard')
+      }
       router.refresh()
     }
   }

@@ -5,28 +5,42 @@ import { authRateLimit } from '@/lib/auth/rate-limit'
 import { headers } from 'next/headers'
 
 export async function loginAction(formData: FormData) {
-  const email = formData.get('email') as string
-  const password = formData.get('password') as string
+  try {
+    const email = formData.get('email') as string
+    const password = formData.get('password') as string
 
-  const forwarded = (await headers()).get('x-forwarded-for')
-  const ip = forwarded ? forwarded.split(',')[0].trim() : '127.0.0.1'
-  const { success } = await authRateLimit.limit(`${ip}:${email.toLowerCase()}`)
-  if (!success) {
-    return { error: 'Too many attempts. Please try again later.' }
+    if (!email || !password) {
+      return { error: 'Email and password are required.' }
+    }
+
+    try {
+      const forwarded = (await headers()).get('x-forwarded-for')
+      const ip = forwarded ? forwarded.split(',')[0].trim() : '127.0.0.1'
+      const { success } = await authRateLimit.limit(`${ip}:${email.toLowerCase()}`)
+      if (!success) {
+        return { error: 'Too many attempts. Please try again later.' }
+      }
+    } catch (e) {
+      console.warn('[Auth] Rate limiter skipped due to error:', e)
+    }
+
+    const supabase = await createServerClient()
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    })
+
+    if (error) {
+      console.error('[Auth] Login Error:', error.code, error.message)
+      return { error: 'Invalid email or password.' }
+    }
+    
+    const isFounder = (data.user?.email || '').toLowerCase() === 'sam@nexorayyc.io'
+    return { success: true, isFounder }
+  } catch (err: unknown) {
+    console.error('[Auth] Fatal Login Action Error:', err)
+    return { error: 'An unexpected server error occurred during login. Please try again.' }
   }
-
-  const supabase = await createServerClient()
-  const { error } = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  })
-
-  if (error) {
-    console.error('[Auth] Login Error:', error.code, error.message)
-    return { error: 'Invalid email or password.' }
-  }
-  
-  return { success: true }
 }
 
 export async function registerAction(formData: FormData) {

@@ -13,6 +13,10 @@ export default async function DashboardIndex({ params }: { params: Promise<{ lan
     redirect(`/${locale}/login`)
   }
 
+  if ((user.email || '').toLowerCase() === 'sam@nexorayyc.io') {
+    redirect(`/${locale}/founder`)
+  }
+
   const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single()
 
   if (profile?.role === 'farmer') {

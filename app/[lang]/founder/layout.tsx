@@ -15,7 +15,7 @@ export default async function FounderLayout({
   const { data: { user }, error } = await supabase.auth.getUser()
   
   if (error || !user) {
-    redirect(`/${lang}/login`)
+    redirect(`/${lang}/login?next=/${lang}/founder`)
     return null
   }
   

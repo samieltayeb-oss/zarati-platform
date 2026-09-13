@@ -6,7 +6,10 @@ import { LoginForm } from '@/components/auth/LoginForm'
 import { ZaratiLogo } from '@/components/brand/zarati-logo'
 import { SudanBadge } from '@/components/brand/sudan-badge'
 
-type Props = { params: Promise<{ lang: string }> }
+type Props = {
+  params: Promise<{ lang: string }>
+  searchParams?: Promise<{ next?: string }>
+}
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { lang } = await params
@@ -14,8 +17,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return { title: t.pageTitle }
 }
 
-export default async function LoginPage({ params }: Props) {
+export default async function LoginPage({ params, searchParams }: Props) {
   const { lang } = await params
+  const { next } = (await searchParams) || {}
   const locale = lang as Locale
   const t = (await getDictionary(locale)).login
 
@@ -35,7 +39,7 @@ export default async function LoginPage({ params }: Props) {
             <p className="text-muted leading-relaxed">{t.subheading}</p>
           </div>
 
-          <LoginForm dict={t} />
+          <LoginForm dict={t} lang={locale} next={next} />
 
           <div className="text-center mt-4 space-y-2">
             <Link href={`/${locale}/reset-password`} className="block text-sm text-primary hover:underline">
