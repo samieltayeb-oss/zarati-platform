@@ -148,7 +148,7 @@ export function Footer({ lang, nav }: FooterProps) {
               </a>
             </div>
           </div>
-          <div className="flex items-center gap-5">
+          <div className="flex flex-wrap items-center justify-center md:justify-end gap-x-5 gap-y-2">
             <Link href={`/${lang}/privacy`} className="hover:text-primary transition-colors">
               {isAr ? 'الخصوصية' : 'Privacy'}
             </Link>
@@ -157,6 +157,9 @@ export function Footer({ lang, nav }: FooterProps) {
             </Link>
             <Link href={`/${lang}/contact`} className="hover:text-primary transition-colors">
               {isAr ? 'تواصل معنا' : 'Contact'}
+            </Link>
+            <Link href={`/${lang}/founder`} className="hover:text-primary transition-colors">
+              {isAr ? 'دخول المؤسس' : 'Founder Access'}
             </Link>
           </div>
         </div>
