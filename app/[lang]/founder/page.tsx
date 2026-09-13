@@ -148,7 +148,7 @@ Do you have 10 minutes on Tuesday to discuss?`}
                     <div><span className="text-slate-500">Decision Maker:</span> <span className="text-slate-300">{t.decisionMaker}</span></div>
                     <div><span className="text-slate-500">Contact:</span> <span className="text-blue-400">{t.contact}</span></div>
                     <div><span className="text-slate-500">Commercial Potential:</span> <span className="text-emerald-400">{t.potential}</span></div>
-                    <div className="col-span-1 md:col-span-2 mt-2"><span className="text-slate-500">Pitch Angle:</span> <span className="text-slate-200 italic">"{t.pitch}"</span></div>
+                    <div className="col-span-1 md:col-span-2 mt-2"><span className="text-slate-500">Pitch Angle:</span> <span className="text-slate-200 italic">&quot;{t.pitch}&quot;</span></div>
                     <div className="col-span-1 md:col-span-2"><span className="text-slate-500">First Meeting Obj:</span> <span className="text-amber-400 font-medium">{t.objective}</span></div>
                   </div>
                 </div>
